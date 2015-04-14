@@ -3,6 +3,7 @@
 #include <unordered_set>
 #include <iomanip>
 #include <functional>
+#include <vector>
 
 using ValArr = std::valarray<int>;
 
