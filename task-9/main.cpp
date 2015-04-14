@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <cassert>
+#include <algorithm>
 
 struct AdjacencyMatrix {
 	std::vector<std::vector<bool>> adjacency;
@@ -18,6 +19,19 @@ struct AdjacencyMatrix {
 		return true;
 	}
 
+	bool areAllConnected() const {
+		bool returnvalue = true;
+		for(std::size_t row=0; row<adjacency.size(); ++row) {
+			bool outsideConnectionPresent =
+					std::any_of(adjacency[row].begin(), adjacency[row].end(),
+							[](bool b){ return b; });
+			if(!outsideConnectionPresent) {
+				std::cerr<<"Node "<<row+1<<" has no connection"<<std::endl;
+				returnvalue = false;
+			}
+		}
+		return returnvalue;
+	}
 };
 
 int main() {
@@ -51,5 +65,6 @@ int main() {
 
 	std::cerr<<"Input matrix is"<<(matrix.isSymmetric()?"":"not")
 			<<" symmetric"<<std::endl;
-
+	std::cerr<<(matrix.areAllConnected()?"":"not ")
+			<<"all nodes are connected in matrix"<<std::endl;
 }
