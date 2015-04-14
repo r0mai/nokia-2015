@@ -1,14 +1,30 @@
 #include <iostream>
 #include <cassert>
+#include <string>
+
+int powi(int b, int e) {
+    int res = 1;
+    for (int i = 0; i < e; ++i) {
+        res *= b;
+    }
+    return res;
+}
 
 int fun(const char *str) {
-    return 0;
+    std::string s(str);
+    int pow = 0;
+    int res = 1;
+    for(char c : s) {
+        res *= powi(int(c-'a'+1), ++pow);
+        res %= 1000000;
+    }
+    return res;
 }
 
 // I have a thing for macros these days.
 #define CALMARE_ASSERT(str, x) \
     std::cout << "fun(" str ") == " << x << " "; \
-    (fun(str) == (x)) ? std::cout << "ok" : std::cout << "failed"; \
+    (fun(str) == (x)) ? std::cout << "ok" : std::cout << "failed " << fun(str); \
     std::cout << std::endl;
 
 int main() {
