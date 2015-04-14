@@ -28,6 +28,7 @@ find_package(Boost COMPONENTS
 find_package(GMP)
 
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+include_directories(SYSTEM ${GMP_INCLUDE_DIR})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -O2")
 
@@ -41,5 +42,6 @@ foreach(SUBDIR ${SUBDIRS})
         set(EXEC_NAME ${SUBDIR})
         add_executable(${EXEC_NAME} ${SOURCES})
         target_link_libraries(${EXEC_NAME} ${Boost_LIBRARIES})
+        target_link_libraries(${EXEC_NAME} ${GMP_LIBRARIES})
     endif()
 endforeach()
