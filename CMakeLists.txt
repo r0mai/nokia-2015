@@ -4,6 +4,8 @@ project(deadline24-2015)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+
 macro(SUBDIRLIST result curdir)
     file(GLOB children RELATIVE ${curdir} ${curdir}/*)
     set(dirlist "")
@@ -23,6 +25,8 @@ find_package(Boost COMPONENTS
     program_options
     thread)
 
+find_package(GMP)
+
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -O2")
@@ -30,7 +34,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -O2")
 subdirlist(SUBDIRS ${CMAKE_SOURCE_DIR})
 foreach(SUBDIR ${SUBDIRS})
     if(NOT SUBDIR STREQUAL ".git" AND
-       NOT SUBDIR STREQUAL "build")
+        NOT SUBDIR STREQUAL "build" AND
+        NOT SUBDIR STREQUAL "cmake")
         set(SOURCES "")
         aux_source_directory(${SUBDIR} SOURCES)
         set(EXEC_NAME ${SUBDIR})
