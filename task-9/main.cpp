@@ -32,6 +32,22 @@ struct AdjacencyMatrix {
 		}
 		return returnvalue;
 	}
+
+	bool isLeafNode(std::size_t nodeId) const {
+		return std::count(
+				adjacency[nodeId].begin(), adjacency[nodeId].end(), true) <= 1;
+	}
+
+	std::vector<std::size_t> getLeafNodes() const {
+		std::vector<std::size_t> result;
+		for(std::size_t i=0; i<adjacency.size(); ++i) {
+			if(isLeafNode(i)) {
+				result.push_back(i);
+			}
+		}
+		return result;
+	}
+
 };
 
 int main() {
@@ -67,4 +83,16 @@ int main() {
 			<<" symmetric"<<std::endl;
 	std::cerr<<(matrix.areAllConnected()?"":"not ")
 			<<"all nodes are connected in matrix"<<std::endl;
+	const auto leafNodes = matrix.getLeafNodes();
+
+	if(!leafNodes.size()) {
+		std::cerr<<"Graph has no leaf nodes"<<std::endl;
+	} else {
+		std::cerr<<"Graph has "<<leafNodes.size()<<" leaf nodes"<<std::endl;
+		for(const auto& nodeId: leafNodes) {
+			std::cerr<<nodeId<<" ";
+		}
+		std::cerr<<std::endl;
+	}
+
 }
