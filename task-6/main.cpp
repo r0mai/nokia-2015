@@ -8,6 +8,7 @@
 
 using ColorType = int;
 using SizeType = int;
+using ResultType = std::uintmax_t;
 
 using ColorVector = std::vector<ColorType>;
 using ColorMatrix = std::vector<ColorVector>;
@@ -52,7 +53,7 @@ inline Coord normal(const Coord& first, const Coord& second)
     return std::move(res);
 }
 
-SizeType do_it(const ColorMatrix& m)
+ResultType do_it(const ColorMatrix& m)
 {
     const SizeType x = m.size();
     const SizeType y = m[0].size();
@@ -61,7 +62,7 @@ SizeType do_it(const ColorMatrix& m)
     const Coord min_c{0,0};
     const Coord max_c{x,y};
 
-    SizeType res = 0;
+    ResultType res = 0;
 
     // végigmegyünk az első koordináták lehetőségein
     for(SizeType first_c = 0; first_c < sum; ++first_c)
