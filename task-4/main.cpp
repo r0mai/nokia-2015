@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <sstream>
-#include <sstream>
+#include <fstream>
 
 
 using namespace std::placeholders;
@@ -126,14 +126,36 @@ using GuessWords = std::unordered_map< WordIndex , GuessWord, TupleHash >;
 
 Board readBoard()
 {
-    return {{-1,-1,-2},
-            {-2,-1,-1},
-            {-1,-1,-1}};
+    std::ifstream i("task4-1.txt");
+    if(!i.is_open())
+        throw std::logic_error("figyeljman a mappara kotsog, nincs itt az input");
+
+    Board res;
+
+    std::string str;
+    std::vector<SmartChar> smc;
+    while(std::getline(i, str))
+    {
+        if(str.size())
+        {
+            smc.clear();
+            for(char c : str)
+            {
+                smc.push_back(-1-(c-'0'));
+            }
+            res.push_back(std::move(smc));
+        }
+    }
+
+    return std::move(res);
 }
 
 Words readWords()
 {
-    return{"12","23","34","47","236","567","246"};
+    std::ifstream i("task4-2.txt");
+    if(!i.is_open())
+        throw std::logic_error("figyeljman a mappara kotsog, nincs itt az input");
+    return {std::istream_iterator<std::string>(i), std::istream_iterator<std::string>()};
 }
 
 GuessWords makeGuessWords(Board& b, Possibilities& p)
@@ -372,16 +394,31 @@ namespace NEW
 }
 int main()
 {
-
     Board board{readBoard()};
     Words words{readWords()};
     Possibilities possibilities{makePossibilities(words)};
 
     GuessWords guesses{makeGuessWords(board, possibilities)};
     printBoard(board);
-    //printGuesses(guesses);
-    //printPossibilities(possibilities);
+    printGuesses(guesses);
+    printPossibilities(possibilities);
 
+    std::cout << "Words are : " << words.size() << std::endl;
+
+    std::array<int, 12> guessSizes{};
+    std::array<int, 12> wordSizes{};
+    for(auto& guess: guesses)
+    {
+        ++guessSizes[guess.second.size()];
+    }
+    for(auto& word : words)
+    {
+        ++wordSizes[word.size()];
+    }
+    for(int i = 0; i < 12; ++i)
+    {
+        std::cout << i << " : w: " << wordSizes[i] << "\t g:"<< guessSizes[i] << std::endl;
+    }
 
     return 0;
 }
