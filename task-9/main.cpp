@@ -48,6 +48,19 @@ struct AdjacencyMatrix {
 		return result;
 	}
 
+	void removeIndices(const std::vector<std::size_t>& indices) {
+		for(std::size_t i=0; i<indices.size(); ++i) {
+			std::swap(adjacency[indices[i]], adjacency[adjacency.size()-i-1]);
+		}
+		adjacency.erase(adjacency.begin()+indices.size());
+	}
+
+	bool isNetworkDown() const {
+		return std::all_of(adjacency.begin(), adjacency.end(), [](const std::vector<bool>& row) {
+				return std::all_of(row.begin(), row.end(), [](bool b) { return b == false; });
+		});
+	}
+
 };
 
 int main() {
