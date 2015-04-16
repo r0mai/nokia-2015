@@ -59,52 +59,109 @@ using RefWr = std::reference_wrapper<T>;
 using Coord = std::pair<SizeType, SizeType>;
 using WordIndex = std::tuple< SizeType, SizeType, SizeType >;
 
-using Possibilities = std::unordered_map< Coord , std::unordered_set<char>, PairHash >;
+using CharToWord = std::unordered_map<char, std::vector<RefWr<Word>> >;
+using Possibilities = std::unordered_map< Coord , CharToWord, PairHash >;
+
+struct RefWrHashEq {
+    template <class T>
+    std::size_t operator()(const RefWr<T> &x) const
+    {
+        return std::hash<T>()(x.get());
+    }
+    template <class T>
+    bool operator()(const RefWr<T> &x, const RefWr<T> &y) const
+    {
+        return x.get() == y.get();
+    }
+};
 
 // -2 NOT IN GAME
 // -1 NOT SURE
 // 0-9 SOLUTION
+
+template<class T>
+bool intersect(T& to, const T& hh)
+{
+    bool b = false;
+    for(auto it = std::begin(to); it != std::end(to);)
+    {
+        if(hh.count(*it))
+        {
+            ++it;
+        }
+        else
+        {
+            b = true;
+            it = to.erase(it);
+        }
+    }
+    return b;
+}
 
 struct SmartChar
 {
     char rw;
     struct WordConnect
     {
+        bool b = false;
         WordIndex wi;
         Coord c;
-        std::unordered_set< char > possibles;
+        CharToWord possibles;
     };
-    std::vector<WordIndex> words;
-    std::vector<WordIndex> word_in;
-    std::unordered_set< char > possibles;
+    WordConnect left;
+    WordConnect down;
 
     SmartChar(char rw): rw(rw){}
 
     void add(const WordIndex& wi, const Coord& c)
     {
-        words.push_back(wi);
-        word_in.push_back(WordIndex{c.first, c.second, std::get<2>(wi)});
+        if(std::get<2>(wi)) // left
+        {
+            left.b = true;
+            left.wi = wi;
+            left.c = c;
+        }
+        else
+        {
+            down.b = true;
+            down.wi = wi;
+            down.c = c;
+        }
     }
 
     void make(Possibilities& pb)
     {
-        if(word_in.size())
+        if(left.b)
         {
-            possibles = pb[Coord{std::get<0>(word_in[0]), std::get<1>(word_in[0])}];
-
-            if(word_in.size() > 1)
+            left.possibles = pb[left.c];
+        }
+        if(down.b)
+        {
+            down.possibles = pb[down.c];
+        }
+        if(left.b && down.b)
+        {
+            for(auto it = std::begin(left.possibles); it != std::end(left.possibles);)
             {
-                auto& r = pb[Coord{std::get<0>(word_in[1]), std::get<1>(word_in[1])}];
-                for(auto it = std::begin(possibles); it != std::end(possibles);)
+                if(!down.possibles.count(it->first))
                 {
-                    if(!r.count(*it))
-                    {
-                        it = possibles.erase(it);
-                    }
-                    else
-                    {
-                        ++it;
-                    }
+                    it = left.possibles.erase(it);
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+
+            for(auto it = std::begin(down.possibles); it != std::end(down.possibles);)
+            {
+                if(!left.possibles.count(it->first))
+                {
+                    it = down.possibles.erase(it);
+                }
+                else
+                {
+                    ++it;
                 }
             }
         }
@@ -119,7 +176,27 @@ using Board = std::vector<std::vector<SmartChar>>;
 
 struct GuessWord : std::vector< RefWr<SmartChar> >
 {
+    int lr;
+    GuessWord(int lr):lr(lr){}
 
+    std::unordered_set< RefWr<Word> , RefWrHashEq, RefWrHashEq> validWords;
+    void setValidWords()
+    {
+        for(auto& pr : (lr ? this->front().get().left.possibles : this->front().get().down.possibles ))
+        {
+            validWords.insert(std::begin(pr.second), std::end(pr.second));
+        }
+        for(SmartChar& sc : *this)
+        {
+            std::unordered_set< RefWr<Word> , RefWrHashEq, RefWrHashEq> vw;
+            for(auto& pr : (lr ? sc.left.possibles : sc.down.possibles ))
+            {
+                vw.insert(std::begin(pr.second), std::end(pr.second));
+            }
+            intersect(validWords, vw);
+        }
+
+    }
 };
 
 using GuessWords = std::unordered_map< WordIndex , GuessWord, TupleHash >;
@@ -173,7 +250,8 @@ GuessWords makeGuessWords(Board& b, Possibilities& p)
             if( ( i == 0 || b[i-1][j] == -2 ) && (i < x-1 && b[i+1][j] != -2) )
             {
                 WordIndex index{i,j,0};
-                auto& word = res[index];
+
+                auto& word = res.insert(std::make_pair(index, GuessWord{0})).first->second;
                 for(SizeType ii = i; ii < x && b[ii][j] != -2; ++ii)
                 {
                     word.push_back(std::ref(b[ii][j]));
@@ -186,7 +264,7 @@ GuessWords makeGuessWords(Board& b, Possibilities& p)
             if( ( j == 0 || b[i][j-1] == -2 ) && (j < y-1 && b[i][j+1] != -2) )
             {
                 WordIndex index{i,j,1};
-                auto& word = res[index];
+                auto& word = res.insert(std::make_pair(index, GuessWord{1})).first->second;
                 for(SizeType jj = j; jj < x && b[i][jj] != -2; ++jj)
                 {
                     word.push_back(std::ref(b[i][jj]));
@@ -205,10 +283,14 @@ GuessWords makeGuessWords(Board& b, Possibilities& p)
             b[i][j].make(p);
         }
     }
+    for(auto& r : res)
+    {
+        r.second.setValidWords();
+    }
     return std::move(res);
 }
 
-Possibilities makePossibilities(const Words& w)
+Possibilities makePossibilities(Words& w)
 {
     Possibilities res;
     for(auto& wo : w)
@@ -216,7 +298,7 @@ Possibilities makePossibilities(const Words& w)
         SizeType s = wo.size();
         for(SizeType i = 0; i < s; ++i)
         {
-            res[std::make_pair(s,i)].insert(wo[i]);
+            res[std::make_pair(s,i)][wo[i]].push_back(std::ref(wo));
         }
     }
 
@@ -231,15 +313,32 @@ void printBoard(Board& board)
         for(SizeType j = 0; j < board[i].size(); ++j)
         {
             std::cout << std::setw(3) << std::right << static_cast<int>(board[i][j]);
-            //*
-            std::stringstream ss;
-            ss << "{";
-            std::copy(std::begin(board[i][j].possibles),
-                        std::end(board[i][j].possibles),
-                        std::ostream_iterator<char>(ss, ","));
-            ss << "}";
 
-            std::cout << std::setw(12) << ss.str();//*/
+            if(board[i][j].left.b)
+            {
+                std::stringstream ss;
+                ss << "{LEFT:";
+                for(auto& f : board[i][j].left.possibles)
+                {
+                    ss << f.first << ",";
+                }
+                ss << "}";
+
+                std::cout << std::setw(23) << ss.str();//*/
+            }
+
+            if(board[i][j].down.b)
+            {
+                std::stringstream ss;
+                ss << "{DOWN:";
+                for(auto& f : board[i][j].down.possibles)
+                {
+                    ss << f.first << ",";
+                }
+                ss << "}";
+
+                std::cout << std::setw(23) << ss.str();//*/
+            }
         }
         std::cout << std::endl;
     }
@@ -256,6 +355,13 @@ void printGuesses(const GuessWords& guesses)
         {
             std::cout << std::setw(3) << std::right << static_cast<int>(static_cast<SmartChar>(guess.second[j]).rw);
         }
+        std::cout <<"{";
+        for(Word& w : guess.second.validWords)
+        {
+            std::cout << w << ",";
+        }
+        std::cout <<"}";
+
         std::cout << std::endl;
     }
     std::cout << std::endl;
@@ -266,132 +372,14 @@ void printPossibilities(Possibilities& possibilities)
     for(auto st : possibilities)
     {
         std::cout << st.first.first << " " << st.first.second << " : ";
-        //std::copy(st.second.begin(), st.second.end(), std::ostream_iterator<char>(std::cout, " "));
+        for(auto& f : st.second)
+        {
+            std::cout << f.first << " ";
+        }
         std::endl(std::cout);
     }
 }
 
-
-
-namespace NEW
-{
-    using Field = char;
-    using SizeType = std::size_t;
-    template<class T>
-    using RefWr = std::reference_wrapper<T>;
-
-    struct Word;
-    struct SmartChar;
-
-
-    using GuessWordIndex = std::tuple< SizeType, SizeType, SizeType >; // x, y, dir
-    using CharPosition = std::tuple< SizeType, SizeType >; // size, pos
-    using CharToWords = std::unordered_map< Field , std::unordered_set< Word* > >;
-
-    struct Word
-    {
-        std::string str;
-        bool used;
-
-        std::unordered_map< void* , std::function<void(Word*)> > events;
-
-        Word(std::string str):str(str),used(false){}
-
-        template<class T>
-        void registering(T* that, void(T::*x)(Word*))
-        {
-            if(!used)
-                events[reinterpret_cast<void*>(that)] = std::bind(x, that, _1);
-        }
-
-        template<class T>
-        void deRegister(T* that)
-        {
-            if(!used)
-                events.erase(reinterpret_cast<void*>(that));
-        }
-
-        void getUsed()
-        {
-            if(used)
-                throw std::logic_error("Ketszer hasznalta a ["+ str +"] szot!");
-
-            used = true;
-            for(auto& e: events)
-            {
-                e.second(this);
-            }
-            events.clear();
-        }
-    };
-
-    struct SmartChar
-    {
-        struct GuessWordConnect
-        {
-            bool valid;
-            GuessWordIndex gwi;
-            CharPosition cp;
-            CharToWords chars;
-
-            std::unordered_map< void* , std::function<void(Field)> > events;
-
-            template<class T>
-            void registering(T* that, void(T::*x)(Field))
-            {
-                events[reinterpret_cast<void*>(that)] = std::bind(x, that, _1);
-            }
-
-            template<class T>
-            void deRegister(T* that)
-            {
-                events.erase(reinterpret_cast<void*>(that));
-            }
-
-            GuessWordConnect():valid(false){}
-
-            void notValidWord(Word* w)
-            {
-                for(auto& stuff : chars)
-                {
-                    auto it = stuff.second.find(w);
-                    if(it != std::end(stuff.second))
-                    {
-                        stuff.second.erase(it);
-                        if(stuff.second.size() == 0)
-                        {
-                            for(auto& e: events)
-                            {
-                                e.second(stuff.first);
-                            }
-                            chars.erase(stuff.first);
-                        }
-                        break;
-                    }
-                }
-            }
-
-            void notValidCharAnymore(Field f)
-            {
-
-            }
-
-            void set(GuessWordIndex&& i, CharPosition&& c, const CharToWords& ctw)
-            {
-                gwi = std::move(i);
-                cp = std::move(c);
-                chars = ctw;
-                for(auto& stuff : chars)
-                {
-                    for(auto& asd : stuff.second)
-                    {
-                        asd->registering(this, &GuessWordConnect::notValidWord);
-                    }
-                }
-            }
-        };
-    };
-}
 int main()
 {
     Board board{readBoard()};
@@ -399,6 +387,7 @@ int main()
     Possibilities possibilities{makePossibilities(words)};
 
     GuessWords guesses{makeGuessWords(board, possibilities)};
+
     printBoard(board);
     printGuesses(guesses);
     printPossibilities(possibilities);
