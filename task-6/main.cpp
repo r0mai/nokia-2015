@@ -2,6 +2,7 @@
 #include <valarray>
 #include <vector>
 #include <unordered_set>
+#include <unordered_map>
 #include <fstream>
 #include <iterator>
 #include <iomanip>
@@ -283,19 +284,20 @@ ColorMatrix readBMP(std::string filename)
     std::basic_string<CharType> data(size, ' ');
     fx.read(&data.front(), sizeof(CharType) * size); // read the rest of the data at once
 
-    ColorMatrix result(height, ColorVector(width));
+    ColorMatrix result(width, ColorVector(height));
+
     for(int i = 0; i < size; i+=3)
     {
-        result[i/3 / width][i/3 % width] = (static_cast<unsigned int>(static_cast<unsigned char>(data[i]  )) << 16) +
+        result[i/3 / height][i/3 % height] = (static_cast<unsigned int>(static_cast<unsigned char>(data[i]  )) << 16) +
                                            (static_cast<unsigned int>(static_cast<unsigned char>(data[i+1])) << 8) +
                                            (static_cast<unsigned int>(static_cast<unsigned char>(data[i+2])));
     }
     if(g_print1)
     {
         std::clog << "Read: " << height << " " << width << std::endl;
-        for(SizeType i = 0; i < height; ++i)
+        for(SizeType i = 0; i < width; ++i)
         {
-            for(SizeType j = 0; j < width; ++j)
+            for(SizeType j = 0; j < height; ++j)
             {
                 std::clog << std::setw(9) << std::right << result[i][j];
             }
@@ -303,6 +305,22 @@ ColorMatrix readBMP(std::string filename)
         }
     }
     return std::move(result);
+}
+
+ColorMatrix readFile(std::string filename)
+{
+    std::ifstream fx(filename);
+    if(!fx.is_open())
+        throw std::invalid_argument("No file");
+
+    std::string str;
+    ColorMatrix res;
+    while(std::getline(fx, str))
+    {
+        std::stringstream ss(str);
+        res.push_back(ColorVector{std::istream_iterator<char>(ss), std::istream_iterator<char>()});
+    }
+    return res;
 }
 
 int main(int argc, char* argv[])
