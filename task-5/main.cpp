@@ -20,8 +20,8 @@ int main()
     mysrand(2854395920);
     int z = myrand();
     std::cout << ::b << std::endl;
-    int a = myrand(), b = myrand(), c = myrand(), d = myrand(), e = myrand();
-    std::clog << z << " " << a << " " << b << " " << c << " " << d << " " << e << " " << std::endl;
+    int a = myrand(), b = myrand(), c = myrand(), d = myrand(), e = myrand(), f = myrand();
+    std::clog << z << " " << a << " " << b << " " << c << " " << d << " " << e << " " << f << " " << std::endl;
     
     {
         srand(2854395920);
