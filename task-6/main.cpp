@@ -36,6 +36,7 @@ inline auto get(const ColorMatrix& m, const Coord& c)
 template<class T>
 inline T gcd(T a, T b)
 {
+    if(a<0) a = -a;
     if(b<0) b = -b;
     while( b!=0 )
     {
@@ -182,6 +183,85 @@ ResultType do_it_2(const ColorMatrix& m)
 }
 
 
+ResultType do_it_3(const ColorMatrix& m)
+{
+    const SizeType x = m.size();
+    const SizeType y = m[0].size();
+
+    std::atomic<ResultType> res{0};
+
+    // eloszor a nem dolteket nezzuk:
+
+    #pragma omp parallel for
+    for(SizeType x1 = 0; x1 < x; ++x1)
+    {
+        ResultType p_res = 0;
+        for(SizeType y1 = 0; y1 < y; ++y1)
+        {
+            ColorType col = m[x1][y1];
+            for(SizeType y2 = y1+1; y2 < y; ++y2)
+            {
+                if(col != m[x1][y2])
+                    continue;
+
+                for(SizeType x2 = x1+1; x2 < x; ++x2)
+                {
+                    if(col == m[x2][y1] && col == m[x2][y2])
+                    {
+                        ++p_res;
+                    }
+                }
+            }
+        }
+        res += p_res;
+    }
+
+
+    #pragma omp parallel for
+    for(SizeType x1 = 0; x1 < x; ++x1)
+    {
+        ResultType p_res = 0;
+        for(SizeType y1 = 0; y1 < y; ++y1)
+        {
+            ColorType col = m[x1][y1];
+            for(SizeType x2 = x1+1; x2 < x; ++x2)
+            {
+                for(SizeType y2 = y1+1; y2 < y; ++y2)
+                {
+                    if(col != m[x2][y2])
+                        continue;
+
+                    SizeType nvx = y2-y1;
+                    SizeType nvy = x1-x2;
+
+                    SizeType g = gcd(nvx, nvy);
+                    nvx /= g;
+                    nvy /= g;
+
+                    SizeType x3 = x1 + nvx;
+                    SizeType y3 = y1 + nvy;
+                    SizeType x4 = x2 + nvx;
+                    SizeType y4 = y2 + nvy;
+                    while(y3 >= 0 && x4 < x)
+                    {
+                        if(col == m[x3][y3] && col == m[x4][y4])
+                        {
+                            ++p_res;
+                        }
+                        x3 += nvx;
+                        y3 += nvy;
+                        x4 += nvx;
+                        y4 += nvy;
+                    }
+                }
+            }
+        }
+        res += p_res;
+    }
+    return res;
+}
+
+
 
 ColorMatrix readBMP(std::string filename)
 {
@@ -237,6 +317,6 @@ int main(int argc, char* argv[])
                   {4,5,5,5,4,4},
                   {4,5,5,5,2,4}};
 
-    std::cout << do_it_2(readBMP("task6.bmp")) << std::endl;
+    std::cout << do_it_3(readBMP("task6.bmp")) << std::endl;
     return 0;
 }
