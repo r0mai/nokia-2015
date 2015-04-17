@@ -507,21 +507,21 @@ void printSimpyBoard(Board& board)
         {
             if(board[i][j] == -1)
             {
-                std::cout << " ";
+                std::clog << " ";
             }
             else if(board[i][j] == -2)
             {
-                std::cout << "X";
+                std::clog << "-";
             }
             else
             {
-                std::cout << static_cast<char>(board[i][j]);
+                std::clog << static_cast<char>(board[i][j]);
 
             }
         }
-        std::cout<<std::endl;
+        std::clog<<std::endl;
     }
-        std::cout<<std::endl;
+    std::clog<<std::endl;
 }
 void printBoard(Board& board)
 {
@@ -608,7 +608,7 @@ int main()
         std::cout << e.what() << std::endl;
     }
 
-    //printSimpyBoard(board);
+    printSimpyBoard(board);
 
     //printBoard(board);
     //printGuesses(guesses);
@@ -622,10 +622,15 @@ int main()
     {
         ++guessSizes[guess.second.size()];
     }
+
+    std::clog << "Not used Words" << std::endl;
     for(auto& word : words)
     {
         if(!word.reserved)
+        {
+            std::clog << word << std::endl;
             ++wordSizes[word.size()];
+        }
         if(!word.reserved && word.size() == 5)
         {
             std::cout << word << std::endl;
