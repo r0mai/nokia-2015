@@ -56,12 +56,6 @@ using Words = std::vector<Word>;
 template<class T>
 using RefWr = std::reference_wrapper<T>;
 
-using Coord = std::pair<SizeType, SizeType>;
-using WordIndex = std::tuple< SizeType, SizeType, SizeType >;
-
-using CharToWord = std::unordered_map<char, std::vector<RefWr<Word>> >;
-using Possibilities = std::unordered_map< Coord , CharToWord, PairHash >;
-
 struct RefWrHashEq {
     template <class T>
     std::size_t operator()(const RefWr<T> &x) const
@@ -74,6 +68,12 @@ struct RefWrHashEq {
         return x.get() == y.get();
     }
 };
+
+using Coord = std::pair<SizeType, SizeType>;
+using WordIndex = std::tuple< SizeType, SizeType, SizeType >;
+
+using CharToWord = std::unordered_map<char, std::unordered_set<RefWr<Word>, RefWrHashEq, RefWrHashEq> >;
+using Possibilities = std::unordered_map< Coord , CharToWord, PairHash >;
 
 // -2 NOT IN GAME
 // -1 NOT SURE
@@ -298,7 +298,7 @@ Possibilities makePossibilities(Words& w)
         SizeType s = wo.size();
         for(SizeType i = 0; i < s; ++i)
         {
-            res[std::make_pair(s,i)][wo[i]].push_back(std::ref(wo));
+            res[std::make_pair(s,i)][wo[i]].insert(std::ref(wo));
         }
     }
 
