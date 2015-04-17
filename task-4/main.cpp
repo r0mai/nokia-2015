@@ -73,7 +73,7 @@ struct RefWrHashEq {
     template <class T>
     bool operator()(const RefWr<T> &x, const RefWr<T> &y) const
     {
-        return x.get() == y.get();
+        return &x.get() == &y.get();
     }
 };
 
@@ -334,6 +334,13 @@ struct GuessWord : std::vector< RefWr<SmartChar> >
                 vw.insert(std::begin(pr.second), std::end(pr.second));
             }
             b |= intersect(validWords, vw);
+
+            if(validWords.size() == 0)
+            {
+                std::stringstream ss;
+                ss << "No valid word " << std::get<0>(lr) << " " << std::get<1>(lr) << " " << (std::get<2>(lr) ? "LEFT" : "DOWN") << std::endl;
+                throw std::logic_error(ss.str());
+            }
         }
         if(validWords.size() == 1 && !found)
         {
@@ -473,7 +480,7 @@ void doWork(GuessWords& res, Board& b)
             changed |= r.second.check();
         }
     }
-    std::cout << "END" << std::endl;
+    //std::cout << "END" << std::endl;
 }
 
 Possibilities makePossibilities(Words& w)
@@ -601,13 +608,13 @@ int main()
         std::cout << e.what() << std::endl;
     }
 
-    printSimpyBoard(board);
+    //printSimpyBoard(board);
 
     //printBoard(board);
     //printGuesses(guesses);
     //printPossibilities(possibilities);
 
-    std::cout << "Words are : " << words.size() << std::endl;
+    //std::cout << "Words are : " << words.size() << std::endl;
 
     std::array<int, 12> guessSizes{};
     std::array<int, 12> wordSizes{};
@@ -619,10 +626,14 @@ int main()
     {
         if(!word.reserved)
             ++wordSizes[word.size()];
+        if(!word.reserved && word.size() == 5)
+        {
+            std::cout << word << std::endl;
+        }
     }
     for(int i = 0; i < 12; ++i)
     {
-        std::cout << i << " : w: " << wordSizes[i] << "\t g:"<< guessSizes[i] << std::endl;
+    //std::cout << i << " : w: " << wordSizes[i] << "\t g:"<< guessSizes[i] << std::endl;
     }
 
     return 0;
