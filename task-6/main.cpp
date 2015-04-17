@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iterator>
 #include <iomanip>
+#include <atomic>
 
 using ColorType = int;
 using SizeType = int;
@@ -134,7 +135,7 @@ ResultType do_it(const ColorMatrix& m)
 
 ResultType do_it_2(const ColorMatrix& m)
 {
-    ResultType res = 0;
+    std::atomic<ResultType> res{0};
 
     const SizeType x = m.size();
     const SizeType y = m[0].size();
@@ -143,10 +144,14 @@ ResultType do_it_2(const ColorMatrix& m)
     const Coord min_c{0,0};
     const Coord max_c{x,y};
 
+    #pragma omp parallel for
     for(SizeType i = 0; i < sum; ++i)
     {
+        std::clog << "\033[0;0H" << std::setw(10) << std::left << i << " / " << sum << " eddig: " << res << std::endl;
+
         Coord x1{i / y, i % y};
         const ColorType& now_col = get(m, x1);
+
         for(SizeType j = i+1; j < sum; ++j)
         {
             Coord x2{j / y, j % y};
