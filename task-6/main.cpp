@@ -132,6 +132,50 @@ ResultType do_it(const ColorMatrix& m)
     return res;
 }
 
+ResultType do_it_2(const ColorMatrix& m)
+{
+    ResultType res = 0;
+
+    const SizeType x = m.size();
+    const SizeType y = m[0].size();
+    const SizeType sum = y * x;
+
+    const Coord min_c{0,0};
+    const Coord max_c{x,y};
+
+    for(SizeType i = 0; i < sum; ++i)
+    {
+        Coord x1{i / y, i % y};
+        const ColorType& now_col = get(m, x1);
+        for(SizeType j = i+1; j < sum; ++j)
+        {
+            Coord x2{j / y, j % y};
+
+            if(now_col != get(m, x2))
+                continue;
+
+            for(SizeType k = j+1; k < sum; ++k)
+            {
+                Coord x3{k / y, k % y};
+
+                if(now_col != get(m, x3))
+                    continue;
+
+                if(((x1-x2)*(x1-x3)).sum() == 0)
+                {
+                    Coord x4 = x2 + (x3-x1);
+
+                    if( (min_c <=x4).min() && (x4 < max_c).min() && now_col == get(m, x4))
+                    {
+                        ++res;
+                    }
+                }
+            }
+        }
+    }
+    return res;
+}
+
 
 
 ColorMatrix readBMP(std::string filename)
@@ -188,6 +232,6 @@ int main(int argc, char* argv[])
                   {4,5,5,5,4,4},
                   {4,5,5,5,2,4}};
 
-    std::cout << do_it(readBMP("task6.bmp")) << std::endl;
+    std::cout << do_it_2(readBMP("task6.bmp")) << std::endl;
     return 0;
 }
