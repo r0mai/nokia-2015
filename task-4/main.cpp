@@ -8,6 +8,8 @@
 #include <unordered_set>
 #include <sstream>
 #include <fstream>
+#include <algorithm>
+#include <deque>
 
 
 using namespace std::placeholders;
@@ -179,7 +181,11 @@ struct SmartChar
             }
             else if(left.possibles.empty())
             {
-                throw std::logic_error("Nem maradt betu");
+                std::stringstream ss;
+
+                ss <<"Nem maradt betu "<< std::get<0>(left.wi)<< " " << std::get<1>(left.wi)
+                    << "LEFT" << " " << left.c.first << " " << left.c.second << std::endl;
+                throw std::logic_error(ss.str());
             }
         }
 
@@ -223,7 +229,11 @@ struct SmartChar
             }
             else if(down.possibles.empty())
             {
-                throw std::logic_error("Nem maradt betu");
+                std::stringstream ss;
+
+                ss <<"Nem maradt betu "<< std::get<0>(down.wi)<< " " << std::get<1>(down.wi)
+                    << "DOWN" << " " << down.c.first << " " << down.c.second << std::endl;
+                throw std::logic_error(ss.str());
             }
         }
         return b;
@@ -300,6 +310,9 @@ struct GuessWord : std::vector< RefWr<SmartChar> >
     }
     bool check()
     {
+        if(found)
+            return false;
+
         bool b = false;
         for(auto it = std::begin(validWords); it != std::end(validWords);)
         {
@@ -368,6 +381,7 @@ Board readBoard()
             res.push_back(std::move(smc));
         }
     }
+    res[18][0] = '5';
 
     return std::move(res);
 }
@@ -434,6 +448,13 @@ GuessWords makeGuessWords(Board& b, Possibilities& p)
         r.second.setValidWords();
     }
 
+    return std::move(res);
+}
+
+void doWork(GuessWords& res, Board& b)
+{
+    const SizeType x = b.size();
+    const SizeType y = b[0].size();
     bool changed = true;
     while(changed)
     {
@@ -445,16 +466,14 @@ GuessWords makeGuessWords(Board& b, Possibilities& p)
                 changed |= b[i][j].checkImport(res);
             }
         }
-        std::cout << "Character change : " << changed << std::endl;
 
         changed = false;
         for(auto& r : res)
         {
             changed |= r.second.check();
         }
-        std::cout << "RefWord change : " << changed << std::endl;
     }
-    return std::move(res);
+    std::cout << "END" << std::endl;
 }
 
 Possibilities makePossibilities(Words& w)
@@ -472,6 +491,31 @@ Possibilities makePossibilities(Words& w)
     return res;
 }
 
+
+void printSimpyBoard(Board& board)
+{
+    for(SizeType i = 0; i < board.size(); ++i)
+    {
+        for(SizeType j = 0; j < board[i].size(); ++j)
+        {
+            if(board[i][j] == -1)
+            {
+                std::cout << " ";
+            }
+            else if(board[i][j] == -2)
+            {
+                std::cout << "X";
+            }
+            else
+            {
+                std::cout << static_cast<char>(board[i][j]);
+
+            }
+        }
+        std::cout<<std::endl;
+    }
+        std::cout<<std::endl;
+}
 void printBoard(Board& board)
 {
     std::cout << "Board is: " << std::endl;
@@ -548,7 +592,18 @@ int main()
 
     GuessWords guesses{makeGuessWords(board, possibilities)};
 
-    printBoard(board);
+    try
+    {
+        doWork(guesses, board);
+    }
+    catch(std::logic_error& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+
+    printSimpyBoard(board);
+
+    //printBoard(board);
     //printGuesses(guesses);
     //printPossibilities(possibilities);
 
@@ -562,7 +617,8 @@ int main()
     }
     for(auto& word : words)
     {
-        ++wordSizes[word.size()];
+        if(!word.reserved)
+            ++wordSizes[word.size()];
     }
     for(int i = 0; i < 12; ++i)
     {
