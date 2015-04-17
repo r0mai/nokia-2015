@@ -49,10 +49,16 @@ struct AdjacencyMatrix {
 	}
 
 	void removeIndices(const std::vector<std::size_t>& indices) {
-		for(std::size_t i=0; i<indices.size(); ++i) {
-			std::swap(adjacency[indices[i]], adjacency[adjacency.size()-i-1]);
+		for(const auto& index: indices) {
+			removeIndex(index);
 		}
-		adjacency.erase(adjacency.begin()+indices.size());
+	}
+
+	void removeIndex(const std::size_t index) {
+		for(auto& row: adjacency) {
+			row.erase(row.begin()+index);
+		}
+		adjacency.erase(adjacency.begin()+index);
 	}
 
 	bool isNetworkDown() const {
@@ -106,6 +112,49 @@ int main() {
 			std::cerr<<nodeId<<" ";
 		}
 		std::cerr<<std::endl;
+	}
+
+	std::cerr<<"Commencing search"<<std::endl;
+
+	AdjacencyMatrix preprocessed = matrix;
+	preprocessed.removeIndices(matrix.getLeafNodes());
+
+	const std::size_t minimalAttackSize = 1;
+
+	for(std::size_t i=minimalAttackSize; i<preprocessed.adjacency.size(); ++i) {
+		std::cerr<<"Searching for attack with size="<<i<<std::endl;
+		std::vector<bool> attackVector(width);
+		for(std::size_t j=0; j<i; ++j) {
+			attackVector[width-j-1] = true;
+		}
+		do {
+#ifdef PRINTALL
+			std::cerr<<"Current attack vector: "<<std::endl;
+			for(int j=0; j<width; ++j) {
+				if(attackVector[j])
+					std::cerr<<j<<" ";
+			}
+			std::cerr<<std::endl;
+
+			std::vector<std::size_t> attackIndices;
+			for(int j=0; j<attackVector.size(); ++j) {
+				if(attackVector[j])
+					attackIndicies.push_back(j);
+			}
+			AdjacencyMatrix copy = preprocessed;
+			copy.eraseIndicies(attackIndicies);
+			if(copy.isNetworkDown()) {
+				std::cerr<<"Attack successful with nodes:"<<std::endl;
+				for(int j=0; j<width; ++j) {
+					if(attackVector[j])
+						std::cerr<<j<<" ";
+				}
+				std::cerr<<std::endl;
+				std::cerr<<"Attack vector over"<<std::endl;
+			}
+
+#endif
+		} while(std::next_permutation(attackVector.begin(), attackVector.end()));
 	}
 
 }
