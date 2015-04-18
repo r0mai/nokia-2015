@@ -13,6 +13,9 @@ struct Transmission {
 
 using Transmissions = std::vector<Transmission>;
 
+void simulate(const Graph& graph, const Transmissions& transmissions) {
+}
+
 int main() {
     std::string line;
 
