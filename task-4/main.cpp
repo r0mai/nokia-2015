@@ -342,12 +342,16 @@ struct GuessWord : std::vector< RefWr<SmartChar> >
                 throw std::logic_error(ss.str());
             }
         }
-        if(validWords.size() == 1 && !found)
+
+        auto& word = validWords.begin()->get();
+        if(validWords.size() == 1 || std::all_of(std::begin(validWords), std::end(validWords), std::bind(std::equal_to<std::string>(), word, std::placeholders::_1)))
         {
             b = true;
             found = true;
-            auto& word = validWords.begin()->get();
+
             word.reserved = true;
+            validWords.erase(++std::begin(validWords), std::end(validWords));
+
             auto begin1 = std::begin(word);
             auto end1 = std::end(word);
             auto begin2 = this->begin();
