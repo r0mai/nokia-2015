@@ -44,8 +44,11 @@ struct ZeroEvents
     {
         bool fail;
         TimePrec when;
+        bool wasBTrueFirst;
+        TimePrec whenWasBTrue;
         int requests;
-        WebServer():fail{false}, requests{0}{}
+
+        WebServer():fail{false},wasBTrueFirst{false}, requests{0}{}
 
         void checkEvent(const TimePrec& t)
         {
@@ -57,17 +60,27 @@ struct ZeroEvents
 
             // B
             bool b = requests >= 400;
+            if(b && !wasBTrueFirst)
+            {
+                wasBTrueFirst = true;
+                whenWasBTrue = t;
+            }
+
             std::clog << "B: " << b << std::endl;
+
             if( a && b )
             {
                 std::cout << "0";
-                gotRestart();
+                when = std::max(when + 5min, whenWasBTrue);
+                wasBTrueFirst = false;
+                requests = 0;
             }
         }
 
         void gotRestart()
         {
             fail = false;
+            wasBTrueFirst = false;
             requests = 0;
         }
 
@@ -110,10 +123,8 @@ struct ZeroEvents
         }
         else if(l.message == "USER_REQUEST")
         {
-            //event.gotRequest();
-
             // tobbes szamban van!
-            for(auto& event : ec) // ????
+            //for(auto& event : ec) // ????
             {
                 event.gotRequest();
             }
@@ -159,15 +170,17 @@ struct OneEvents
 
         void gotStop(const TimePrec& t)
         {
-            isDown = true;
-            when = t;
+            if(!isDown)
+            {
+                isDown = true;
+                when = t;
+            }
         }
 
-        void gotRestart(const TimePrec& asd) // ????
+        void restart(const TimePrec& asd) // ????
         {
             no_space_alarms.clear();
-            //isDown = false;
-            when = std::min(when + 3min, asd);
+            when = std::min(when+3min, asd);
         }
     };
 
@@ -189,7 +202,7 @@ struct OneEvents
             lastDo = p;
         }
 
-        void gotRestart()
+        void restart()
         {
             do_anything = false; // ????
         }
@@ -215,12 +228,12 @@ struct OneEvents
 
             for(Storage& s : storages)
             {
-                s.gotRestart(p);
+                s.restart(p);
             }
 
             for(Distributor& d : distributors)
             {
-                d.gotRestart();
+                d.restart();
             }
         }
     }
