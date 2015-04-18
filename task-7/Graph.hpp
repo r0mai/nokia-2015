@@ -5,7 +5,8 @@
 struct vertex_property {};
 
 struct edge_property {
-    unsigned speed = 0;
+    unsigned speed = 100;
+    bool canHaveOptic = false;
 };
 
 struct vertex_property_tag {
@@ -23,9 +24,28 @@ typedef boost::adjacency_list<
     boost::property<vertex_property_tag, vertex_property>,
     boost::property<edge_property_tag, edge_property>> Graph;
 
+typedef boost::graph_traits<Graph>::vertex_descriptor vertex_descriptor;
+typedef boost::graph_traits<Graph>::edge_descriptor edge_descriptor;
+
+auto& getEdgeProperty(Graph& g, edge_descriptor e) {
+    return boost::get(edge_property_tag(), g, e);
+}
+
 void addEdgeBetween(Graph& g, unsigned x, unsigned y) {
-    boost::add_edge(x-1, y-1, g);
-    boost::add_edge(y-1, x-1, g);
+    auto e1 = boost::add_edge(x-1, y-1, g).first;
+    auto e2 = boost::add_edge(y-1, x-1, g).first;
+    if (x == 20 || y == 20) {
+        // Coming from ISP
+        getEdgeProperty(g, e1).speed = 10000;
+        getEdgeProperty(g, e2).speed = 10000;
+    }
+    auto isOpticDevice = [](unsigned n) {
+        return n == 11 || n == 12 || n == 16 || n == 17 || n == 18 || n == 19;
+    };
+    if (isOpticDevice(x) && isOpticDevice(y)) {
+        getEdgeProperty(g, e1).canHaveOptic = true;
+        getEdgeProperty(g, e2).canHaveOptic = true;
+    }
 }
 
 inline
