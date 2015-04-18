@@ -7,6 +7,7 @@
 #include <iterator>
 #include <iomanip>
 #include <atomic>
+#include <sstream>
 
 using ColorType = int;
 using SizeType = int;
@@ -50,7 +51,7 @@ inline T gcd(T a, T b)
 
 inline Coord normal(const Coord& first, const Coord& second)
 {
-    Coord res{(first-second).cshift(1)};
+    Coord res((first-second).cshift(1));
     res /= res[0] < 0 ? gcd(res[0] = -res[0], res[1]) : gcd(res[0], res[1] = -res[1]);
     // lenormáljuk a legkisebb egész koordinátákra, hogy x>=0 legyen
     return std::move(res);
@@ -90,7 +91,7 @@ ResultType do_it(const ColorMatrix& m)
                 for(Coord moved = norm; ;moved+=norm)
                 {
                     // 3. koordináta
-                    const Coord third{first + moved};
+                    const Coord third(first + moved);
 
                     // ha benne vagyunk a range-ben, OK (kben break)
                     if( (min_c <=third).min() && (third < max_c).min() )
@@ -99,7 +100,7 @@ ResultType do_it(const ColorMatrix& m)
                         if(now_col == get(m, third) && second_c < third[0]*y+third[1])
                         {
                             // negyedik koord számolás
-                            const Coord fourth{second + moved};
+                            const Coord fourth(second + moved);
 
                             // ha benne vagyunk a range-ben, OK (kben break)
                             if( (min_c <=fourth).min() && (fourth < max_c).min() )
