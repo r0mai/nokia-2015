@@ -10,7 +10,7 @@
 #include <fstream>
 #include <algorithm>
 #include <deque>
-
+#include <array>
 
 using namespace std::placeholders;
 struct PairHash {
