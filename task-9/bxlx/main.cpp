@@ -60,23 +60,13 @@ public:
 
 };
 
-struct MyUSHash
-{
-    template<class T>
-    inline std::size_t operator()(const std::unordered_set<T>& us) const
-    {
-        return std::accumulate(std::begin(us), std::end(us), std::hash<std::size_t>()(us.size()),
-                            [](std::size_t b, const T& e){ return b ^ std::hash<T>()(e); });
-    }
-};
-
 int main()
 {
     bool file = true;
 
     std::ifstream input_f("task9.txt");
 
-    std::istream& input(file ? input_f : std::cin);
+    std::istream& input(file && input_f.is_open() ? input_f : std::cin);
 
     std::string tmp;
 	std::getline(input, tmp);
