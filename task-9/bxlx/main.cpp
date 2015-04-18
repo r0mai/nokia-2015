@@ -225,6 +225,7 @@ int main()
     std::stringstream sso;
     for(Node n : ns)
     {
+        ++n;
         if(n < 10)
             sso << "0" << n;
         else
