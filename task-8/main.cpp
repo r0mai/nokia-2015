@@ -6,6 +6,7 @@
 #include <deque>
 #include <algorithm>
 #include <queue>
+#include <sstream>
 
 using namespace std::literals;
 
@@ -40,6 +41,7 @@ struct Line
     }
 };
 
+std::stringstream ss;
 struct ZeroEvents
 {
     struct WebServer
@@ -53,19 +55,19 @@ struct ZeroEvents
 
         bool checkEvent(const TimePrec& t)
         {
-            std::clog << t.count() << " - ";
+            //std::clog << t.count() << " - ";
 
             // A
             bool a = fail && (t - when) >= 5min;
-            std::clog << "A: " << a << ", ";
+            //std::clog << "A: " << a << ", ";
 
             // B
             bool b = requests >= 400;
-            std::clog << "B: " << b << std::endl;
+            //std::clog << "B: " << b << std::endl;
 
             if( a && b )
             {
-                std::cout << "0";
+                ss << "0";
                 when = t;
                 requests = 0;
                 return true;
@@ -233,17 +235,17 @@ struct OneEvents
     void tick(const TimePrec& p)
     {
         // C
-        std::clog << p.count() << " - ";
+        //std::clog << p.count() << " - ";
         bool c = std::count_if(std::begin(storages), std::end(storages), [&p](Storage& s){ return s.checkC(p); }) >= 8;
         c &= std::count_if(std::begin(distributors), std::end(distributors), [&p](Distributor& d){ return d.checkC(p); }) >= 1;
-        std::clog << "C: " << c << ", ";
+        //std::clog << "C: " << c << ", ";
         // D
         bool d = std::count_if(std::begin(storages), std::end(storages), [&p](Storage& s){ return s.checkD(p); }) >= 5;
-        std::clog << "D: " << d << std::endl;
+        //std::clog << "D: " << d << std::endl;
 
         if(c || d)
         {
-            std::cout << "1";
+            ss << "1";
 
             falseEvents.push(p + 3min);
             for(Storage& s : storages)
@@ -320,6 +322,8 @@ int main()
         ze.tick(l.tp);
         oe.tick(l.tp);
     }
-    std::cout << std::endl;
+
+    std::clog << ss.str() << std::endl;
+    std::cout << std::stol(ss.str(), nullptr, 2) << std::endl;
     return 0;
 }
