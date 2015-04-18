@@ -49,8 +49,16 @@ struct ZeroEvents
 
         void checkEvent(const TimePrec& t)
         {
-            if(fail && (t - when) > 5min // A
-                && requests >= 400 ) // B
+            std::clog << t.count() << " - ";
+
+            // A
+            bool a = fail && (t - when) > 5min;
+            std::clog << "A: " << a << ", ";
+
+            // B
+            bool b = requests >= 400;
+            std::clog << "B: " << b << std::endl;
+            if( a && b )
             {
                 std::cout << "0";
                 gotRestart();
@@ -65,8 +73,11 @@ struct ZeroEvents
 
         void gotFail(TimePrec w)
         {
-            when = w;
-            fail = true;
+            if(!fail)
+            {
+                when = w;
+                fail = true;
+            }
         }
 
         void gotRequest()
@@ -152,10 +163,11 @@ struct OneEvents
             when = t;
         }
 
-        void gotRestart() // ????
+        void gotRestart(const TimePrec& asd) // ????
         {
             no_space_alarms.clear();
-            isDown = false;
+            //isDown = false;
+            when = std::min(when + 3min, asd);
         }
     };
 
@@ -179,7 +191,7 @@ struct OneEvents
 
         void gotRestart()
         {
-            //do_anything = false; // ????
+            do_anything = false; // ????
         }
     };
 
@@ -189,18 +201,21 @@ struct OneEvents
     void tick(const TimePrec& p)
     {
         // C
-        bool oneRule = std::count_if(std::begin(storages), std::end(storages), [&p](Storage& s){ return s.checkC(p); }) >= 8;
-        oneRule &= std::count_if(std::begin(distributors), std::end(distributors), [&p](Distributor& d){ return d.checkC(p); }) >= 1;
+        std::clog << p.count() << " - ";
+        bool c = std::count_if(std::begin(storages), std::end(storages), [&p](Storage& s){ return s.checkC(p); }) >= 8;
+        c &= std::count_if(std::begin(distributors), std::end(distributors), [&p](Distributor& d){ return d.checkC(p); }) >= 1;
+        std::clog << "C: " << c << ", ";
         // D
-        oneRule |= std::count_if(std::begin(storages), std::end(storages), [&p](Storage& s){ return s.checkD(p); }) >= 5;
+        bool d = std::count_if(std::begin(storages), std::end(storages), [&p](Storage& s){ return s.checkD(p); }) >= 5;
+        std::clog << "D: " << d << std::endl;
 
-        if(oneRule)
+        if(c || d)
         {
             std::cout << "1";
 
             for(Storage& s : storages)
             {
-                s.gotRestart();
+                s.gotRestart(p);
             }
 
             for(Distributor& d : distributors)
@@ -230,24 +245,22 @@ struct OneEvents
     void distributorEventHappened(const Line& l)
     {
         distributors[l.num - 30].gotStg(l.tp);
-        // tick(l.tp); - nem válthat ki eseményt
     }
 };
 
 int main()
 {
-    std::ifstream input("07516091bcd356947518fe4e948b826e.log");
-    if(!input.is_open())
-        throw std::logic_error("No file");
+    bool file = true;
+    std::ifstream input_f("07516091bcd356947518fe4e948b826e.log");
+    std::istream& input(file && input_f.is_open() ? input_f : std::cin);
 
     ZeroEvents ze;
     OneEvents oe;
     Line l;
-
     while(input >> l)
     {
-        ze.tick(l.tp);
-        oe.tick(l.tp);
+        ze.tick(l.tp-1ms);
+        oe.tick(l.tp-1ms);
         if(11 <= l.num && l.num <= 15)
         {
             ze.webServerHappened(l);
@@ -260,10 +273,9 @@ int main()
         {
             oe.distributorEventHappened(l);
         }
-
         ze.tick(l.tp);
         oe.tick(l.tp);
     }
-
+    std::cout << std::endl;
     return 0;
 }
