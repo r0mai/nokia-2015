@@ -31,9 +31,9 @@ struct Line
         std::chrono::hours h;
         std::chrono::minutes m;
         std::chrono::seconds s;
-        std::chrono::duration<std::int64_t, std::centi > cs;
-        i >> l.message >> h >> tmp >> m >> tmp >> s >> tmp >> cs >> l.num >> l.message;
-        l.tp = h + m + s + cs;
+        TimePrec ms;
+        i >> l.message >> h >> tmp >> m >> tmp >> s >> tmp >> ms >> l.num >> l.message;
+        l.tp = h + m + s + ms;
         return i;
     }
 };
@@ -107,8 +107,6 @@ struct ZeroEvents
                 event.gotRequest();
             }
         }
-
-        tick(l.tp);
     }
 };
 
@@ -157,6 +155,7 @@ struct OneEvents
         void gotRestart() // ????
         {
             no_space_alarms.clear();
+            isDown = false;
         }
     };
 
@@ -180,7 +179,7 @@ struct OneEvents
 
         void gotRestart()
         {
-            do_anything = false; // ????
+            //do_anything = false; // ????
         }
     };
 
@@ -226,8 +225,6 @@ struct OneEvents
         {
             st.gotStart();
         }
-
-        tick(l.tp);
     }
 
     void distributorEventHappened(const Line& l)
@@ -249,6 +246,8 @@ int main()
 
     while(input >> l)
     {
+        ze.tick(l.tp);
+        oe.tick(l.tp);
         if(11 <= l.num && l.num <= 15)
         {
             ze.webServerHappened(l);
@@ -261,6 +260,9 @@ int main()
         {
             oe.distributorEventHappened(l);
         }
+
+        ze.tick(l.tp);
+        oe.tick(l.tp);
     }
 
     return 0;
