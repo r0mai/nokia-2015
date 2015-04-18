@@ -152,7 +152,7 @@ int main()
                     setB.insert(n);
                 }
 
-                // csak akkor folytatjuk, ha B nagyobb a min-nál (kben nem javít az egészen)
+                // csak akkor folytatjuk, ha B merete kisebb a min-nál (kben nem javít az egészen)
                 if(setB.size() <= min)
                 {
                     // a 0 -s pontokat tegyuk bele A-ba
@@ -221,6 +221,8 @@ int main()
     })();
     std::clog << "Minimalis " << min << ", db: " << mins.size() << std::endl;
 
+
+    // gyujtsuk ossze az osszeset (es logoljunk)
     std::set<Node> ns;
     for(auto& m : mins)
     {
@@ -228,6 +230,8 @@ int main()
         ns.insert(std::begin(m), std::end(m));
         std::clog << std::endl;
     }
+
+    // formazzuk a megfelelo kimenethez
     std::stringstream sso;
     for(Node n : ns)
     {
