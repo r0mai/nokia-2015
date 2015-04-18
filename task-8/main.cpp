@@ -5,7 +5,7 @@
 #include <array>
 #include <deque>
 #include <algorithm>
-
+#include <queue>
 
 using namespace std::literals;
 
@@ -19,6 +19,8 @@ std::istream& operator>>(std::istream& i, std::chrono::duration<T, U>& d)
 }
 
 using TimePrec = std::chrono::milliseconds;
+using FalseEvents = std::priority_queue< TimePrec , std::vector<TimePrec>, std::greater<TimePrec> >;
+
 struct Line
 {
     int num;
@@ -44,69 +46,77 @@ struct ZeroEvents
     {
         bool fail;
         TimePrec when;
-        bool wasBTrueFirst;
-        TimePrec whenWasBTrue;
+
         int requests;
 
-        WebServer():fail{false},wasBTrueFirst{false}, requests{0}{}
+        WebServer():fail{false}, requests{0}{}
 
-        void checkEvent(const TimePrec& t)
+        bool checkEvent(const TimePrec& t)
         {
             std::clog << t.count() << " - ";
 
             // A
-            bool a = fail && (t - when) > 5min;
+            bool a = fail && (t - when) >= 5min;
             std::clog << "A: " << a << ", ";
 
             // B
             bool b = requests >= 400;
-            if(b && !wasBTrueFirst)
-            {
-                wasBTrueFirst = true;
-                whenWasBTrue = t;
-            }
-
             std::clog << "B: " << b << std::endl;
 
             if( a && b )
             {
                 std::cout << "0";
-                when = std::max(when + 5min, whenWasBTrue);
-                wasBTrueFirst = false;
+                when = t;
                 requests = 0;
+                return true;
             }
+            return false;
         }
 
         void gotRestart()
         {
             fail = false;
-            wasBTrueFirst = false;
             requests = 0;
         }
 
-        void gotFail(TimePrec w)
+        bool gotFail(TimePrec w)
         {
             if(!fail)
             {
                 when = w;
                 fail = true;
+                return true;
             }
+            return false;
         }
 
         void gotRequest()
         {
             if(fail)
+            {
                 ++requests;
+            }
         }
     };
+
+    ZeroEvents(FalseEvents& falseEvents):
+        falseEvents(falseEvents){}
+
+    FalseEvents& falseEvents;
 
     std::array< WebServer, 5 > ec;
 
     void tick(const TimePrec& p)
     {
+        bool needRestart = false;
         for(auto& event : ec)
         {
-            event.checkEvent(p);
+            needRestart |= event.checkEvent(p);
+        }
+
+        if(needRestart)
+        {
+            falseEvents.push(p + 5min);
         }
     }
 
@@ -115,7 +125,10 @@ struct ZeroEvents
         auto& event = ec[l.num-11];
         if(l.message == "FAILURE")
         {
-            event.gotFail(l.tp);
+            if(event.gotFail(l.tp))
+            {
+                falseEvents.push(l.tp + 5min);
+            }
         }
         else if (l.message == "SERVICE_RESTART_COMPLETED")
         {
@@ -155,7 +168,7 @@ struct OneEvents
 
         bool checkD(const TimePrec& t)
         {
-            return isDown && t - when > 3min;
+            return isDown && t - when >= 3min;
         }
 
         void gotNoSpace(const TimePrec& t)
@@ -168,19 +181,21 @@ struct OneEvents
             isDown = false;
         }
 
-        void gotStop(const TimePrec& t)
+        bool gotStop(const TimePrec& t)
         {
             if(!isDown)
             {
                 isDown = true;
                 when = t;
+                return true;
             }
+            return false;
         }
 
         void restart(const TimePrec& asd) // ????
         {
             no_space_alarms.clear();
-            when = std::min(when+3min, asd);
+            when = asd;
         }
     };
 
@@ -204,10 +219,14 @@ struct OneEvents
 
         void restart()
         {
-            do_anything = false; // ????
+            //do_anything = false; // ????
         }
     };
 
+    OneEvents(FalseEvents& falseEvents):
+        falseEvents(falseEvents){}
+
+    FalseEvents& falseEvents;
     std::array< Storage, 10 > storages;
     std::array< Distributor, 2 > distributors;
 
@@ -226,6 +245,7 @@ struct OneEvents
         {
             std::cout << "1";
 
+            falseEvents.push(p + 3min);
             for(Storage& s : storages)
             {
                 s.restart(p);
@@ -247,7 +267,10 @@ struct OneEvents
         }
         else if(l.message == "STOP")
         {
-            st.gotStop(l.tp);
+            if(st.gotStop(l.tp))
+            {
+                falseEvents.push(l.tp + 3min);
+            }
         }
         else if(l.message == "START")
         {
@@ -267,13 +290,21 @@ int main()
     std::ifstream input_f("07516091bcd356947518fe4e948b826e.log");
     std::istream& input(file && input_f.is_open() ? input_f : std::cin);
 
-    ZeroEvents ze;
-    OneEvents oe;
+    FalseEvents falseEvents;
+    ZeroEvents ze(falseEvents);
+    OneEvents oe(falseEvents);
     Line l;
+
     while(input >> l)
     {
-        ze.tick(l.tp-1ms);
-        oe.tick(l.tp-1ms);
+        while(!falseEvents.empty() && falseEvents.top() <= l.tp)
+        {
+            TimePrec falseEvent = falseEvents.top();
+            falseEvents.pop();
+            ze.tick(falseEvent);
+            oe.tick(falseEvent);
+        }
+
         if(11 <= l.num && l.num <= 15)
         {
             ze.webServerHappened(l);
