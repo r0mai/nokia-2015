@@ -153,10 +153,6 @@ struct OneEvents
     struct Storage
     {
         std::deque<TimePrec> no_space_alarms;
-        bool isDown;
-        TimePrec when;
-
-        Storage():isDown{false}{}
 
         bool checkC(const TimePrec& t)
         {
@@ -165,12 +161,7 @@ struct OneEvents
                 no_space_alarms.pop_front();
             }
 
-            return no_space_alarms.size() >= 3;
-        }
-
-        bool checkD(const TimePrec& t)
-        {
-            return isDown && t - when >= 3min;
+            return no_space_alarms.size() >= 1;
         }
 
         void gotNoSpace(const TimePrec& t)
@@ -178,59 +169,43 @@ struct OneEvents
             no_space_alarms.push_back(t);
         }
 
-        void gotStart()
-        {
-            isDown = false;
-        }
-
-        bool gotStop(const TimePrec& t)
-        {
-            if(!isDown)
-            {
-                isDown = true;
-                when = t;
-                return true;
-            }
-            return false;
-        }
-
         void restart(const TimePrec& asd) // ????
         {
             no_space_alarms.clear();
-            when = asd;
         }
     };
 
     struct Distributor
     {
-        bool do_anything;
-        TimePrec lastDo;
-
-        Distributor():do_anything{false}{}
+        std::deque<TimePrec> anythings;
 
         bool checkC(const TimePrec& p)
         {
-            return !do_anything || p - lastDo > 5min;
+            while(!anythings.empty() && p - anythings.front() > 5min )
+            {
+                anythings.pop_front();
+            }
+            return anythings.size() < 15;
         }
 
         void gotStg(const TimePrec& p)
         {
-            do_anything = true;
-            lastDo = p;
+            anythings.push_back(p);
         }
 
         void restart()
         {
-            //do_anything = false; // ????
+            //anythings.clear();
         }
     };
 
     OneEvents(FalseEvents& falseEvents):
-        falseEvents(falseEvents){}
+        falseEvents(falseEvents), lastTrue{9h}{}
 
     FalseEvents& falseEvents;
     std::array< Storage, 10 > storages;
     std::array< Distributor, 2 > distributors;
+    TimePrec lastTrue;
 
     void tick(const TimePrec& p)
     {
@@ -239,15 +214,13 @@ struct OneEvents
         bool c = std::count_if(std::begin(storages), std::end(storages), [&p](Storage& s){ return s.checkC(p); }) >= 8;
         c &= std::count_if(std::begin(distributors), std::end(distributors), [&p](Distributor& d){ return d.checkC(p); }) >= 1;
         //std::clog << "C: " << c << ", ";
-        // D
-        bool d = std::count_if(std::begin(storages), std::end(storages), [&p](Storage& s){ return s.checkD(p); }) >= 5;
-        //std::clog << "D: " << d << std::endl;
 
-        if(c || d)
+        if(c && p - lastTrue >= 5min)
         {
+        
+            lastTrue = p;
+            
             ss << "1";
-
-            falseEvents.push(p + 3min);
             for(Storage& s : storages)
             {
                 s.restart(p);
@@ -266,17 +239,6 @@ struct OneEvents
         if(l.message == "NO_SPACE")
         {
             st.gotNoSpace(l.tp);
-        }
-        else if(l.message == "STOP")
-        {
-            if(st.gotStop(l.tp))
-            {
-                falseEvents.push(l.tp + 3min);
-            }
-        }
-        else if(l.message == "START")
-        {
-            st.gotStart();
         }
     }
 
