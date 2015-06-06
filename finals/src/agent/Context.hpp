@@ -2,12 +2,12 @@
 
 #include <vector>
 #include <utility>
-#include "Capabilities.hpp"
-#include "GameState.hpp"
-#include "MapState.hpp"
-#include "Order.hpp"
-#include "Resources.hpp"
-#include "Unit.hpp"
+#include "agent/Capabilities.hpp"
+#include "agent/GameState.hpp"
+#include "agent/MapState.hpp"
+#include "agent/Order.hpp"
+#include "agent/Resources.hpp"
+#include "agent/Unit.hpp"
 
 namespace calmare {
 
