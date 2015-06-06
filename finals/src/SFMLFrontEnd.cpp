@@ -32,6 +32,11 @@ void SFMLFrontEnd::draw() {
     //draw stuff
     window.clear(model.color);
 
+    sf::CircleShape shape(50);
+    shape.setFillColor(sf::Color(100, 250, 50));
+
+    window.draw(shape);
+
     window.display();
 }
 
