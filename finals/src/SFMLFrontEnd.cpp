@@ -6,6 +6,10 @@ SFMLFrontEnd::SFMLFrontEnd() :
     window(sf::VideoMode(800, 800), "Calmare - Nokia 2015"),
     worldView(sf::FloatRect(0, 0, 1, 1))
 {
+    generateGrid();
+}
+
+void SFMLFrontEnd::generateGrid() {
     unsigned w = 10, h = 10;
     float gridThickness = 0.002;
     for (unsigned x = 0; x <= w; ++x) {

@@ -15,6 +15,8 @@ public:
     void run();
 
 private:
+    void generateGrid();
+
     void handleEvents();
     void tick();
     void draw();
