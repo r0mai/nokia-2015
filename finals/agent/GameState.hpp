@@ -1,8 +1,10 @@
 #pragma once
 
+#include "ContextFwd.hpp"
+
 namespace calmare {
 
-class GameState {
+class GameState : public OwnedByContext {
 };
 
 }

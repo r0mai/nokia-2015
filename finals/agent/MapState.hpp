@@ -1,8 +1,10 @@
 #pragma once
 
+#include "ContextFwd.hpp"
+
 namespace calmare {
 
-class MapState {
+class MapState : public OwnedByContext {
 };
 
 }
