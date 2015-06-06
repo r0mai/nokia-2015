@@ -58,6 +58,15 @@ void SFMLFrontEnd::handleEvents() {
                 }
                 break;
             }
+            case sf::Event::KeyPressed:
+                switch (event.key.code) {
+                    case sf::Keyboard::Q:
+                        window.close();
+                        break;
+                    default:
+                        break;
+                }
+                break;
             default:
                 break;
         }
