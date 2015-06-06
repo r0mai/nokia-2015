@@ -13,13 +13,13 @@ namespace calmare {
 
 class Context {
 
-	GameState gameState;
-	MapState mapState;
-	Resources resources;
-	Units units;
+    GameState gameState;
+    MapState mapState;
+    Resources resources;
+    Units units;
 
 public:
-	std::vector<std::pair<Unit, Order> > currentOrders() const;
+    std::vector<std::pair<Unit, Order> > currentOrders() const;
 
 };
 

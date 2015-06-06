@@ -8,11 +8,11 @@ namespace calmare {
 typedef int UnitId;
 
 class Unit : public OwnedByContext {
-	Capabilities currentCapabilities;
+    Capabilities currentCapabilities;
 };
 
 class Units {
-	std::vector<Unit> units;
+    std::vector<Unit> units;
 };
 
 }

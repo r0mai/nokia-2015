@@ -8,7 +8,7 @@ class Capability {
 };
 
 class Capabilities {
-	std::vector<Capability> capabilities;
+    std::vector<Capability> capabilities;
 };
 
 }
