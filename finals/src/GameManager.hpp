@@ -2,6 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Model.hpp"
+
 namespace calmare {
 
 class GameManager {
@@ -10,6 +12,7 @@ public:
 
     void run();
 private:
+    Model model;
     sf::RenderWindow window;
 };
 

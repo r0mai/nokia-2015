@@ -13,7 +13,14 @@ void GameManager::run() {
                 window.close();
             }
         }
-        window.clear(sf::Color::Blue);
+
+        model.tick();
+
+        window.clear(sf::Color::Black);
+
+        //draw stuff
+        window.clear(model.color);
+
         window.display();
     }
 }
