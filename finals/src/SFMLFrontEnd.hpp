@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include <SFML/Graphics.hpp>
 
 #include "Model.hpp"
@@ -12,16 +14,20 @@ public:
 
     void run();
 
+private:
     void handleEvents();
     void tick();
     void draw();
 
     void drawWorld();
     void drawGUI();
-private:
+
     Model model;
+
     sf::RenderWindow window;
     sf::View worldView;
+
+    std::vector<sf::RectangleShape> gridShapes;
 };
 
 }

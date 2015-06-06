@@ -5,7 +5,22 @@ namespace calmare {
 SFMLFrontEnd::SFMLFrontEnd() :
     window(sf::VideoMode(800, 800), "Calmare - Nokia 2015"),
     worldView(sf::FloatRect(0, 0, 1, 1))
-{}
+{
+    unsigned w = 10, h = 10;
+    float gridThickness = 0.002;
+    for (unsigned x = 0; x <= w; ++x) {
+        sf::RectangleShape s{sf::Vector2f{gridThickness, 1}};
+        s.setPosition(sf::Vector2f{float(x)/w - gridThickness/2, 0});
+        s.setFillColor(sf::Color::White);
+        gridShapes.push_back(s);
+    }
+    for (unsigned y = 0; y <= h; ++y) {
+        sf::RectangleShape s{sf::Vector2f{1, gridThickness}};
+        s.setPosition(sf::Vector2f{0, float(y)/h - gridThickness/2});
+        s.setFillColor(sf::Color::White);
+        gridShapes.push_back(s);
+    }
+}
 
 void SFMLFrontEnd::run() {
     while (window.isOpen()) {
@@ -41,10 +56,9 @@ void SFMLFrontEnd::draw() {
 }
 
 void SFMLFrontEnd::drawWorld() {
-    sf::CircleShape shape(0.25);
-    shape.setFillColor(sf::Color(100, 250, 50));
-
-    window.draw(shape);
+    for (const auto& shape : gridShapes) {
+        window.draw(shape);
+    }
 }
 
 void SFMLFrontEnd::drawGUI() {
