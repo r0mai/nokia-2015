@@ -50,6 +50,23 @@ void SFMLFrontEnd::handleEvents() {
             case sf::Event::KeyPressed:
                 handleKeyPressedEvent(event.key);
                 break;
+            case sf::Event::MouseMoved:
+                handleMouseMovedEvent(event.mouseMove);
+                break;
+            case sf::Event::MouseButtonPressed:
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    lastPointerLocation = window.mapPixelToCoords(sf::Vector2i(
+                        event.mouseButton.x,
+                        event.mouseButton.y
+                    ), worldView);
+                    dragInProgress = true;
+                }
+                break;
+            case sf::Event::MouseButtonReleased:
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    dragInProgress = false;
+                }
+                break;
             default:
                 break;
         }
@@ -79,6 +96,23 @@ void SFMLFrontEnd::handleKeyPressedEvent(const sf::Event::KeyEvent& event) {
         default:
             break;
     }
+}
+
+void SFMLFrontEnd::handleMouseMovedEvent(
+    const sf::Event::MouseMoveEvent& event)
+{
+    // Dragging
+    if (!dragInProgress) {
+        return;
+    }
+    sf::Vector2f currentPointerLocation = window.mapPixelToCoords(sf::Vector2i(
+        event.x,
+        event.y
+    ), worldView);
+
+    worldView.move(lastPointerLocation - currentPointerLocation);
+
+    lastPointerLocation = currentPointerLocation;
 }
 
 void SFMLFrontEnd::tick() {

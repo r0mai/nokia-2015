@@ -21,6 +21,8 @@ private:
     void handleMouseWheelScrollEvent(
         const sf::Event::MouseWheelScrollEvent& event);
     void handleKeyPressedEvent(const sf::Event::KeyEvent& event);
+    void handleMouseMovedEvent(const sf::Event::MouseMoveEvent& event);
+
     void tick();
     void draw();
 
@@ -33,6 +35,10 @@ private:
     sf::View worldView;
 
     std::vector<sf::RectangleShape> gridShapes;
+
+    // Gesture related stuff
+    bool dragInProgress = false;
+    sf::Vector2f lastPointerLocation;
 };
 
 }
