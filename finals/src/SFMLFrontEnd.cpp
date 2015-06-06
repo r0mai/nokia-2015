@@ -1,5 +1,8 @@
 #include "SFMLFrontEnd.hpp"
 
+#include <cmath>
+#include <iostream>
+
 namespace calmare {
 
 SFMLFrontEnd::SFMLFrontEnd() :
@@ -11,7 +14,7 @@ SFMLFrontEnd::SFMLFrontEnd() :
 
 void SFMLFrontEnd::generateGrid() {
     unsigned w = 10, h = 10;
-    float gridThickness = 0.002;
+    float gridThickness = 0.01;
     for (unsigned x = 0; x <= w; ++x) {
         sf::RectangleShape s{sf::Vector2f{gridThickness, 1}};
         s.setPosition(sf::Vector2f{float(x)/w - gridThickness/2, 0});
@@ -35,10 +38,28 @@ void SFMLFrontEnd::run() {
 }
 
 void SFMLFrontEnd::handleEvents() {
-    sf::Event Event;
-    while (window.pollEvent(Event)) {
-        if (Event.type == sf::Event::Closed) {
-            window.close();
+    sf::Event event;
+    while (window.pollEvent(event)) {
+        switch (event.type) {
+            case sf::Event::Closed:
+                window.close();
+                break;
+            case sf::Event::MouseWheelScrolled:
+            {
+                if (event.mouseWheelScroll.wheel != sf::Mouse::VerticalWheel) {
+                    break;
+                }
+                const float zoomFactor = 0.9;
+                const float delta = event.mouseWheelScroll.delta;
+                if (delta < 0.f) {
+                    worldView.zoom(std::pow(1/zoomFactor, -delta));
+                } else if (delta > 0.f) {
+                    worldView.zoom(std::pow(zoomFactor, delta));
+                }
+                break;
+            }
+            default:
+                break;
         }
     }
 }
