@@ -12,7 +12,7 @@ find_package(Boost COMPONENTS
     program_options
     thread)
 
-find_package(SFML 2 REQUIRED
+find_package(SFML 2.3 REQUIRED
     system
     window
     graphics
