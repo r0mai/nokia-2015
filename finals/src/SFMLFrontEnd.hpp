@@ -18,6 +18,9 @@ private:
     void generateGrid();
 
     void handleEvents();
+    void handleMouseWheelScrollEvent(
+        const sf::Event::MouseWheelScrollEvent& event);
+    void handleKeyPressedEvent(const sf::Event::KeyEvent& event);
     void tick();
     void draw();
 

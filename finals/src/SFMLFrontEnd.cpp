@@ -45,31 +45,39 @@ void SFMLFrontEnd::handleEvents() {
                 window.close();
                 break;
             case sf::Event::MouseWheelScrolled:
-            {
-                if (event.mouseWheelScroll.wheel != sf::Mouse::VerticalWheel) {
-                    break;
-                }
-                const float zoomFactor = 0.9;
-                const float delta = event.mouseWheelScroll.delta;
-                if (delta < 0.f) {
-                    worldView.zoom(std::pow(1/zoomFactor, -delta));
-                } else if (delta > 0.f) {
-                    worldView.zoom(std::pow(zoomFactor, delta));
-                }
+                handleMouseWheelScrollEvent(event.mouseWheelScroll);
                 break;
-            }
             case sf::Event::KeyPressed:
-                switch (event.key.code) {
-                    case sf::Keyboard::Q:
-                        window.close();
-                        break;
-                    default:
-                        break;
-                }
+                handleKeyPressedEvent(event.key);
                 break;
             default:
                 break;
         }
+    }
+}
+
+void SFMLFrontEnd::handleMouseWheelScrollEvent(
+    const sf::Event::MouseWheelScrollEvent& event)
+{
+    if (event.wheel != sf::Mouse::VerticalWheel) {
+        return;
+    }
+    const float zoomFactor = 0.9;
+    const float delta = event.delta;
+    if (delta < 0.f) {
+        worldView.zoom(std::pow(1/zoomFactor, -delta));
+    } else if (delta > 0.f) {
+        worldView.zoom(std::pow(zoomFactor, delta));
+    }
+}
+
+void SFMLFrontEnd::handleKeyPressedEvent(const sf::Event::KeyEvent& event) {
+    switch (event.code) {
+        case sf::Keyboard::Q:
+            window.close();
+            break;
+        default:
+            break;
     }
 }
 
