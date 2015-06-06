@@ -6,6 +6,17 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
+macro(SUBDIRLIST result curdir)
+    file(GLOB children RELATIVE ${curdir} ${curdir}/*)
+    set(dirlist "")
+    foreach(child ${children})
+        if(IS_DIRECTORY ${curdir}/${child})
+            list(APPEND dirlist ${child})
+        endif()
+    endforeach()
+    set(${result} ${dirlist})
+endmacro()
+
 find_package(Boost COMPONENTS
     regex
     system
@@ -25,7 +36,14 @@ include_directories(SYSTEM ${SFML_INCLUDE_DIR})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -O2")
 
 aux_source_directory(src SRC_SOURCES)
-aux_source_directory(src/agent SRC_AGENT_SOURCES)
+
+subdirlist(SRC_SUBDIRS "${CMAKE_SOURCE_DIR}/src/")
+foreach(SRC_SUBDIR ${SRC_SUBDIRS})
+    set(SRC_SOURCES_TMP "")
+    aux_source_directory("${CMAKE_SOURCE_DIR}/src/${SRC_SUBDIR}" SRC_SOURCES_TMP)
+    list(APPEND SRC_SOURCES ${SRC_SOURCES_TMP})
+endforeach()
+
 aux_source_directory(bin BIN_SOURCES)
 
 set(SRC_LIB_NAME ${CMAKE_PROJECT_NAME}-src)
