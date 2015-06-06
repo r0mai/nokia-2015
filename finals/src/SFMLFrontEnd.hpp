@@ -11,6 +11,10 @@ public:
     SFMLFrontEnd();
 
     void run();
+
+    void handleEvents();
+    void tick();
+    void draw();
 private:
     Model model;
     sf::RenderWindow window;
