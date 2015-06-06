@@ -15,9 +15,13 @@ public:
     void handleEvents();
     void tick();
     void draw();
+
+    void drawWorld();
+    void drawGUI();
 private:
     Model model;
     sf::RenderWindow window;
+    sf::View worldView;
 };
 
 }
