@@ -6,9 +6,9 @@
 
 namespace calmare {
 
-class GameManager {
+class SFMLFrontEnd {
 public:
-    GameManager();
+    SFMLFrontEnd();
 
     void run();
 private:

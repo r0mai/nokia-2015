@@ -1,6 +1,6 @@
-#include "GameManager.hpp"
+#include "SFMLFrontEnd.hpp"
 
 int main() {
-    calmare::GameManager gm;
+    calmare::SFMLFrontEnd gm;
     gm.run();
 }

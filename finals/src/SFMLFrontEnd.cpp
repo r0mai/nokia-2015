@@ -1,11 +1,11 @@
-#include "GameManager.hpp"
+#include "SFMLFrontEnd.hpp"
 
 namespace calmare {
 
-GameManager::GameManager() :
+SFMLFrontEnd::SFMLFrontEnd() :
     window(sf::VideoMode(800, 600), "Calmare - Nokia 2015") {}
 
-void GameManager::run() {
+void SFMLFrontEnd::run() {
     while (window.isOpen()) {
         sf::Event Event;
         while (window.pollEvent(Event)) {
