@@ -38,7 +38,7 @@ private:
 
     // Gesture related stuff
     bool dragInProgress = false;
-    sf::Vector2f lastPointerLocation;
+    sf::Vector2f dragStart;
 };
 
 }

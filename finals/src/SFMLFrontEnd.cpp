@@ -55,7 +55,7 @@ void SFMLFrontEnd::handleEvents() {
                 break;
             case sf::Event::MouseButtonPressed:
                 if (event.mouseButton.button == sf::Mouse::Left) {
-                    lastPointerLocation = window.mapPixelToCoords(sf::Vector2i(
+                    dragStart = window.mapPixelToCoords(sf::Vector2i(
                         event.mouseButton.x,
                         event.mouseButton.y
                     ), worldView);
@@ -105,14 +105,12 @@ void SFMLFrontEnd::handleMouseMovedEvent(
     if (!dragInProgress) {
         return;
     }
-    sf::Vector2f currentPointerLocation = window.mapPixelToCoords(sf::Vector2i(
+    sf::Vector2f current = window.mapPixelToCoords(sf::Vector2i(
         event.x,
         event.y
     ), worldView);
 
-    worldView.move(lastPointerLocation - currentPointerLocation);
-
-    lastPointerLocation = currentPointerLocation;
+    worldView.move(dragStart - current);
 }
 
 void SFMLFrontEnd::tick() {
