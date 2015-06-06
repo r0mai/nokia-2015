@@ -3,8 +3,8 @@
 namespace calmare {
 
 SFMLFrontEnd::SFMLFrontEnd() :
-    window(sf::VideoMode(800, 600), "Calmare - Nokia 2015"),
-    worldView(sf::FloatRect(0, 0, 1000, 1000))
+    window(sf::VideoMode(800, 800), "Calmare - Nokia 2015"),
+    worldView(sf::FloatRect(0, 0, 1, 1))
 {}
 
 void SFMLFrontEnd::run() {
@@ -41,7 +41,7 @@ void SFMLFrontEnd::draw() {
 }
 
 void SFMLFrontEnd::drawWorld() {
-    sf::CircleShape shape(50);
+    sf::CircleShape shape(0.25);
     shape.setFillColor(sf::Color(100, 250, 50));
 
     window.draw(shape);
