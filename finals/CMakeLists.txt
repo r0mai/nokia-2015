@@ -17,6 +17,18 @@ macro(SUBDIRLIST result curdir)
     set(${result} ${dirlist})
 endmacro()
 
+macro(AUX_RECURSIVE_SOURCE_DIRECTORY directory result)
+    aux_source_directory(${directory} DIR_SOURCES)
+    subdirlist(DIR_SUBDIRS "${CMAKE_SOURCE_DIR}/${directory}")
+    foreach(DIR_SUBDIR ${DIR_SUBDIRS})
+        set(DIR_SOURCES_TMP "")
+        aux_source_directory(
+            "${CMAKE_SOURCE_DIR}/${directory}/${DIR_SUBDIR}" DIR_SOURCES_TMP)
+        list(APPEND DIR_SOURCES ${DIR_SOURCES_TMP})
+    endforeach()
+    set(${result} ${DIR_SOURCES})
+endmacro()
+
 find_package(Boost)
 
 if(WIN32)
@@ -34,22 +46,8 @@ if(NOT WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -O2")
 endif()
 
-aux_source_directory(src SRC_SOURCES)
-
-subdirlist(SRC_SUBDIRS "${CMAKE_SOURCE_DIR}/src/")
-foreach(SRC_SUBDIR ${SRC_SUBDIRS})
-    set(SRC_SOURCES_TMP "")
-    aux_source_directory("${CMAKE_SOURCE_DIR}/src/${SRC_SUBDIR}" SRC_SOURCES_TMP)
-    list(APPEND SRC_SOURCES ${SRC_SOURCES_TMP})
-endforeach()
-
-aux_source_directory(test TEST_SOURCES)
-subdirlist(TEST_SUBDIRS "${CMAKE_SOURCE_DIR}/test/")
-foreach(TEST_SUBDIR ${TEST_SUBDIRS})
-    set(TEST_SOURCES_TMP "")
-    aux_source_directory("${CMAKE_SOURCE_DIR}/test/${TEST_SUBDIR}" TEST_SOURCES_TMP)
-    list(APPEND TEST_SOURCES ${TEST_SOURCES_TMP})
-endforeach()
+aux_recursive_source_directory(src SRC_SOURCES)
+aux_recursive_source_directory(test TEST_SOURCES)
 
 aux_source_directory(bin BIN_SOURCES)
 
