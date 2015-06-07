@@ -19,6 +19,9 @@ endmacro()
 
 find_package(Boost)
 
+if(WIN32)
+    set(SFML_STATIC_LIBRARIES TRUE)
+endif()
 find_package(SFML 2.3 REQUIRED
     system
     window
