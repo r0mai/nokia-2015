@@ -43,8 +43,17 @@ foreach(SRC_SUBDIR ${SRC_SUBDIRS})
     list(APPEND SRC_SOURCES ${SRC_SOURCES_TMP})
 endforeach()
 
+aux_source_directory(test TEST_SOURCES)
+subdirlist(TEST_SUBDIRS "${CMAKE_SOURCE_DIR}/test/")
+foreach(TEST_SUBDIR ${TEST_SUBDIRS})
+    set(TEST_SOURCES_TMP "")
+    aux_source_directory("${CMAKE_SOURCE_DIR}/test/${TEST_SUBDIR}" TEST_SOURCES_TMP)
+    list(APPEND TEST_SOURCES ${TEST_SOURCES_TMP})
+endforeach()
+
 aux_source_directory(bin BIN_SOURCES)
 
+set(TEST_EXEC_NAME test-${CMAKE_PROJECT_NAME})
 set(SRC_LIB_NAME ${CMAKE_PROJECT_NAME}-src)
 set(BIN_EXEC_NAME ${CMAKE_PROJECT_NAME}-bin)
 
@@ -55,5 +64,8 @@ target_link_libraries(${SRC_LIB_NAME} ${SFML_DEPENDENCIES})
 
 add_executable(${BIN_EXEC_NAME} ${BIN_SOURCES})
 target_link_libraries(${BIN_EXEC_NAME} ${SRC_LIB_NAME})
+
+add_executable(${TEST_EXEC_NAME} ${TEST_SOURCES})
+target_link_libraries(${TEST_EXEC_NAME} ${SRC_LIB_NAME})
 
 include_directories(src)
