@@ -59,11 +59,11 @@ set(GUI_EXEC_NAME gui-${CMAKE_PROJECT_NAME})
 
 add_library(${SRC_LIB_NAME} STATIC ${SRC_SOURCES})
 target_link_libraries(${SRC_LIB_NAME} ${Boost_LIBRARIES})
-target_link_libraries(${SRC_LIB_NAME} ${SFML_LIBRARIES})
-target_link_libraries(${SRC_LIB_NAME} ${SFML_DEPENDENCIES})
 
 add_executable(${GUI_EXEC_NAME} ${GUI_SOURCES})
 target_link_libraries(${GUI_EXEC_NAME} ${SRC_LIB_NAME})
+target_link_libraries(${GUI_EXEC_NAME} ${SFML_LIBRARIES})
+target_link_libraries(${GUI_EXEC_NAME} ${SFML_DEPENDENCIES})
 
 add_executable(${TEST_EXEC_NAME} ${TEST_SOURCES})
 target_link_libraries(${TEST_EXEC_NAME} ${SRC_LIB_NAME})
