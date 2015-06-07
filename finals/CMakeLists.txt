@@ -18,6 +18,7 @@ macro(SUBDIRLIST result curdir)
 endmacro()
 
 macro(AUX_RECURSIVE_SOURCE_DIRECTORY directory result)
+    set(DIR_SOURCES "")
     aux_source_directory(${directory} DIR_SOURCES)
     subdirlist(DIR_SUBDIRS "${CMAKE_SOURCE_DIR}/${directory}")
     foreach(DIR_SUBDIR ${DIR_SUBDIRS})
@@ -47,23 +48,22 @@ if(NOT WIN32)
 endif()
 
 aux_recursive_source_directory(src SRC_SOURCES)
+aux_recursive_source_directory(gui GUI_SOURCES)
 aux_recursive_source_directory(test TEST_SOURCES)
 
-aux_source_directory(bin BIN_SOURCES)
+include_directories(src)
 
 set(TEST_EXEC_NAME test-${CMAKE_PROJECT_NAME})
-set(SRC_LIB_NAME ${CMAKE_PROJECT_NAME}-src)
-set(BIN_EXEC_NAME ${CMAKE_PROJECT_NAME}-bin)
+set(SRC_LIB_NAME src-${CMAKE_PROJECT_NAME})
+set(GUI_EXEC_NAME gui-${CMAKE_PROJECT_NAME})
 
-add_library(${SRC_LIB_NAME} STATIC ${SRC_SOURCES} ${SRC_AGENT_SOURCES})
+add_library(${SRC_LIB_NAME} STATIC ${SRC_SOURCES})
 target_link_libraries(${SRC_LIB_NAME} ${Boost_LIBRARIES})
 target_link_libraries(${SRC_LIB_NAME} ${SFML_LIBRARIES})
 target_link_libraries(${SRC_LIB_NAME} ${SFML_DEPENDENCIES})
 
-add_executable(${BIN_EXEC_NAME} ${BIN_SOURCES})
-target_link_libraries(${BIN_EXEC_NAME} ${SRC_LIB_NAME})
+add_executable(${GUI_EXEC_NAME} ${GUI_SOURCES})
+target_link_libraries(${GUI_EXEC_NAME} ${SRC_LIB_NAME})
 
 add_executable(${TEST_EXEC_NAME} ${TEST_SOURCES})
 target_link_libraries(${TEST_EXEC_NAME} ${SRC_LIB_NAME})
-
-include_directories(src)
