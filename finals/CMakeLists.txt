@@ -17,11 +17,7 @@ macro(SUBDIRLIST result curdir)
     set(${result} ${dirlist})
 endmacro()
 
-find_package(Boost COMPONENTS
-    regex
-    system
-    program_options
-    thread)
+find_package(Boost)
 
 find_package(SFML 2.3 REQUIRED
     system
