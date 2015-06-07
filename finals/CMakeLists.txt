@@ -25,9 +25,7 @@ endif()
 find_package(SFML 2.3 REQUIRED
     system
     window
-    graphics
-    network
-    audio)
+    graphics)
 
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(SYSTEM ${SFML_INCLUDE_DIR})
@@ -53,6 +51,7 @@ set(BIN_EXEC_NAME ${CMAKE_PROJECT_NAME}-bin)
 add_library(${SRC_LIB_NAME} STATIC ${SRC_SOURCES} ${SRC_AGENT_SOURCES})
 target_link_libraries(${SRC_LIB_NAME} ${Boost_LIBRARIES})
 target_link_libraries(${SRC_LIB_NAME} ${SFML_LIBRARIES})
+target_link_libraries(${SRC_LIB_NAME} ${SFML_DEPENDENCIES})
 
 add_executable(${BIN_EXEC_NAME} ${BIN_SOURCES})
 target_link_libraries(${BIN_EXEC_NAME} ${SRC_LIB_NAME})
