@@ -6,9 +6,13 @@
 namespace calmare {
 
 class Resource : public OwnedByContext {
+public:
+    Resource(Context* context) : OwnedByContext(context) { }
 };
 
-class Resources {
+class Resources : public OwnedByContext {
+public:
+    Resources(Context* context) : OwnedByContext(context) { }
 };
 
 }

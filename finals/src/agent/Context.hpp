@@ -19,8 +19,10 @@ class Context {
     Units units;
 
 public:
-    std::vector<std::pair<Unit, Order> > currentOrders() const;
-
+    Context() : gameState(this), mapState(this), resources(this), units(this) {
+    }
+    std::vector<std::pair<Unit&, Order> > currentOrders() const;
+    void executeCurrentOrders();
 };
 
 }

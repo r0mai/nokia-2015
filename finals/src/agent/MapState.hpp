@@ -5,6 +5,8 @@
 namespace calmare {
 
 class MapState : public OwnedByContext {
+public:
+    MapState(Context* context) : OwnedByContext(context) { }
 };
 
 }

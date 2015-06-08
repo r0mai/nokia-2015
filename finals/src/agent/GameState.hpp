@@ -5,6 +5,8 @@
 namespace calmare {
 
 class GameState : public OwnedByContext {
+public:
+    GameState(Context* context) : OwnedByContext(context) { }
 };
 
 }
