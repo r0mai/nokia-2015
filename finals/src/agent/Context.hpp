@@ -23,6 +23,16 @@ public:
     }
     std::vector<std::pair<Unit&, Order> > currentOrders() const;
     void executeCurrentOrders();
+    friend class OwnedByContext;
+
+    const GameState& getGameState() const { return gameState; }
+    const MapState& getMapState() const { return mapState; }
+    const Resources& getResources() const { return resources; }
+    const Units& getUnits() const { return units; }
+    GameState& getGameState() { return gameState; }
+    MapState& getMapState() { return mapState; }
+    Resources& getResources() { return resources; }
+    Units& getUnits() { return units; }
 };
 
 }

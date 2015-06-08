@@ -3,6 +3,7 @@
 using namespace calmare;
 
 void Context::executeCurrentOrders() {
+    gameState.advance();
     const auto& orders = currentOrders();
     for(const auto& pair: orders) {
         auto& unit = pair.first;

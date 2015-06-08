@@ -14,7 +14,7 @@ public:
 
     Unit(Context* context) : OwnedByContext(context) { }
     Order getCurrentOrder() const {
-        return "Up";
+        return "Move";
     }
 
     void executeOrder(const Order& order);
