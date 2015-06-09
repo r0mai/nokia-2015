@@ -1,7 +1,7 @@
 #pragma once
 
-#include "agent/ContextFwd.hpp"
-#include "agent/Unit.hpp"
+#include "ContextFwd.hpp"
+#include "Unit.hpp"
 
 #include <vector>
 #include <functional>

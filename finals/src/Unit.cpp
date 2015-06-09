@@ -1,5 +1,5 @@
-#include "agent/Unit.hpp"
-#include "agent/Context.hpp"
+#include "Unit.hpp"
+#include "Context.hpp"
 
 using namespace calmare;
 

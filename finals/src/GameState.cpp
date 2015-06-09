@@ -1,4 +1,4 @@
-#include "agent/GameState.hpp"
+#include "GameState.hpp"
 
 using namespace calmare;
 
