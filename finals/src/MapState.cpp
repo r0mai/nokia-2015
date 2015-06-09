@@ -1,4 +1,4 @@
-#include "agent/MapState.hpp"
+#include "MapState.hpp"
 
 #include <algorithm>
 #include <cassert>

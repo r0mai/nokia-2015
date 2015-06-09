@@ -1,8 +1,8 @@
 #pragma once
 
-#include "agent/ContextFwd.hpp"
-#include "agent/Capabilities.hpp"
-#include "agent/Order.hpp"
+#include "ContextFwd.hpp"
+#include "Capabilities.hpp"
+#include "Order.hpp"
 
 namespace calmare {
 

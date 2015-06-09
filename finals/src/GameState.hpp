@@ -1,6 +1,6 @@
 #pragma once
 
-#include "agent/ContextFwd.hpp"
+#include "ContextFwd.hpp"
 
 namespace calmare {
 
