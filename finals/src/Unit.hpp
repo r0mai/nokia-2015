@@ -8,8 +8,17 @@ namespace calmare {
 
 typedef int UnitId;
 
+enum class UnitKind {
+    friendly = 1,
+    enemy,
+    invisible
+};
+
 class Unit : public OwnedByContext {
     Capabilities currentCapabilities;
+    UnitKind unitKind = UnitKind::friendly;
+    UnitId unitId;
+    unsigned visibilityRadius = 2;
 public:
 
     Unit(Context* context) : OwnedByContext(context) { }
@@ -18,6 +27,10 @@ public:
     }
 
     void executeOrder(const Order& order);
+
+    UnitId getId() const { return unitId; }
+
+    template<UnitKind kind> bool is() { return unitKind == kind; }
 
 };
 
