@@ -3,6 +3,7 @@
 #include "agent/ContextFwd.hpp"
 
 namespace calmare {
+namespace agent {
 
 class GameState : public OwnedByContext {
     unsigned ticks;
@@ -12,4 +13,5 @@ public:
     auto getNumberOfTicksElapsed() const { return ticks; }
 };
 
+}
 }

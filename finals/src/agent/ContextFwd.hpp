@@ -1,6 +1,7 @@
 #pragma once
 
 namespace calmare {
+namespace agent {
 
 class Context;
 
@@ -13,4 +14,5 @@ public:
     }
 };
 
+}
 }

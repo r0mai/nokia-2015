@@ -5,6 +5,7 @@
 #include "agent/Order.hpp"
 
 namespace calmare {
+namespace agent {
 
 typedef int UnitId;
 
@@ -30,4 +31,5 @@ public:
     friend class Context;
 };
 
+}
 }

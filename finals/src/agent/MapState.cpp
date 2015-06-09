@@ -4,7 +4,7 @@
 #include <cassert>
 #include <cstdlib>
 
-using namespace calmare;
+using namespace calmare::agent;
 
 int MapState::distanceBetween(const Unit& a, const Unit& b) const {
     const auto aIt = findUnit(a);

@@ -10,6 +10,7 @@
 #include "agent/Unit.hpp"
 
 namespace calmare {
+namespace agent {
 
 class Context {
 
@@ -37,4 +38,5 @@ public:
     Unit& addUnit();
 };
 
+}
 }

@@ -1,7 +1,7 @@
 #include "agent/Unit.hpp"
 #include "agent/Context.hpp"
 
-using namespace calmare;
+using namespace calmare::agent;
 
 void Unit::executeOrder(const Order& order) {
     if(order == "Move") {

@@ -8,6 +8,7 @@
 #include <algorithm>
 
 namespace calmare {
+namespace agent {
 
 struct Position {
     int x = 0;
@@ -46,4 +47,5 @@ public:
     int distanceBetween(const Unit& a, const Unit& b) const;
 };
 
+}
 }
