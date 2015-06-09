@@ -10,7 +10,7 @@ namespace calmare {
 
 class SFMLFrontEnd {
 public:
-    SFMLFrontEnd();
+    SFMLFrontEnd(Model& model);
 
     void run();
 
@@ -29,7 +29,7 @@ private:
     void drawWorld();
     void drawGUI();
 
-    Model model;
+    Model& model;
 
     sf::RenderWindow window;
     sf::View worldView;

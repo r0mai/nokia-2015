@@ -1,6 +1,7 @@
 #include "SFMLFrontEnd.hpp"
 
 int main() {
-    calmare::SFMLFrontEnd gm;
+    calmare::Model model;
+    calmare::SFMLFrontEnd gm(model);
     gm.run();
 }

@@ -5,7 +5,8 @@
 
 namespace calmare {
 
-SFMLFrontEnd::SFMLFrontEnd() :
+SFMLFrontEnd::SFMLFrontEnd(Model& model) :
+    model(model),
     window(sf::VideoMode(800, 800), "Calmare - Nokia 2015"),
     worldView(sf::FloatRect(0, 0, 1, 1))
 {
