@@ -8,4 +8,8 @@ void Model::tick() {
 
 }
 
+const Context& Model::getContext() const {
+    return context;
+}
+
 }
