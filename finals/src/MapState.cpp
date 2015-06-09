@@ -9,9 +9,10 @@ using namespace calmare;
 int MapState::distanceBetween(const Unit& a, const Unit& b) const {
     const auto aIt = findUnit(a);
     const auto bIt = findUnit(b);
-    if(aIt == positions.end() || bIt == positions.end()) {
-        assert(!"Can only get position between units contained on the map");
-    }
+
+    assert(aIt != positions.end() && bIt != positions.end() &&
+        "Can only get position between units contained on the map");
+
     const auto aPos = aIt->second;
     const auto bPos = bIt->second;
 
