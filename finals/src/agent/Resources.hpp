@@ -4,7 +4,6 @@
 #include <vector>
 
 namespace calmare {
-namespace agent {
 
 class Resource : public OwnedByContext {
 public:
@@ -16,5 +15,4 @@ public:
     Resources(Context* context) : OwnedByContext(context) { }
 };
 
-}
 }

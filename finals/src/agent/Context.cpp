@@ -1,6 +1,6 @@
 #include "agent/Context.hpp"
 
-using namespace calmare::agent;
+using namespace calmare;
 
 void Context::executeCurrentOrders() {
     gameState.advance();

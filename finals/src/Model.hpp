@@ -5,7 +5,7 @@
 namespace calmare {
 
 class Model {
-    agent::Context context;
+    Context context;
 public:
     void tick();
 };

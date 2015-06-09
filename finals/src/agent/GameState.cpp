@@ -1,6 +1,6 @@
 #include "agent/GameState.hpp"
 
-using namespace calmare::agent;
+using namespace calmare;
 
 void GameState::advance() {
     ++ticks;
