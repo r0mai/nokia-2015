@@ -18,6 +18,10 @@ struct Position {
 class MapState : public OwnedByContext {
     std::vector<std::pair<std::reference_wrapper<const Unit>, Position> >
         positions;
+
+    int width = 10;
+    int height = 15;
+
     auto findUnit(const Unit& unit) const {
         const auto it = std::find_if(positions.begin(), positions.end(),
                 [&unit](const decltype(positions)::value_type& p) {
@@ -44,6 +48,9 @@ public:
         return it->second;
     }
     int distanceBetween(const Unit& a, const Unit& b) const;
+
+    int getWidth() const;
+    int getHeight() const;
 };
 
 }

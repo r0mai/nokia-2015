@@ -23,3 +23,11 @@ int MapState::distanceBetween(const Unit& a, const Unit& b) const {
 
     return std::max(dX, dY);
 }
+
+int MapState::getWidth() const {
+    return width;
+}
+
+int MapState::getHeight() const {
+    return height;
+}
