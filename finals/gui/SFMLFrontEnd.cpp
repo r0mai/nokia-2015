@@ -2,14 +2,20 @@
 
 #include <cmath>
 #include <iostream>
+#include <algorithm>
 
 namespace calmare {
 
 SFMLFrontEnd::SFMLFrontEnd(Model& model) :
     model(model),
-    window(sf::VideoMode(800, 800), "Calmare - Nokia 2015"),
-    worldView(sf::FloatRect(0, 0, 1, 1))
+    window(sf::VideoMode(800, 800), "Calmare - Nokia 2015")
 {
+    int w = model.getContext().mapState.getWidth();
+    int h = model.getContext().mapState.getHeight();
+
+    int max = std::max(w, h);
+    worldView.reset(sf::FloatRect(0, 0, max, max));
+
     generateGrid();
 }
 
