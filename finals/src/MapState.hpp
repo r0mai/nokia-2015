@@ -44,6 +44,7 @@ public:
         return it->second;
     }
     int distanceBetween(const Unit& a, const Unit& b) const;
+    bool isVisibleFor(const Unit& from, const Unit& to) const;
 };
 
 }
