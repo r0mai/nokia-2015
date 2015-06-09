@@ -10,9 +10,8 @@
 namespace calmare {
 
 struct Position {
-    int x, y;
-    Position() : x(0), y(0) { }
-    Position& operator=(const Position&) = default;
+    int x = 0;
+    int y = 0;
 };
 
 
