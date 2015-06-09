@@ -17,17 +17,17 @@ void SFMLFrontEnd::generateGrid() {
     int w = model.getContext().mapState.getWidth();
     int h = model.getContext().mapState.getHeight();
 
-    float gridThickness = 0.01;
+    float gridThickness = 0.01 * w;
 
     for (int x = 0; x <= w; ++x) {
-        sf::RectangleShape s{sf::Vector2f{gridThickness, 1}};
-        s.setPosition(sf::Vector2f{float(x)/w - gridThickness/2, 0});
+        sf::RectangleShape s{sf::Vector2f{gridThickness, 1.f * h}};
+        s.setPosition(sf::Vector2f{float(x) - gridThickness/2, 0});
         s.setFillColor(sf::Color::White);
         gridShapes.push_back(s);
     }
     for (int y = 0; y <= h; ++y) {
-        sf::RectangleShape s{sf::Vector2f{1, gridThickness}};
-        s.setPosition(sf::Vector2f{0, float(y)/h - gridThickness/2});
+        sf::RectangleShape s{sf::Vector2f{1.f * w, gridThickness}};
+        s.setPosition(sf::Vector2f{0, float(y) - gridThickness/2});
         s.setFillColor(sf::Color::White);
         gridShapes.push_back(s);
     }
