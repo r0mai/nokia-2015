@@ -13,14 +13,12 @@ namespace calmare {
 
 class Context {
 
-    GameState gameState;
-    MapState mapState;
-    Resources resources;
-    Units units;
+    GameState gameState{this};
+    MapState mapState{this};
+    Resources resources{this};
+    Units units{this};
 
 public:
-    Context() : gameState(this), mapState(this), resources(this), units(this) {
-    }
     std::vector<std::pair<Unit&, Order> > currentOrders() const;
     void executeCurrentOrders();
     friend class OwnedByContext;
