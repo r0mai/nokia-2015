@@ -19,7 +19,7 @@ class Context {
     Units units{this};
 
 public:
-    std::vector<std::pair<Unit&, Order> > currentOrders() const;
+    std::vector<std::pair<Unit&, Order>> currentOrders() const;
     void executeCurrentOrders();
     friend class OwnedByContext;
 
