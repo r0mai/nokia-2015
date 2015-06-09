@@ -32,3 +32,15 @@ int MapState::getWidth() const {
 int MapState::getHeight() const {
     return height;
 }
+
+bool MapState::isVisibleFor(const Unit& from, const Unit& to) const {
+    const auto fromIt = findUnit(to);
+    const auto toIt = findUnit(to);
+    if(fromIt == positions.end() || toIt == positions.end()) {
+        assert(!"Can only get position between units contained on the map");
+    }
+
+    const auto visibilityRadius = from.getVisibilityRadius();
+
+    return visibilityRadius >= distanceBetween(from, to);
+}

@@ -29,6 +29,7 @@ public:
     void executeOrder(const Order& order);
 
     UnitId getId() const { return unitId; }
+    auto getVisibilityRadius() const { return visibilityRadius; }
 
     template<UnitKind kind> bool is() { return unitKind == kind; }
 

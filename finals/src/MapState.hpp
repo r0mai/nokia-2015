@@ -51,6 +51,8 @@ public:
 
     int getWidth() const;
     int getHeight() const;
+
+    bool isVisibleFor(const Unit& from, const Unit& to) const;
 };
 
 }
