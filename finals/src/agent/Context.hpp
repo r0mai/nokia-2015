@@ -33,6 +33,8 @@ public:
     MapState& getMapState() { return mapState; }
     Resources& getResources() { return resources; }
     Units& getUnits() { return units; }
+
+    Unit& addUnit();
 };
 
 }

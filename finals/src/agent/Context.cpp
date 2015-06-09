@@ -20,3 +20,8 @@ std::vector<std::pair<Unit&, Order> > Context::currentOrders() const {
         orders.push_back(std::move(pair));
     }
 }
+
+Unit& Context::addUnit() {
+    units.units.push_back(Unit(this));
+    return units.units.back();
+}
