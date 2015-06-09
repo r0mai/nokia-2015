@@ -19,9 +19,12 @@ std::vector<std::pair<Unit&, Order> > Context::currentOrders() const {
         std::pair<Unit&, Order> pair(const_cast<Unit&>(unit), unit.getCurrentOrder());
         orders.push_back(std::move(pair));
     }
+    return orders;
 }
 
 Unit& Context::addUnit() {
     units.units.push_back(Unit(this));
-    return units.units.back();
+    Unit& unit = units.units.back();
+    mapState.setUnitPosition(unit, {});
+    return unit;
 }

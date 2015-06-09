@@ -38,7 +38,7 @@ bool MapState::isVisibleFor(const Unit& from, const Unit& to) const {
     const auto toIt = findUnit(to);
 
     assert(fromIt != positions.end() && toIt != positions.end() &&
-        "Can only get distance between units contained on the map");
+        "Can only get visibility between units contained on the map");
 
     const auto visibilityRadius = from.getVisibilityRadius();
 
