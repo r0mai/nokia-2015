@@ -43,6 +43,7 @@ public:
         const auto it = findUnit(unit);
         return it->second;
     }
+    int distanceBetween(const Unit& a, const Unit& b) const;
 };
 
 }
