@@ -31,7 +31,7 @@ install:
     - mkdir -p SFML-2.3/build
     - cd SFML-2.3/build
     - cmake ..
-    - make install
+    - sudo make install
     - cd -
 script:
     - mkdir -p finals/build
