@@ -48,7 +48,6 @@ if(NOT WIN32)
 endif()
 
 if(UNIX AND NOT APPLE)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lX11 -lxcb -ludev")
 endif()
 
 aux_recursive_source_directory(src SRC_SOURCES)
@@ -69,6 +68,8 @@ target_link_libraries(${GUI_EXEC_NAME} ${SRC_LIB_NAME})
 target_link_libraries(${GUI_EXEC_NAME} ${SFML_LIBRARIES})
 target_link_libraries(${GUI_EXEC_NAME} ${SFML_DEPENDENCIES})
 if(UNIX AND NOT APPLE)
+    target_link_libraries(${GUI_EXEC_NAME} "-lX11")
+    target_link_libraries(${GUI_EXEC_NAME} "-lxcb")
     target_link_libraries(${GUI_EXEC_NAME} "-ludev")
 endif()
 
