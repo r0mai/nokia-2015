@@ -41,7 +41,7 @@ class Units {
 
 public:
     Units(Context* context) : context(context) { }
-    friend class Context;
+    friend struct Context;
 };
 
 }
