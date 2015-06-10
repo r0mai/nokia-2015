@@ -13,7 +13,7 @@ SFMLFrontEnd::SFMLFrontEnd(Model& model) :
     int w = model.getContext().mapState.getWidth();
     int h = model.getContext().mapState.getHeight();
 
-    int max = std::max(w, h);
+    float max = static_cast<float>(std::max(w, h));
     worldView.reset(sf::FloatRect(0.f, 0.f, max, max));
 
     generateGrid();
