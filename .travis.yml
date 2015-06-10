@@ -8,9 +8,12 @@ before_install:
     - sudo apt-get update -qq
 install:
     - sudo apt-get install -y
-      libsfml-dev
       clang
       g++-4.8
+    - wget http://www.sfml-dev.org/files/SFML-2.3-linux-gcc-64-bit.tar.gz
+    - tar -xvf SFML-2.3-linux-gcc-64-bit.tar.gz
+    - sudo cp -R SFML-2.3/include/SFML /usr/include
+    - sudo cp -R SFML-2.3/lib/* /usr/lib
     - if [ "$CXX" == "g++" ]; then export CXX="g++-4.8"; fi
 script:
     - mkdir -p finals/build
@@ -18,3 +21,10 @@ script:
     - cmake ..
     - make
     - ./test-finals
+notifications:
+    email:
+        - andras.kucsma@prezi.com
+        - schaumb@gmail.com
+        - matyas.vegh@gmail.com
+    on_success: change
+    on_failure: always
