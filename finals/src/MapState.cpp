@@ -6,7 +6,7 @@
 
 using namespace calmare;
 
-int MapState::distanceBetween(const Unit& a, const Unit& b) const {
+unsigned MapState::distanceBetween(const Unit& a, const Unit& b) const {
     const auto aIt = findUnit(a);
     const auto bIt = findUnit(b);
 

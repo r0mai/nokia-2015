@@ -2,7 +2,7 @@
 
 namespace calmare {
 
-class Context;
+struct Context;
 
 class OwnedByContext {
     Context* context;

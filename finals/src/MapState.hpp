@@ -47,7 +47,7 @@ public:
         const auto it = findUnit(unit);
         return it->second;
     }
-    int distanceBetween(const Unit& a, const Unit& b) const;
+    unsigned distanceBetween(const Unit& a, const Unit& b) const;
 
     int getWidth() const;
     int getHeight() const;

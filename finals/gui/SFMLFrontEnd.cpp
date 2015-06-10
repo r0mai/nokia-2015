@@ -14,7 +14,7 @@ SFMLFrontEnd::SFMLFrontEnd(Model& model) :
     int h = model.getContext().mapState.getHeight();
 
     int max = std::max(w, h);
-    worldView.reset(sf::FloatRect(0, 0, max, max));
+    worldView.reset(sf::FloatRect(0.f, 0.f, max, max));
 
     generateGrid();
 }
@@ -23,7 +23,7 @@ void SFMLFrontEnd::generateGrid() {
     int w = model.getContext().mapState.getWidth();
     int h = model.getContext().mapState.getHeight();
 
-    float gridThickness = 0.01 * w;
+    float gridThickness = 0.01f * w;
 
     for (int x = 0; x <= w; ++x) {
         sf::RectangleShape s{sf::Vector2f{gridThickness, 1.f * h}};
@@ -89,7 +89,7 @@ void SFMLFrontEnd::handleMouseWheelScrollEvent(
     if (event.wheel != sf::Mouse::VerticalWheel) {
         return;
     }
-    const float zoomFactor = 0.9;
+    const float zoomFactor = 0.9f;
     const float delta = event.delta;
     if (delta < 0.f) {
         worldView.zoom(std::pow(1/zoomFactor, -delta));
