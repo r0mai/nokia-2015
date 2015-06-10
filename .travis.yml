@@ -9,19 +9,32 @@ before_install:
     - sudo apt-get update -qq
 install:
     - sudo apt-get install -y
-      clang
-      g++-4.8
-      boost1.55
-    - wget http://www.sfml-dev.org/files/SFML-2.3-linux-gcc-64-bit.tar.gz
-    - tar -xvf SFML-2.3-linux-gcc-64-bit.tar.gz
-    - sudo cp -R SFML-2.3/include/SFML /usr/include
-    - sudo cp -R SFML-2.3/lib/* /usr/lib
+        clang
+        g++-4.8
+        boost1.55
+        doxygen
+        xorg-dev
+        libgl1-mesa-dev
+        libudev-dev
+        libglew-dev
+        libjpeg-dev
+        libopenal-dev
+        libsndfile-dev
+
     - if [ "$CXX" == "g++" ]; then export CXX="g++-4.8"; fi
+
+    - wget http://www.sfml-dev.org/files/SFML-2.3-sources.zip
+    - unzip SFML-2.3-sources.zip
+    - mkdir -p SFML-2.3/build
+    - cd SFML-2.3/build
+    - cmake ..
+    - make install
+    - cd -
 script:
     - mkdir -p finals/build
     - cd finals/build
     - cmake ..
-    - make test-finals
+    - make
     - ./test-finals
 notifications:
     email:
