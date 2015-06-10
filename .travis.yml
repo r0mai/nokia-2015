@@ -20,6 +20,7 @@ install:
         libjpeg-dev
         libopenal-dev
         libsndfile-dev
+        libx11-xcb-dev
 
     - if [ "$CXX" == "g++" ]; then export CXX="g++-4.8"; fi
 
