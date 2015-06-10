@@ -21,6 +21,7 @@ install:
         libopenal-dev
         libsndfile-dev
         libx11-xcb-dev
+        libxcb-image0-dev
 
     - if [ "$CXX" == "g++" ]; then export CXX="g++-4.8"; fi
 
