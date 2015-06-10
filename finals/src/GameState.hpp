@@ -9,7 +9,7 @@ class GameState : public OwnedByContext {
 public:
     GameState(Context* context) : OwnedByContext(context), ticks(0) { }
     void advance();
-    auto getNumberOfTicksElapsed() const { return ticks; }
+    unsigned getNumberOfTicksElapsed() const { return ticks; }
 };
 
 }
