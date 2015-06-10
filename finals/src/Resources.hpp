@@ -1,6 +1,7 @@
 #pragma once
 
-//#include "agent/ContextFwd.hpp"
+#include "ContextFwd.hpp"
+
 #include <vector>
 #include <valarray>
 #include <cassert>
