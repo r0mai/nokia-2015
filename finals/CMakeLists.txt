@@ -47,6 +47,10 @@ if(NOT WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -O2")
 endif()
 
+if(UNIX AND NOT APPLE)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lX11 -lxcb")
+endif()
+
 aux_recursive_source_directory(src SRC_SOURCES)
 aux_recursive_source_directory(gui GUI_SOURCES)
 aux_recursive_source_directory(test TEST_SOURCES)
