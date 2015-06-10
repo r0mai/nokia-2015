@@ -21,6 +21,7 @@ install:
     - sudo cp -R SFML-2.3/include/SFML /usr/include
     - sudo cp -R SFML-2.3/lib/* /usr/lib
     - if [ "$CXX" == "g++" ]; then export CXX="g++-4.8"; fi
+    - sudo ln -sf /lib/x86_64-linux-gnu/libudev.so.0 /lib/x86_64-linux-gnu/libudev.so.1
 script:
     - mkdir -p finals/build
     - cd finals/build
