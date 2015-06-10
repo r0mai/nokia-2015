@@ -22,7 +22,7 @@ install:
         libsndfile-dev
         libx11-xcb-dev
         libxcb-image0-dev
-        libxrandr
+        libxrandr2
         libxrandr-dev
 
     - if [ "$CXX" == "g++" ]; then export CXX="g++-4.8"; fi
