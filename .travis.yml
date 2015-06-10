@@ -15,13 +15,12 @@ install:
       libxcb1 libxcb1-dev libx11-xcb1 libx11-xcb-dev
       libxcb-image0 libxcb-image0-dev
       libxcb-randr0 libxcb-randr0-dev
-      libudev0 libudev-dev
+      systemd
     - wget http://www.sfml-dev.org/files/SFML-2.3-linux-gcc-64-bit.tar.gz
     - tar -xvf SFML-2.3-linux-gcc-64-bit.tar.gz
     - sudo cp -R SFML-2.3/include/SFML /usr/include
     - sudo cp -R SFML-2.3/lib/* /usr/lib
     - if [ "$CXX" == "g++" ]; then export CXX="g++-4.8"; fi
-    - sudo ln -sf /lib/x86_64-linux-gnu/libudev.so.0 /lib/x86_64-linux-gnu/libudev.so.1
 script:
     - mkdir -p finals/build
     - cd finals/build
