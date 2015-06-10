@@ -48,7 +48,7 @@ if(NOT WIN32)
 endif()
 
 if(UNIX AND NOT APPLE)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lX11 -lxcb")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lX11 -lxcb -ludev")
 endif()
 
 aux_recursive_source_directory(src SRC_SOURCES)
