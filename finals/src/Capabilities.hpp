@@ -14,8 +14,8 @@ public:
     Capability(Context* context) : OwnedByContext(context) {}
 };
 
-class Capabilities {
-    std::unordered_map<UnitType, Capability> capabilities;
-};
+
+using Capabilities = std::vector < Capability > ;
+
 
 }

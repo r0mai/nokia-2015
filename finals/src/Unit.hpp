@@ -24,9 +24,15 @@ enum class UnitType {
     Torony,
     Fal,
 
-    Akadaly,
-    Egyeb
+    Ko,
+    Fa,
+    Banya,
+    Tokfold,
+
+    Ismeretlen
 };
+
+
 
 enum class UnitKind {
     friendly = 1,
