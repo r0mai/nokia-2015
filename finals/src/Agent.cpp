@@ -72,10 +72,15 @@ Position getLocationOfResourceNearBy(const TJatekos& jatekos, Mezo mezo,
         });
     if (it == positions.end()) {
         log("Didnt find any resource");
-        const int dx = uid(gen);
-        const int dy = uid(gen);
 
-        return Position{near.x + dx, near.y + dy};
+        for (;;) {
+            const int dx = uid(gen);
+            const int dy = uid(gen);
+            const Position destination = Position{near.x + dx, near.y + dy};
+            if (isAvailableForMovement(jatekos, destination)) {
+                return destination;
+            }
+        }
     }
     return *it;
 }
