@@ -33,6 +33,7 @@ private:
         GetWood,
         GetIron,
         GoForLoter,
+        ExploreBoundaries,
         DefendBorders
     } current_strategy = Strategy::GetFood;
 
@@ -41,6 +42,7 @@ private:
     bool getWoodStrategy();
     bool getIronStrategy();
     bool goForLoterStrategy();
+    bool exploreBoundariesStrategy();
     bool defendBordersStrategy();
 
     void logFeedback();
@@ -60,6 +62,7 @@ private:
 
     bool isAvailableForMovement(Position cell) const;
     bool isValidPosition(Position p) const; // benne vagyunk e a mezobe
+    bool areControlPointsVisible() const;
 
     std::pair<Position, Position> getMainDiagonal() const;
 
