@@ -428,9 +428,16 @@ bool Agent::defendBordersStrategy() {
 void Agent::logFeedback() {
 #ifndef CALMARE_DISABLE_LOG
     for (int i = 0; i < jatekos.UtasitSzam; ++i) {
-        auto errorCode = jatekos.Utasitasok[i].Result;
-        if (errorCode != chOk) {
-            log("Warning: Got error code %d", int(errorCode));
+        auto utasitas = jatekos.Utasitasok[i];
+        if (utasitas.Result != chOk) {
+            log("Warning: Got error code %d, command(kod=%d, kieg=%d, ID=%d, ID2=%d, X=%d, Y=%d)",
+                int(utasitas.Result),
+                int(utasitas.Kod),
+                int(utasitas.Kieg),
+                int(utasitas.ID),
+                int(utasitas.ID2),
+                int(utasitas.X),
+                int(utasitas.Y));
         }
     }
 #endif
