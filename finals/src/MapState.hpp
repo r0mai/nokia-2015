@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Position.hpp"
 #include "ContextFwd.hpp"
 #include "Unit.hpp"
 
@@ -8,12 +9,6 @@
 #include <algorithm>
 
 namespace calmare {
-
-struct Position {
-    int x = 0;
-    int y = 0;
-};
-
 
 class MapState : public OwnedByContext {
     std::vector<std::pair<std::reference_wrapper<const Unit>, Position> >

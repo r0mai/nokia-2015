@@ -7,7 +7,8 @@
 namespace calmare {
 
 class Building : public OwnedByContext {
-    Capabilities currentCapabilites;
+    CreationCapabilities currentCreationCapabilites;
+    ImprovementCapabilities currentImprovementCapabilites;
     UnitKind buildingKind;
 
 public:
@@ -19,6 +20,7 @@ class Buildings {
     std::vector<Building> buildings;
 
 public:
+    Buildings(Context* context) : context(context) {}
     const std::vector<Building>& getBuildings() const { return buildings; }
     friend struct Context;
 };
