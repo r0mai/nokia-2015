@@ -169,9 +169,8 @@ void SFMLFrontEnd::draw() {
         text.setFont(font);
         text.setString(sf::String(getCharForType(type)));
         text.setColor(getColorForKind(kind));
-
-        std::cout << "(" << pos.x << ", " << pos.y << ")" << std::endl;
-        text.setPosition(static_cast<float>(pos.x), static_cast<float>(pos.y));
+        text.setScale(0.01f, 0.01f);
+        text.setPosition(pos.x + 0.1f, pos.y - .1f);
 
         window.draw(text);
     }
