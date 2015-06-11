@@ -115,6 +115,8 @@ void Agent::makeWorkersStrategy() {
         std::cerr << "Found food at: " << food.x << " " << food.y << std::endl;
         sendUnitTo(food, jatekos.Egysegek[freeWorker]);
     }
+
+    while (makeWorkerIfPossible()) {}
 }
 
 TKoteg Agent::getOrders(TJatekos jatekos) {
