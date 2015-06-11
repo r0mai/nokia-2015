@@ -213,6 +213,7 @@ bool Agent::getFoodStrategy() {
         current_strategy = Strategy::GetWood;
         return true;
     }
+    log(__PRETTY_FUNCTION__);
     getStuff(cvKaja);
     return false;
 }
@@ -222,6 +223,7 @@ bool Agent::getWoodStrategy() {
         current_strategy = Strategy::GetIron;
         return true;
     }
+    log(__PRETTY_FUNCTION__);
     getStuff(cvFa);
     return false;
 }
@@ -231,11 +233,13 @@ bool Agent::getIronStrategy() {
         current_strategy = Strategy::GoForLoter;
         return true;
     }
+    log(__PRETTY_FUNCTION__);
     getStuff(cvVasBanya);
     return false;
 }
 
 bool Agent::goForLoterStrategy() {
+    log(__PRETTY_FUNCTION__);
     return false;
 }
 
