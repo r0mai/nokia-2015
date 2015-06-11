@@ -104,7 +104,7 @@ char fieldToChar(int type) {
     }
     return '\\';
 }
-void logMap(const TJatekos& jatekos, std::ostream& os) {
+void Agent::logMap(const TJatekos& jatekos, std::ostream& os) {
     std::vector<std::string> lines(jatekos.YMax, std::string(jatekos.XMax, ' '));
     for (int y = 0; y < jatekos.YMax; ++y) {
         for (int x = 0; x < jatekos.XMax; ++x) {
