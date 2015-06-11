@@ -86,7 +86,7 @@ Position Agent::getLocationOfResourceNearBy(Mezo mezo, Position near) const {
         });
     if (it == positions.end()) {
         log("Didnt find any resource");
-
+        return getExplorationPosition(near);
     }
     return *it;
 }
