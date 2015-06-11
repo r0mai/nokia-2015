@@ -78,7 +78,10 @@ Position getLocationOfResourceNearBy(const TJatekos& jatekos, Mezo mezo,
             const int dy = uid(gen);
             const Position destination = Position{near.x + dx, near.y + dy};
             if (isAvailableForMovement(jatekos, destination)) {
-                return destination;
+                if (jatekos.Vilag[destination.y][destination.x].Objektum ==
+                    cvMezo) {
+                    return destination;
+                }
             }
         }
     }
