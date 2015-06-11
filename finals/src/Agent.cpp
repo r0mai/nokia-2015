@@ -98,7 +98,7 @@ void sendUnitTo(Position position, const TEgyseg& unit) {
     const auto x = position.x;
     const auto y = position.y;
     if(unit.AkcioKod == caNincs) {
-        log("Unit %d was idle, sending to %d, %d", int(unit.ID), x, y);
+        log("Unit %d was idle, sending to %d, %d from %d, %d", int(unit.ID), x, y, unit.X, unit.Y);
         Utasit_Termel(unit.ID, x, y);
     } else {
         log("Unit %d was already in movement", int(unit.ID));
@@ -300,7 +300,7 @@ bool Agent::areControlPointsVisible() const {
 }
 
 bool Agent::getFoodStrategy() {
-    if (getNumberOfUnitsProducingWare(caKaja) >= 4) {
+    if (getNumberOfUnitsProducingWare(caKaja) >= 8) {
         current_strategy = Strategy::GetWood;
         return true;
     }
@@ -310,7 +310,7 @@ bool Agent::getFoodStrategy() {
 }
 
 bool Agent::getWoodStrategy() {
-    if (getNumberOfUnitsProducingWare(caFa) >= 6) {
+    if (getNumberOfUnitsProducingWare(caFa) >= 10) {
         current_strategy = Strategy::GetIron;
         return true;
     }
