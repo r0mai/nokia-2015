@@ -342,7 +342,7 @@ void Agent::logFeedback() {
     for (int i = 0; i < jatekos.UtasitSzam; ++i) {
         auto errorCode = jatekos.Utasitasok[i].Result;
         if (errorCode != chOk) {
-            log("Warning: Got error code %c", errorCode);
+            log("Warning: Got error code %d", int(errorCode));
         }
     }
 #endif
