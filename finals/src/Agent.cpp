@@ -109,11 +109,20 @@ bool Agent::makeUnitIfPossible(Egyseg e) {
         return false;
     }
 
-    auto hazid = getBuildingId(buildingTypeForUnit(e));
-    if (hazid < 0) {
+    auto buildingType = buildingTypeForUnit(e);
+    int epuletIndex = -1;
+    for (int i = 0; i < jatekos.EpSzam; ++i) {
+        if (jatekos.Epuletek[i].Tipus == e &&
+            jatekos.Epuletek[i].AkcioKod == caNincs)
+        {
+            epuletIndex = i;
+            break;
+        }
+    }
+    if (epuletIndex < 0) {
         return false;
     }
-    Utasit_Kepez(e, hazid);
+    Utasit_Kepez(e, jatekos.Epuletek[epuletIndex].ID);
     jatekos.Eroforras.Kaja -= cost.food();
     jatekos.Eroforras.Fa -= cost.wood();
     jatekos.Eroforras.Vas -= cost.iron();
