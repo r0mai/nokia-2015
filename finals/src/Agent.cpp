@@ -102,10 +102,20 @@ void sendUnitTo(Position position, const TEgyseg& unit) {
     }
 }
 
+std::vector<int> Agent::getFreeArchers() const {
+    std::vector<int> archers;
+    for(int i=0; i<jatekos.EgySzam; ++i) {
+        if(jatekos.Egysegek[i].Tipus == ceIjasz && jatekos.Egysegek[i].AkcioKod == caNincs) {
+            archers.push_back(i);
+        }
+    }
+    return archers;
+}
+
 std::vector<int> Agent::getFreeWorkers() const {
     std::vector<int> workers;
     for (int i = 0; i < jatekos.EgySzam; ++i) {
-        if (jatekos.Egysegek[i].AkcioKod == caNincs) {
+        if (jatekos.Egysegek[i].Tipus == ceParaszt && jatekos.Egysegek[i].AkcioKod == caNincs) {
             workers.push_back(i);
         }
     }
@@ -293,6 +303,9 @@ bool Agent::goForLoterStrategy() {
 
 bool Agent::defendBordersStrategy() {
     log("defendBorders");
+    while (makeUnitIfPossible(ceIjasz)) {
+    }
+
     return false;
 }
 
