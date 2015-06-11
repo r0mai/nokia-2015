@@ -93,17 +93,47 @@ std::vector<int> getFreeWorkers(const TJatekos& jatekos) {
     return workers;
 }
 
-bool Agent::makeWorkerIfPossible() {
-    if (jatekos.Eroforras.Kaja < 50) {
+bool Agent::makeUnitIfPossible(Egyseg e) {
+    auto our = Resources::fromJatekos(jatekos);
+    auto cost = Cost::Unit(e);
+
+    if (!(our - cost)) {
         return false;
     }
-    auto fohazid = getFoHazId();
-    if (getFoHazId() < 0) {
+
+    auto hazid = getBuildingId(buildingTypeForUnit(e));
+    if (hazid < 0) {
         return false;
     }
-    Utasit_Kepez(ceParaszt, fohazid);
-    jatekos.Eroforras.Kaja -= 50;
+    Utasit_Kepez(e, hazid);
+    jatekos.Eroforras.Kaja -= cost.food();
+    jatekos.Eroforras.Fa -= cost.wood();
+    jatekos.Eroforras.Vas -= cost.iron();
+    jatekos.Eroforras.Arany -= cost.gold();
     return true;
+}
+
+Mezo Agent::buildingTypeForUnit(Egyseg e) {
+    switch (e) {
+        case ceParaszt:
+            return cvFohaz;
+        case ceKardos: case cePuskas:
+            return cvLaktanya;
+        case ceIjasz:
+            return cvLoter;
+        case ceLovas:
+            return cvIstallo;
+    }
+    return Mezo(-1);
+}
+
+short Agent::getBuildingId(Mezo m) {
+    for (int i = 0; i < jatekos.EpSzam; ++i) {
+        if (jatekos.Epuletek[i].Tipus == m) {
+            return jatekos.Epuletek[i].ID;
+        }
+    }
+    return -1;
 }
 
 short Agent::getFoHazId() {
@@ -141,7 +171,7 @@ bool Agent::makeWorkersStrategy() {
         sendUnitTo(food, jatekos.Egysegek[freeWorker]);
     }
 
-    while (makeWorkerIfPossible()) {}
+    while (makeUnitIfPossible(ceParaszt)) {}
 
     return false;
 }

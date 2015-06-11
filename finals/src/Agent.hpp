@@ -24,8 +24,11 @@ private:
     bool makeWorkersStrategy();
     bool goForLoterStrategy();
 
-    bool makeWorkerIfPossible();
+    Mezo buildingTypeForUnit(Egyseg e);
+
+    bool makeUnitIfPossible(Egyseg e);
     short getFoHazId();
+    short getBuildingId(Mezo m);
     int getUnitCount(Egyseg e);
 };
 
