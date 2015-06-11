@@ -62,11 +62,6 @@ target_link_libraries(${SRC_LIB_NAME} ${Boost_LIBRARIES})
 
 add_executable(${GUI_EXEC_NAME} ${GUI_SOURCES})
 target_link_libraries(${GUI_EXEC_NAME} ${SRC_LIB_NAME})
-if(UNIX AND NOT APPLE)
-    target_link_libraries(${GUI_EXEC_NAME} "-lX11")
-    target_link_libraries(${GUI_EXEC_NAME} "-lxcb")
-    target_link_libraries(${GUI_EXEC_NAME} "-ludev")
-endif()
 
 add_executable(${TEST_EXEC_NAME} ${TEST_SOURCES})
 target_link_libraries(${TEST_EXEC_NAME} ${SRC_LIB_NAME})
