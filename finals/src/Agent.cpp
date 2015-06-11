@@ -383,6 +383,21 @@ std::vector<Position> Agent::getBoundaryPositions() const {
     return res;
 }
 
+std::vector<Position> Agent::findBuildablePositions() const {
+    std::vector<Position> result;
+    for (int x = 0; x < jatekos.XMax; ++x) {
+        for (int y = 0; y < jatekos.YMax; ++y) {
+            if (jatekos.Vilag[y][x].Objektum != cvMezo) {
+                continue;
+            }
+            if (isBuildablePosition(Position{x, y})) {
+                result.push_back(Position{x, y});
+            }
+        }
+    }
+    return result;
+}
+
 bool Agent::isBuildablePosition(const Position& position) const {
     if (position.x <= 0 || position.y <= 0 ||
         position.x >= jatekos.XMax-1 || position.y >= jatekos.YMax-1)
