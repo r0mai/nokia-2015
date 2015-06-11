@@ -73,13 +73,14 @@ void sendUnitTo(Position position, const TEgyseg& unit) {
     }
 }
 
-int getNextFreeWorker(const TJatekos& jatekos) {
+std::vector<int> getFreeWorkers(const TJatekos& jatekos) {
+    std::vector<int> workers;
     for (int i = 0; i < jatekos.EgySzam; ++i) {
         if (jatekos.Egysegek[i].AkcioKod == caNincs) {
-            return i;
+            workers.push_back(i);
         }
     }
-    return -1;
+    return workers;
 }
 
 void Agent::makeWorkersStrategy() {
