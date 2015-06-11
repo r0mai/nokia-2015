@@ -1,3 +1,4 @@
+#if 0
 #include "Unit.hpp"
 #include "Context.hpp"
 
@@ -14,3 +15,4 @@ void Unit::executeOrder(const Order& order) {
         mapState.setUnitPosition(*this, currentPosition);
     }
 }
+#endif

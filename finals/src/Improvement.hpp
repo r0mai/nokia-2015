@@ -1,3 +1,4 @@
+#if 0
 #pragma once
 
 #include <vector>
@@ -29,3 +30,4 @@ public:
 };
 
 }
+#endif

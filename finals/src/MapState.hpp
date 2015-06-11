@@ -1,3 +1,4 @@
+#if 0
 #pragma once
 
 #include "Position.hpp"
@@ -51,3 +52,4 @@ public:
 };
 
 }
+#endif

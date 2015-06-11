@@ -1,3 +1,4 @@
+#if 0
 #pragma once
 
 #include "ContextFwd.hpp"
@@ -25,3 +26,4 @@ public:
     friend struct Context;
 };
 }
+#endif

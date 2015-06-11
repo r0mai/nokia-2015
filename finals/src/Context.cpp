@@ -1,3 +1,4 @@
+#if 0
 #include "Context.hpp"
 
 using namespace calmare;
@@ -28,3 +29,4 @@ Unit& Context::addUnit() {
     mapState.setUnitPosition(unit, {});
     return unit;
 }
+#endif

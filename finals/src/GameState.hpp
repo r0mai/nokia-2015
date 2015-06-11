@@ -1,3 +1,4 @@
+#if 0
 #pragma once
 
 #include "ContextFwd.hpp"
@@ -13,3 +14,4 @@ public:
 };
 
 }
+#endif

@@ -1,3 +1,4 @@
+#if 0
 #pragma once
 
 #include "ContextFwd.hpp"
@@ -30,3 +31,4 @@ using CreationCapabilities = std::vector<CreationCapability>;
 using ImprovementCapabilities = std::vector<ImprovementCapability>;
 
 }
+#endif

@@ -1,3 +1,4 @@
+#if 0
 #include "MapState.hpp"
 
 #include <algorithm>
@@ -44,3 +45,4 @@ bool MapState::isVisibleFor(const Unit& from, const Unit& to) const {
 
     return visibilityRadius >= distanceBetween(from, to);
 }
+#endif

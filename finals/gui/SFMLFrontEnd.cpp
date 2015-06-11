@@ -1,3 +1,4 @@
+#if 0
 #include "SFMLFrontEnd.hpp"
 
 #include <cmath>
@@ -196,3 +197,4 @@ void SFMLFrontEnd::drawGUI() {
 }
 
 }
+#endif

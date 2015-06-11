@@ -1,3 +1,4 @@
+#if 0
 #include "Model.hpp"
 
 namespace calmare {
@@ -17,3 +18,4 @@ const Context& Model::getContext() const {
 }
 
 }
+#endif

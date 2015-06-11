@@ -1,3 +1,4 @@
+#if 0
 #pragma once
 
 #include <vector>
@@ -43,3 +44,4 @@ private:
 };
 
 }
+#endif

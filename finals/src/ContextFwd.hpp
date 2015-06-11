@@ -1,3 +1,4 @@
+#if 0
 #pragma once
 
 namespace calmare {
@@ -14,3 +15,4 @@ public:
 };
 
 }
+#endif
