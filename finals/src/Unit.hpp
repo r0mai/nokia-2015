@@ -42,6 +42,7 @@ enum class UnitKind {
 
 class Unit : public OwnedByContext {
     Capabilities currentCapabilities;
+    UnitType unitType = UnitType::Egyeb;
     UnitKind unitKind = UnitKind::friendly;
     UnitId unitId;
     unsigned visibilityRadius = 2;
@@ -59,6 +60,8 @@ public:
 
     template<UnitKind kind> bool is() { return unitKind == kind; }
 
+    UnitType getUnitType() const { return unitType; }
+    UnitKind getUnitKind() const { return unitKind; }
 };
 
 class Units {
@@ -67,6 +70,9 @@ class Units {
 
 public:
     Units(Context* context) : context(context) { }
+
+    const std::vector<Unit>& getUnits() const { return units; }
+
     friend struct Context;
 };
 
