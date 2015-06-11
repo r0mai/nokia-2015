@@ -42,7 +42,7 @@ enum class UnitKind {
 
 class Unit : public OwnedByContext {
     Capabilities currentCapabilities;
-    UnitType unitType = UnitType::Egyeb;
+    UnitType unitType = UnitType::Ismeretlen;
     UnitKind unitKind = UnitKind::friendly;
     UnitId unitId;
     unsigned visibilityRadius = 2;
