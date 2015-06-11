@@ -83,7 +83,7 @@ void Utasit_Kutat(short tipus, short nyersanyag)
     utasitas.Kod = cuFejleszt;
     utasitas.Kieg = cfKutat; 
     utasitas.ID = tipus;
-    utasitas.ID = nyersanyag;
+    utasitas.ID2 = nyersanyag;
     UtasitasFel(utasitas);
 }
 
