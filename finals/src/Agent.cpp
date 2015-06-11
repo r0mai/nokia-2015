@@ -366,7 +366,44 @@ bool Agent::exploreBoundariesStrategy() {
 
 bool Agent::defendBordersStrategy() {
     log("defendBorders");
-    return true;
+
+
+    // Find tower locations closest to borders
+    auto positions = findBuildablePositions();
+
+    auto diagonal = getMainDiagonal();
+
+    auto distanceFromDiagonal = [&](const Position& p) {
+        auto v = diagonal.first;
+        auto w = diagonal.second;
+        // Return minimum distance between line segment vw and point p
+        const double l2 = lengthSquared(v, w);  // i.e. |w-v|^2 -  avoid a sqrt
+        // Consider the line extending the segment, parameterized as v + t (w - v).
+        // We find projection of point p onto the line.
+        // It falls where t = [(p-v) . (w-v)] / |w-v|^2
+        const double t = dot(p - v, w - v) / l2;
+        if (t < 0.0) return length(p, v);       // Beyond the 'v' end of the segment
+        else if (t > 1.0) return length(p, w);  // Beyond the 'w' end of the segment
+        const Positionf projection = v + t * (w - v);  // Projection falls on the segment
+        return length(p, projection);
+    };
+
+    std::sort(positions.begin(), positions.end(),
+        [&](const Position& p1, const Position& p2) {
+            return distanceFromDiagonal(p1) < distanceFromDiagonal(p2);
+        }
+    );
+
+    for (const Position& p : positions) {
+        if (distanceFromDiagonal(p) > 5.) {
+            break;
+        }
+
+        if (!buildBuildingIfPossible(cvTorony, p)) {
+            break;
+        }
+    }
+    return false;
 }
 
 void Agent::logFeedback() {
