@@ -106,13 +106,33 @@ bool Agent::makeWorkerIfPossible() {
     return true;
 }
 
-short Agent::getFoHazId() {
+int Agent::getFoHazEpuletId() {
     for (int i = 0; i < jatekos.EpSzam; ++i) {
         if (jatekos.Epuletek[i].Tipus == cvFohaz) {
-            return jatekos.Epuletek[i].ID;
+            return i;
         }
     }
     return -1;
+}
+
+short Agent::getFoHazId() {
+    int fohazEpuletId = getFoHazEpuletId();
+    if (fohazEpuletId != -1) {
+        return jatekos.Epuletek[fohazEpuletId].ID;
+    }
+    else {
+        return -1;
+    }
+}
+
+int Agent::negyed() {
+    int fohazEpuletId = getFoHazEpuletId();
+    if (fohazEpuletId != -1) {
+        return (jatekos.Epuletek[fohazEpuletId].X > jatekos.XMax / 2) | ((jatekos.Epuletek[fohazEpuletId].Y > jatekos.YMax / 2) << 1);
+    }
+    else {
+        return -1;
+    }
 }
 
 int Agent::getUnitCount(Egyseg e) {

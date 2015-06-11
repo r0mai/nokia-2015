@@ -30,7 +30,9 @@ private:
     void getStuff(Mezo mezo);
 
     bool makeWorkerIfPossible();
+    int getFoHazEpuletId();
     short getFoHazId();
+    int negyed();
     int getUnitCount(Egyseg e);
 };
 
