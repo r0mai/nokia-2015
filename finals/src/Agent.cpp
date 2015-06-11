@@ -243,7 +243,7 @@ void Agent::getStuff(Mezo mezo) {
 }
 
 bool Agent::getFoodStrategy() {
-    if (getNumberOfUnitsProducingWare(caKaja) >= 4) {
+    if (getNumberOfUnitsProducingWare(caKaja) >= 8) {
         current_strategy = Strategy::GetWood;
         return true;
     }
@@ -328,6 +328,7 @@ TKoteg Agent::getOrders(TJatekos jatekos) {
                 break;
             case Strategy::GetIron:
                 strategy_changes = getIronStrategy();
+                break;
             case Strategy::GoForLoter:
                 strategy_changes = goForLoterStrategy();
                 break;
