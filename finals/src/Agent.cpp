@@ -72,10 +72,18 @@ Position getLocationOfResourceNearBy(const TJatekos& jatekos, Mezo mezo,
         });
     if (it == positions.end()) {
         log("Didnt find any resource");
-        const int dx = uid(gen);
-        const int dy = uid(gen);
 
-        return Position{near.x + dx, near.y + dy};
+        for (;;) {
+            const int dx = uid(gen);
+            const int dy = uid(gen);
+            const Position destination = Position{near.x + dx, near.y + dy};
+            if (isAvailableForMovement(jatekos, destination)) {
+                if (jatekos.Vilag[destination.y][destination.x].Objektum ==
+                    cvMezo) {
+                    return destination;
+                }
+            }
+        }
     }
     return *it;
 }
@@ -188,8 +196,7 @@ void Agent::getStuff(Mezo mezo) {
         short myOnlySon = jatekos.Egysegek[freeWorker].ID;
         Position ofMyOnlySon = Position{jatekos.Egysegek[freeWorker].X,
                                         jatekos.Egysegek[freeWorker].Y};
-        Position food =
-            getLocationOfResourceNearBy(jatekos, cvKaja, ofMyOnlySon);
+        Position food = getLocationOfResourceNearBy(jatekos, mezo, ofMyOnlySon);
         std::cerr << "Found food at: " << food.x << " " << food.y << std::endl;
         sendUnitTo(food, jatekos.Egysegek[freeWorker]);
     }
