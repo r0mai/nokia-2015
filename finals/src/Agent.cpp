@@ -477,3 +477,15 @@ bool Agent::isBuildablePosition(const Position& position) const {
 
     return true;
 }
+
+Position Agent::getPointTowardsMiddle() const {
+    auto xMax = jatekos.XMax;
+    auto yMax = jatekos.YMax;
+    switch (negyed()) {
+        case 0: return Position{xMax/2 - 1, yMax/2 - 1};
+        case 1: return Position{xMax/2 + 1, yMax/2 - 1};
+        case 2: return Position{xMax/2 - 1, yMax/2 + 1};
+        case 3: return Position{xMax/2 + 1, yMax/2 + 1};
+    }
+    assert(false);
+}
