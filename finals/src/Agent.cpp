@@ -19,7 +19,7 @@ std::size_t distanceBetween(Position position1, Position position2) {
             std::abs(position1.y - position2.y));
 }
 
-std::size_t unitsOnCell(const TJatekos& jatekos, Position position) {
+std::size_t Agent::unitsOnCell(Position position) const {
     std::size_t count = 0;
     for(int i=0; i<jatekos.EgySzam; ++i) {
         const int x = jatekos.Egysegek[i].X;
@@ -31,7 +31,7 @@ std::size_t unitsOnCell(const TJatekos& jatekos, Position position) {
     return count;
 }
 
-bool Agent::isAvailableForMovement(Position cell) {
+bool Agent::isAvailableForMovement(Position cell) const {
     if (isValidPosition(cell)) {
         const auto worldCell = jatekos.Vilag[cell.y][cell.x].Objektum;
         if(worldCell == cvMezo || worldCell == cvKaja || worldCell == cvFa || worldCell == cvVasBanya || worldCell == cvAranyBanya) {
@@ -41,8 +41,7 @@ bool Agent::isAvailableForMovement(Position cell) {
     return false;
 }
 
-Position getLocationOfResourceNearBy(const TJatekos& jatekos, Mezo mezo,
-                                     Position near) {
+Position Agent::getLocationOfResourceNearBy(Mezo mezo, Position near) const {
     static std::random_device rnd;
     static std::mt19937 gen(rnd());
     std::uniform_int_distribution<int> uid(-jatekos.Kepesseg.LatEgy / 1.414,
@@ -53,7 +52,7 @@ Position getLocationOfResourceNearBy(const TJatekos& jatekos, Mezo mezo,
     for(int x = 0; x < maxX ; ++x) {
         for(int y = 0; y < maxY; ++y) {
             if (jatekos.Vilag[y][x].Objektum == mezo &&
-                unitsOnCell(jatekos, Position{x, y}) < 4) {
+                unitsOnCell(Position{x, y}) < 4) {
                 positions.push_back(Position{x, y});
             }
         }
@@ -70,12 +69,12 @@ Position getLocationOfResourceNearBy(const TJatekos& jatekos, Mezo mezo,
             const int dx = uid(gen);
             const int dy = uid(gen);
             const Position destination = Position{near.x + dx, near.y + dy};
-            /*if (isAvailableForMovement(destination)) {
+            if (isAvailableForMovement(destination)) {
                 if (jatekos.Vilag[destination.y][destination.x].Objektum ==
                     cvMezo) {
                     return destination;
                 }
-            }*/
+            }
         }
     }
     return *it;
@@ -92,7 +91,7 @@ void sendUnitTo(Position position, const TEgyseg& unit) {
     }
 }
 
-std::vector<int> getFreeWorkers(const TJatekos& jatekos) {
+std::vector<int> Agent::getFreeWorkers() const {
     std::vector<int> workers;
     for (int i = 0; i < jatekos.EgySzam; ++i) {
         if (jatekos.Egysegek[i].AkcioKod == caNincs) {
@@ -145,7 +144,7 @@ Mezo Agent::buildingTypeForUnit(Egyseg e) {
     return Mezo(-1);
 }
 
-int Agent::getBuildingIndex(Mezo m) {
+int Agent::getBuildingIndex(Mezo m) const {
     for (int i = 0; i < jatekos.EpSzam; ++i) {
         if (jatekos.Epuletek[i].Tipus == m) {
             return i;
@@ -163,7 +162,7 @@ short Agent::getBuildingId(Mezo m) {
     return -1;
 }
 
-int Agent::negyed() {
+int Agent::negyed() const {
     int fohazEpuletIndex = getBuildingIndex(cvFohaz);
     if (fohazEpuletIndex != -1) {
         return (jatekos.Epuletek[fohazEpuletIndex].X > jatekos.XMax / 2) | ((jatekos.Epuletek[fohazEpuletIndex].Y > jatekos.YMax / 2) << 1);
@@ -183,8 +182,7 @@ int Agent::getUnitCount(Egyseg e) {
     return c;
 }
 
-std::size_t getNumberOfUnitsProducingWare(const TJatekos& jatekos,
-                                          Akcio akcio) {
+std::size_t Agent::getNumberOfUnitsProducingWare(Akcio akcio) const {
     std::size_t count = 0;
     for (int i = 0; i < jatekos.EgySzam; ++i) {
         const auto unit = jatekos.Egysegek[i];
@@ -197,10 +195,10 @@ std::size_t getNumberOfUnitsProducingWare(const TJatekos& jatekos,
 
 void Agent::getStuff(Mezo mezo) {
 
-    for (const auto& freeWorker : getFreeWorkers(jatekos)) {
+    for (const auto& freeWorker : getFreeWorkers()) {
         Position ofMyOnlySon = Position{jatekos.Egysegek[freeWorker].X,
                                         jatekos.Egysegek[freeWorker].Y};
-        Position food = getLocationOfResourceNearBy(jatekos, mezo, ofMyOnlySon);
+        Position food = getLocationOfResourceNearBy(mezo, ofMyOnlySon);
         std::cerr << "Found food at: " << food.x << " " << food.y << std::endl;
         sendUnitTo(food, jatekos.Egysegek[freeWorker]);
     }
@@ -209,7 +207,7 @@ void Agent::getStuff(Mezo mezo) {
 }
 
 bool Agent::getFoodStrategy() {
-    if (getNumberOfUnitsProducingWare(jatekos, caKaja) >= 4) {
+    if (getNumberOfUnitsProducingWare(caKaja) >= 4) {
         current_strategy = Strategy::GetWood;
         return true;
     }
@@ -219,7 +217,7 @@ bool Agent::getFoodStrategy() {
 }
 
 bool Agent::getWoodStrategy() {
-    if (getNumberOfUnitsProducingWare(jatekos, caFa) >= 8) {
+    if (getNumberOfUnitsProducingWare(caFa) >= 8) {
         current_strategy = Strategy::GetIron;
         return true;
     }
@@ -229,7 +227,7 @@ bool Agent::getWoodStrategy() {
 }
 
 bool Agent::getIronStrategy() {
-    if (getNumberOfUnitsProducingWare(jatekos, caVas) >= 4) {
+    if (getNumberOfUnitsProducingWare(caVas) >= 4) {
         current_strategy = Strategy::GoForLoter;
         return true;
     }
@@ -332,11 +330,11 @@ void Agent::logMap(const TJatekos& jatekos, std::ostream& os) {
 #endif
 }
 
-bool Agent::isValidPosition(Position p) {
+bool Agent::isValidPosition(Position p) const {
     auto c = getMainDiagonal();
     return c.first.x <= p.x && p.x < c.second.x && c.first.y <= p.y && p.y < c.second.y;
 }
-std::pair<Position, Position> Agent::getMainDiagonal() {
+std::pair<Position, Position> Agent::getMainDiagonal() const {
     if (isPieceTime())
     {
         switch (negyed())
@@ -350,7 +348,7 @@ std::pair<Position, Position> Agent::getMainDiagonal() {
     return{ { 0, 0 }, { jatekos.XMax, jatekos.YMax } };
 }
 
-bool Agent::isPieceTime() {
+bool Agent::isPieceTime() const {
     return jatekos.Ido <= jatekos.BekeIdo;
 }
 

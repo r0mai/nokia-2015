@@ -43,18 +43,23 @@ private:
     void getStuff(Mezo mezo);
 
     bool makeWorkerIfPossible();
-    int getBuildingIndex(Mezo m);
+    int getBuildingIndex(Mezo m) const;
     short getBuildingId(Mezo m);
-    int negyed();
+    int negyed() const;
     int getUnitCount(Egyseg e);
 
-    bool isAvailableForMovement(Position cell);
-    bool isValidPosition(Position p); // benne vagyunk e a mezobe
+    bool isAvailableForMovement(Position cell) const;
+    bool isValidPosition(Position p) const; // benne vagyunk e a mezobe
 
-    std::pair<Position, Position> getMainDiagonal();
+    std::pair<Position, Position> getMainDiagonal() const;
 
-    bool isPieceTime();
-    std::vector<Position> getBoundaryPositions(); 
+    std::size_t unitsOnCell(Position position) const;
+    Position getLocationOfResourceNearBy(Mezo mezo, Position near) const;
+    std::vector<int> getFreeWorkers() const;
+    std::size_t getNumberOfUnitsProducingWare(Akcio akcio) const;
+
+    bool isPieceTime() const;
+    std::vector<Position> getBoundaryPositions();
 };
 
 }
