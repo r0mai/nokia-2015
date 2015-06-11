@@ -196,6 +196,28 @@ namespace calmare {
             return Cost(Resources::wood(40) + Resources::iron(5), 80);
         }
 
+        static Cost Building(Mezo m) {
+            switch (m) {
+                case cvFohaz:
+                    return Varoshaza();
+                case cvLaktanya:
+                    return Laktanya();
+                case cvLoter:
+                    return Loter();
+                case cvIstallo:
+                    return Istallo();
+                case cvAkademia:
+                    return Akademia();
+                case cvKorhaz:
+                    return Korhaz();
+                case cvTorony:
+                    return Torony();
+                case cvFal:
+                    return Fal();
+                default:
+                    return Cost(-1);
+            }
+        }
 
         // improvements
         // soldiers
