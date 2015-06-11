@@ -6,6 +6,30 @@
 
 namespace calmare {
 
+namespace {
+
+sf::Color getColorForKind(UnitKind kind) {
+    switch (kind) {
+        case UnitKind::enemy:
+            return sf::Color::Red;
+        case UnitKind::friendly:
+            return sf::Color::Green;
+        case UnitKind::invisible:
+            return sf::Color(200, 200, 200);
+        default:
+            return sf::Color::White;
+    }
+}
+
+char getCharForType(UnitType type) {
+    switch (type) {
+
+    }
+    return 'x';
+}
+
+} // anonymous namespace
+
 SFMLFrontEnd::SFMLFrontEnd(Model& model) :
     model(model),
     window(sf::VideoMode(800, 800), "Calmare - Nokia 2015")
@@ -15,6 +39,8 @@ SFMLFrontEnd::SFMLFrontEnd(Model& model) :
 
     float max = static_cast<float>(std::max(w, h));
     worldView.reset(sf::FloatRect(0.f, 0.f, max, max));
+
+    font.loadFromFile("assets/arial.ttf");
 
     generateGrid();
 }
@@ -132,6 +158,23 @@ void SFMLFrontEnd::draw() {
 
     window.setView(worldView);
     drawWorld();
+
+    for (const auto& unit : model.getContext().units.getUnits()) {
+        auto pos = model.getContext().mapState.getUnitPosition(unit);
+
+        UnitKind kind = unit.getUnitKind();
+        UnitType type = unit.getUnitType();
+
+        sf::Text text;
+        text.setFont(font);
+        text.setString(sf::String(getCharForType(type)));
+        text.setColor(getColorForKind(kind));
+
+        std::cout << "(" << pos.x << ", " << pos.y << ")" << std::endl;
+        text.setPosition(static_cast<float>(pos.x), static_cast<float>(pos.y));
+
+        window.draw(text);
+    }
 
     window.setView(window.getDefaultView());
     drawGUI();

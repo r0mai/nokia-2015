@@ -8,6 +8,7 @@ class Model {
     Context context;
 public:
     void tick();
+    Context& getContext();
     const Context& getContext() const;
 };
 

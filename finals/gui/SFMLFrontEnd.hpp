@@ -39,6 +39,7 @@ private:
     // Gesture related stuff
     bool dragInProgress = false;
     sf::Vector2f dragStart;
+    sf::Font font;
 };
 
 }
