@@ -43,7 +43,7 @@ Position getLocationOfResourceNearBy(const TJatekos& jatekos, Mezo mezo,
             return distanceBetween(p1, near) < distanceBetween(p2, near);
         });
     if (it == positions.end()) {
-        std::cerr << "Didnt find any resource" << std::endl;
+        log("Didnt find any resource");
         return Position{near.x - 2, near.y - 2};
     }
     return *it;
@@ -53,11 +53,10 @@ void sendUnitTo(Position position, const TEgyseg& unit) {
     const auto x = position.x;
     const auto y = position.y;
     if(unit.AkcioKod == caNincs) {
-        std::cerr<<"Unit " << unit.ID << " was idle, sending to "<<x << " "<< y<<std::endl;
+        log("Unit %d was idle, sending to %d, %d", int(unit.ID), x, y);
         Utasit_Termel(unit.ID, x, y);
     } else {
-        std::cerr<<"Unit " << unit.ID << " was already in movement"<<std::endl;
-
+        log("Unit %d was already in movement", int(unit.ID));
     }
 }
 
