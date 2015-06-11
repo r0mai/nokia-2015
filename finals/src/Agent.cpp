@@ -82,6 +82,27 @@ int getNextFreeWorker(const TJatekos& jatekos) {
     return -1;
 }
 
+bool Agent::makeWorkerIfPossible() {
+    if (jatekos.Eroforras.Kaja < 50) {
+        return false;
+    }
+    auto fohazid = getFoHazId();
+    if (getFoHazId() < 0) {
+        return false;
+    }
+    Utasit_Kepez(ceParaszt, fohazid);
+    jatekos.Eroforras.Kaja -= 50;
+}
+
+short Agent::getFoHazId() {
+    for (int i = 0; i < jatekos.EpSzam; ++i) {
+        if (jatekos.Epuletek[i].Tipus == cvFohaz) {
+            return jatekos.Epuletek[i].ID;
+        }
+    }
+    return -1;
+}
+
 void Agent::makeWorkersStrategy() {
 
     short myOnlySon = jatekos.Egysegek[0].ID;

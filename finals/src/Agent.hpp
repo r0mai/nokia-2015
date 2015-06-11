@@ -19,6 +19,9 @@ private:
     } current_strategy = Strategy::MakeWorkers;
 
     void makeWorkersStrategy();
+
+    bool makeWorkerIfPossible();
+    short getFoHazId();
 };
 
 }
