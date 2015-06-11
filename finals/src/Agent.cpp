@@ -73,7 +73,17 @@ void sendUnitTo(Position position, const TEgyseg& unit) {
     }
 }
 
+int getNextFreeWorker(const TJatekos& jatekos) {
+    for (int i = 0; i < jatekos.EgySzam; ++i) {
+        if (jatekos.Egysegek[i].AkcioKod == caNincs) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 void Agent::makeWorkersStrategy() {
+
     short myOnlySon = jatekos.Egysegek[0].ID;
     Position ofMyOnlySon = Position{jatekos.Egysegek[0].X, jatekos.Egysegek[0].Y};
     Position food = getLocationOfResourceNearBy(jatekos, cvKaja, ofMyOnlySon);
