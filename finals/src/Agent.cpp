@@ -323,7 +323,7 @@ char fieldToChar(int type) {
     }
     return '\\';
 }
-void Agent::logMap(const TJatekos& jatekos, std::ostream& os) {
+void Agent::logMap(const TJatekos& jatekos) {
 #ifndef CALMARE_DISABLE_LOG
     std::vector<std::string> lines(jatekos.YMax, std::string(jatekos.XMax, ' '));
     for (int y = 0; y < jatekos.YMax; ++y) {
@@ -343,7 +343,6 @@ void Agent::logMap(const TJatekos& jatekos, std::ostream& os) {
     }
 #else
     (void)(jatekos);
-    (void)(os);
 #endif
 }
 
