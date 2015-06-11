@@ -501,4 +501,32 @@ Position Agent::getPointTowardsMiddle() const {
         case 3: return Position{xMax/2 + 1, yMax/2 + 1};
     }
     assert(false);
+    return Position{};
 }
+
+Position Agent::getPointTowardsSide1() const {
+    auto xMax = jatekos.XMax;
+    auto yMax = jatekos.YMax;
+    switch (negyed()) {
+        case 0: return Position{xMax/2 - 1, 0};
+        case 1: return Position{xMax, yMax/2 - 1};
+        case 2: return Position{0, yMax/2 + 1};
+        case 3: return Position{xMax, yMax/2 + 1};
+    }
+    assert(false);
+    return Position{};
+}
+
+Position Agent::getPointTowardsSide2() const {
+    auto xMax = jatekos.XMax;
+    auto yMax = jatekos.YMax;
+    switch (negyed()) {
+        case 0: return Position{0, yMax/2 - 1};
+        case 1: return Position{xMax/2 + 1, 0};
+        case 2: return Position{xMax/2 - 1, yMax};
+        case 3: return Position{xMax/2 + 1, yMax};
+    }
+    assert(false);
+    return Position{};
+}
+

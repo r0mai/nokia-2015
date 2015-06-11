@@ -69,6 +69,8 @@ private:
 
 
     Position getPointTowardsMiddle() const;
+    Position getPointTowardsSide1() const;
+    Position getPointTowardsSide2() const;
 };
 
 }
