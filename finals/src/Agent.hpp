@@ -19,7 +19,7 @@ class Agent {
 public:
     TKoteg getOrders(TJatekos jatekos);
 
-    void logMap(const TJatekos& jatekos, std::ostream& os = std::cerr);
+    void logMap(const TJatekos& jatekos);
     TJatekos jatekos;
 private:
     enum class Strategy {
