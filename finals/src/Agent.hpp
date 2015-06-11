@@ -58,6 +58,7 @@ private:
     std::size_t unitsOnCell(Position position) const;
     Position getLocationOfResourceNearBy(Mezo mezo, Position near) const;
     std::vector<int> getFreeWorkers() const;
+    std::vector<int> getFreeArchers() const;
     std::size_t getNumberOfUnitsProducingWare(Akcio akcio) const;
 
     bool isPieceTime() const;
