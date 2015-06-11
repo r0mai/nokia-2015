@@ -14,7 +14,11 @@ public:
     TJatekos jatekos;
 private:
 
-    void initialStrategy();
+    enum Strategy {
+        MakeWorkers
+    } current_strategy = Strategy::MakeWorkers;
+
+    void makeWorkersStrategy();
 };
 
 }

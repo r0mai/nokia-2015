@@ -73,7 +73,7 @@ void sendUnitTo(Position position, const TEgyseg& unit) {
     }
 }
 
-void Agent::initialStrategy() {
+void Agent::makeWorkersStrategy() {
     short myOnlySon = jatekos.Egysegek[0].ID;
     Position ofMyOnlySon = Position{jatekos.Egysegek[0].X, jatekos.Egysegek[0].Y};
     Position food = getLocationOfResourceNearBy(jatekos, cvKaja, ofMyOnlySon);
@@ -85,7 +85,7 @@ TKoteg Agent::getOrders(TJatekos jatekos) {
     eraseOrders();
     this->jatekos = jatekos;
     std::cerr << "Working with " << jatekos.EgySzam << " units" << std::endl;
-    initialStrategy();
+    makeWorkersStrategy();
     return koteg;
 }
 
