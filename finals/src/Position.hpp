@@ -20,14 +20,14 @@ struct Positionf {
 inline
 int lengthSquared(const Position& p1, const Position& p2) {
     auto dx = p1.x - p2.x;
-    auto dy = p2.y - p2.y;
+    auto dy = p1.y - p2.y;
     return dx*dx + dy*dy;
 }
 
 inline
 double lengthSquared(const Positionf& p1, const Positionf& p2) {
     auto dx = p1.x - p2.x;
-    auto dy = p2.y - p2.y;
+    auto dy = p1.y - p2.y;
     return dx*dx + dy*dy;
 }
 
