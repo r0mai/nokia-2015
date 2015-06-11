@@ -9,7 +9,7 @@
 using namespace calmare;
 
 void eraseOrders() {
-    std::cerr << "Erasing orders" << std::endl;
+    log("Erasing orders");
     koteg.UtasitSzam = 0;
 }
 
