@@ -36,24 +36,19 @@ T dot(const PositionBase<T>& p1, const PositionBase<T>& p2) {
     return p1.x*p2.x + p1.y*p2.y;
 }
 
-inline
-Position operator-(const Position& p1, const Position& p2) {
-    return Position{p1.x - p2.x, p1.y - p2.y};
+template<class T>
+PositionBase<T> operator-(const PositionBase<T>& p1, const PositionBase<T>& p2) {
+    return {p1.x - p2.x, p1.y - p2.y};
 }
 
-inline
-Position operator+(const Position& p1, const Position& p2) {
-    return Position{p1.x + p2.x, p1.y + p2.y};
+template<class T>
+PositionBase<T> operator+(const PositionBase<T>& p1, const PositionBase<T>& p2) {
+    return {p1.x + p2.x, p1.y + p2.y};
 }
 
-inline
-Positionf operator+(const Position& p1, const Positionf& p2) {
-    return Positionf{p1.x + p2.x, p1.y + p2.y};
-}
-
-inline
-Positionf operator*(double f, const Position& p1) {
-    return Positionf{p1.x * f, p1.y * f};
+template<class T>
+PositionBase<T> operator*(T f, const PositionBase<T>& p1) {
+    return {p1.x * f, p1.y * f};
 }
 
 }

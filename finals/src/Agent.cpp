@@ -396,7 +396,7 @@ bool Agent::defendBordersStrategy() {
         const double t = dot(p - v, w - v) / l2;
         if (t < 0.0) return length(p, v);       // Beyond the 'v' end of the segment
         else if (t > 1.0) return length(p, w);  // Beyond the 'w' end of the segment
-        const Positionf projection = v + t * (w - v);  // Projection falls on the segment
+        const Positionf projection = Positionf(v) + t * Positionf(w - v);
         return length(Positionf(p), projection);
     };
 
