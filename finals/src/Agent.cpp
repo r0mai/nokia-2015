@@ -207,6 +207,16 @@ int Agent::getBuildingIndex(Mezo m) const {
     return -1;
 }
 
+std::size_t Agent::getNumberOfBuildings(Mezo m) const {
+    std::size_t count = 0;
+    for(int i=0; i<jatekos.EpSzam; ++i) {
+        if(jatekos.Epuletek[i].Tipus == m) {
+            ++count;
+        }
+    }
+    return count;
+}
+
 short Agent::getBuildingId(Mezo m) {
     for (int i = 0; i < jatekos.EpSzam; ++i) {
         if (jatekos.Epuletek[i].Tipus == m) {
@@ -319,7 +329,7 @@ bool Agent::getIronStrategy() {
 
 bool Agent::goForLoterStrategy() {
     log("loter");
-    if(getBuildingIndex(cvLoter) != -1) {
+    if(getNumberOfBuildings(cvLoter) >= 2) {
         current_strategy = Strategy::ExploreBoundaries;
         return true;
     }

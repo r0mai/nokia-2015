@@ -56,6 +56,7 @@ private:
     void handleFreeWorkers();
 
     int getBuildingIndex(Mezo m) const;
+    std::size_t getNumberOfBuildings(Mezo m) const;
     short getBuildingId(Mezo m);
     int negyed() const;
     int getUnitCount(Egyseg e);
