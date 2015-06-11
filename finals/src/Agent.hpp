@@ -59,7 +59,7 @@ private:
     std::size_t getNumberOfUnitsProducingWare(Akcio akcio) const;
 
     bool isPieceTime() const;
-    std::vector<Position> getBoundaryPositions();
+    std::vector<Position> getBoundaryPositions() const;
 };
 
 }

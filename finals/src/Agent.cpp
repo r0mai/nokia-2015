@@ -65,10 +65,12 @@ Position Agent::getLocationOfResourceNearBy(Mezo mezo, Position near) const {
     if (it == positions.end()) {
         log("Didnt find any resource");
 
+        auto poss= getBoundaryPositions();
+
+        std::uniform_int_distribution<int> uidd(0, poss.size() - 1);
         for (;;) {
-            const int dx = uid(gen);
-            const int dy = uid(gen);
-            const Position destination = Position{near.x + dx, near.y + dy};
+            const int ind = uidd(gen);
+            auto destination = poss[ind];
             if (isAvailableForMovement(destination)) {
                 if (jatekos.Vilag[destination.y][destination.x].Objektum ==
                     cvMezo) {
@@ -352,7 +354,7 @@ bool Agent::isPieceTime() const {
     return jatekos.Ido <= jatekos.BekeIdo;
 }
 
-std::vector<Position> Agent::getBoundaryPositions() {
+std::vector<Position> Agent::getBoundaryPositions() const {
     std::vector<Position> res;
 
     auto c = getMainDiagonal();
