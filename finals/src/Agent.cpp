@@ -120,7 +120,7 @@ bool Agent::makeUnitIfPossible(Egyseg e) {
     auto buildingType = buildingTypeForUnit(e);
     int epuletIndex = -1;
     for (int i = 0; i < jatekos.EpSzam; ++i) {
-        if (jatekos.Epuletek[i].Tipus == e &&
+        if (jatekos.Epuletek[i].Tipus == buildingType &&
             jatekos.Epuletek[i].AkcioKod == caNincs)
         {
             epuletIndex = i;
