@@ -25,6 +25,18 @@ std::size_t distanceBetween(Position position1, Position position2) {
             std::abs(position1.y - position2.y));
 }
 
+std::size_t unitsOnCell(const TJatekos& jatekos, Position position) {
+    std::size_t count = 0;
+    for(int i=0; i<jatekos.EgySzam; ++i) {
+        const int x = jatekos.Egysegek[i].X;
+        const int y = jatekos.Egysegek[i].Y;
+        if(x == position.x && y == position.y) {
+            ++count;
+        }
+    }
+    return count;
+}
+
 Position getLocationOfResourceNearBy(const TJatekos& jatekos, Mezo mezo,
                                      Position near) {
     const int maxX = jatekos.XMax;
@@ -32,7 +44,8 @@ Position getLocationOfResourceNearBy(const TJatekos& jatekos, Mezo mezo,
     std::vector<Position> positions;
     for(int x = 0; x < maxX ; ++x) {
         for(int y = 0; y < maxY; ++y) {
-            if(jatekos.Vilag[y][x].Objektum == mezo) {
+            if (jatekos.Vilag[y][x].Objektum == mezo &&
+                unitsOnCell(jatekos, Position{x, y}) < 3) {
                 positions.push_back(Position{x, y});
             }
         }
@@ -60,15 +73,19 @@ void sendUnitTo(Position position, const TEgyseg& unit) {
     }
 }
 
-TKoteg Agent::getOrders(TJatekos jatekos) {
-    logMap(jatekos);
-    eraseOrders();
-    std::cerr << "Working with " << jatekos.EgySzam << " units" << std::endl;
+void Agent::initialStrategy() {
     short myOnlySon = jatekos.Egysegek[0].ID;
     Position ofMyOnlySon = Position{jatekos.Egysegek[0].X, jatekos.Egysegek[0].Y};
     Position food = getLocationOfResourceNearBy(jatekos, cvKaja, ofMyOnlySon);
     std::cerr << "Found food at: " << food.x << " " << food.y << std::endl;
     sendUnitTo(food, jatekos.Egysegek[0]);
+}
+
+TKoteg Agent::getOrders(TJatekos jatekos) {
+    eraseOrders();
+    this->jatekos = jatekos;
+    std::cerr << "Working with " << jatekos.EgySzam << " units" << std::endl;
+    initialStrategy();
     return koteg;
 }
 
