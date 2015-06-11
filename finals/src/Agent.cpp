@@ -45,7 +45,7 @@ Position getLocationOfResourceNearBy(const TJatekos& jatekos, Mezo mezo,
     for(int x = 0; x < maxX ; ++x) {
         for(int y = 0; y < maxY; ++y) {
             if (jatekos.Vilag[y][x].Objektum == mezo &&
-                unitsOnCell(jatekos, Position{x, y}) < 3) {
+                unitsOnCell(jatekos, Position{x, y}) < 4) {
                 positions.push_back(Position{x, y});
             }
         }
