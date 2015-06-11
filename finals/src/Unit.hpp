@@ -8,6 +8,26 @@ namespace calmare {
 
 typedef int UnitId;
 
+enum class UnitType {
+    Paraszt = 1,
+    Kardos,
+    Ijasz,
+    Lovas,
+    Puskas,
+
+    Varoshaza,
+    Laktanya,
+    Loter,
+    Istallo,
+    Akademia,
+    Korhaz,
+    Torony,
+    Fal,
+
+    Akadaly,
+    Egyeb
+};
+
 enum class UnitKind {
     friendly = 1,
     enemy,
