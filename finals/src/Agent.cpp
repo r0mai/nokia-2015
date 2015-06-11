@@ -562,7 +562,9 @@ std::vector<Position> Agent::getBoundaryPositions() const {
         for (int j = c.first.y + 1; j < c.second.y - 1; ++j) {
             if (jatekos.Vilag[j][i].Objektum != cvNemLatszik) {
                 if (jatekos.Vilag[j - 1][i].Objektum == cvNemLatszik || jatekos.Vilag[j + 1][i].Objektum == cvNemLatszik ||
-                    jatekos.Vilag[j][i - 1].Objektum == cvNemLatszik || jatekos.Vilag[j][i - 1].Objektum == cvNemLatszik) {
+                    jatekos.Vilag[j][i - 1].Objektum == cvNemLatszik || jatekos.Vilag[j][i + 1].Objektum == cvNemLatszik ||
+                    jatekos.Vilag[j - 1][i - 1].Objektum == cvNemLatszik || jatekos.Vilag[j + 1][i + 1].Objektum == cvNemLatszik ||
+                    jatekos.Vilag[j + 1][i - 1].Objektum == cvNemLatszik || jatekos.Vilag[j - 1][i + 1].Objektum == cvNemLatszik) {
                     res.push_back({ i, j });
                 }
             }
