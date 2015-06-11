@@ -51,6 +51,8 @@ private:
     bool makeUnitIfPossible(Egyseg e);
     void getStuff(Mezo mezo);
 
+    void handleFreeWorkers();
+
     int getBuildingIndex(Mezo m) const;
     short getBuildingId(Mezo m);
     int negyed() const;

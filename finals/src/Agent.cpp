@@ -258,6 +258,16 @@ void Agent::getStuff(Mezo mezo) {
     while (makeUnitIfPossible(ceParaszt)) {}
 }
 
+void Agent::handleFreeWorkers() {
+    for (const auto& freeWorker : getFreeWorkers()) {
+        Position ofMyOnlySon = Position{jatekos.Egysegek[freeWorker].X,
+                                        jatekos.Egysegek[freeWorker].Y};
+        Position gold = getLocationOfResourceNearBy(cvAranyBanya, ofMyOnlySon);
+        std::cerr << "Found gold at: " << gold.x << " " << gold.y << std::endl;
+        sendUnitTo(gold, jatekos.Egysegek[freeWorker]);
+    }
+}
+
 bool Agent::getFoodStrategy() {
     if (getNumberOfUnitsProducingWare(caKaja) >= 6) {
         current_strategy = Strategy::GetWood;
@@ -364,6 +374,9 @@ TKoteg Agent::getOrders(TJatekos jatekos) {
                 strategy_changes = false;
         }
     } while (strategy_changes);
+
+    handleFreeWorkers();
+
     return koteg;
 }
 
