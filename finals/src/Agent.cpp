@@ -278,6 +278,21 @@ bool Agent::goForLoterStrategy() {
         current_strategy = Strategy::DefendBorders;
         return true;
     }
+
+    const auto buildingSites = findBuildablePositions();
+    if (!buildingSites.empty()) {
+        const auto baseIndex = getBuildingIndex(cvFohaz);
+        const auto base = jatekos.Epuletek[baseIndex];
+        const auto basePos = Position{base.X, base.Y};
+        const auto buildingSite =
+                *std::min_element(buildingSites.begin(), buildingSites.end(),
+                                  [&basePos](const Position& p1,
+                                             const Position& p2) {
+                    return distanceBetween(p1, basePos) <
+                           distanceBetween(p2, basePos);
+                });
+        buildBuildingIfPossible(cvLoter, buildingSite);
+    }
     return false;
 }
 
