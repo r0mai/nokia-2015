@@ -57,11 +57,13 @@ Position Agent::getExplorationPosition(Position near) const {
             nearposs.push_back(poss[i]);
         }
     }
-    std::uniform_int_distribution<int> uidd(0, nearposs.size() - 1);
-    for (;;) {
-        const int ind = uidd(gen);
-        auto destination = nearposs[ind];
-        return destination;
+    if (nearposs.size()) {
+        std::uniform_int_distribution<int> uidd(0, nearposs.size() - 1);
+        for (;;) {
+            const int ind = uidd(gen);
+            auto destination = nearposs[ind];
+            return destination;
+        }
     }
     return{ -1, -1 };
 }
@@ -207,6 +209,16 @@ int Agent::getBuildingIndex(Mezo m) const {
     return -1;
 }
 
+std::size_t Agent::getNumberOfBuildings(Mezo m) const {
+    std::size_t count = 0;
+    for(int i=0; i<jatekos.EpSzam; ++i) {
+        if(jatekos.Epuletek[i].Tipus == m) {
+            ++count;
+        }
+    }
+    return count;
+}
+
 short Agent::getBuildingId(Mezo m) {
     for (int i = 0; i < jatekos.EpSzam; ++i) {
         if (jatekos.Epuletek[i].Tipus == m) {
@@ -288,7 +300,7 @@ bool Agent::areControlPointsVisible() const {
 }
 
 bool Agent::getFoodStrategy() {
-    if (getNumberOfUnitsProducingWare(caKaja) >= 6) {
+    if (getNumberOfUnitsProducingWare(caKaja) >= 4) {
         current_strategy = Strategy::GetWood;
         return true;
     }
@@ -319,7 +331,7 @@ bool Agent::getIronStrategy() {
 
 bool Agent::goForLoterStrategy() {
     log("loter");
-    if(getBuildingIndex(cvLoter) != -1) {
+    if(getNumberOfBuildings(cvLoter) >= 2) {
         current_strategy = Strategy::ExploreBoundaries;
         return true;
     }
@@ -599,9 +611,9 @@ Position Agent::getPointTowardsMiddle() const {
     auto yMax = jatekos.YMax;
     switch (negyed()) {
         case 0: return Position{xMax/2 - 1, yMax/2 - 1};
-        case 1: return Position{xMax/2 + 1, yMax/2 - 1};
-        case 2: return Position{xMax/2 - 1, yMax/2 + 1};
-        case 3: return Position{xMax/2 + 1, yMax/2 + 1};
+        case 1: return Position{xMax/2, yMax/2 - 1};
+        case 2: return Position{xMax/2 - 1, yMax/2};
+        case 3: return Position{xMax/2, yMax/2};
     }
     assert(false);
     return Position{};
@@ -612,9 +624,9 @@ Position Agent::getPointTowardsSide1() const {
     auto yMax = jatekos.YMax;
     switch (negyed()) {
         case 0: return Position{xMax/2 - 1, 0};
-        case 1: return Position{xMax, yMax/2 - 1};
-        case 2: return Position{0, yMax/2 + 1};
-        case 3: return Position{xMax, yMax/2 + 1};
+        case 1: return Position{xMax - 1, yMax/2 - 1};
+        case 2: return Position{0, yMax/2};
+        case 3: return Position{xMax - 1, yMax/2 + 1};
     }
     assert(false);
     return Position{};
@@ -625,9 +637,9 @@ Position Agent::getPointTowardsSide2() const {
     auto yMax = jatekos.YMax;
     switch (negyed()) {
         case 0: return Position{0, yMax/2 - 1};
-        case 1: return Position{xMax/2 + 1, 0};
-        case 2: return Position{xMax/2 - 1, yMax};
-        case 3: return Position{xMax/2 + 1, yMax};
+        case 1: return Position{xMax/2, 0};
+        case 2: return Position{xMax/2 - 1, yMax - 1};
+        case 3: return Position{xMax/2 + 1, yMax - 1};
     }
     assert(false);
     return Position{};
