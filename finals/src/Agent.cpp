@@ -183,10 +183,21 @@ int Agent::getUnitCount(Egyseg e) {
     return c;
 }
 
+std::size_t getNumberOfUnitsProducingWare(const TJatekos& jatekos,
+                                          Akcio akcio) {
+    std::size_t count = 0;
+    for (int i = 0; i < jatekos.EgySzam; ++i) {
+        const auto unit = jatekos.Egysegek[i];
+        if (unit.AkcioKod == akcio) {
+            ++count;
+        }
+    }
+    return count;
+}
+
 void Agent::getStuff(Mezo mezo) {
 
     for (const auto& freeWorker : getFreeWorkers(jatekos)) {
-        short myOnlySon = jatekos.Egysegek[freeWorker].ID;
         Position ofMyOnlySon = Position{jatekos.Egysegek[freeWorker].X,
                                         jatekos.Egysegek[freeWorker].Y};
         Position food = getLocationOfResourceNearBy(jatekos, mezo, ofMyOnlySon);
@@ -198,7 +209,7 @@ void Agent::getStuff(Mezo mezo) {
 }
 
 bool Agent::getFoodStrategy() {
-    if (getUnitCount(ceParaszt) > 4) {
+    if (getNumberOfUnitsProducingWare(jatekos, caKaja) >= 4) {
         current_strategy = Strategy::GetWood;
         return true;
     }
@@ -207,7 +218,7 @@ bool Agent::getFoodStrategy() {
 }
 
 bool Agent::getWoodStrategy() {
-    if (getUnitCount(ceParaszt) > 8) {
+    if (getNumberOfUnitsProducingWare(jatekos, caFa) >= 8) {
         current_strategy = Strategy::GetIron;
         return true;
     }
@@ -216,7 +227,7 @@ bool Agent::getWoodStrategy() {
 }
 
 bool Agent::getIronStrategy() {
-    if (getUnitCount(ceParaszt) > 12) {
+    if (getNumberOfUnitsProducingWare(jatekos, caVas) >= 4) {
         current_strategy = Strategy::GoForLoter;
         return true;
     }
