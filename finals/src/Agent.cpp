@@ -371,7 +371,7 @@ bool Agent::defendBordersStrategy() {
     // Find tower locations closest to borders
     auto positions = findBuildablePositions();
 
-    auto diagonal = getMainDiagonal();
+    auto diagonal = std::make_pair(getPointTowardsSide1(), getPointTowardsSide2());
 
     auto distanceFromDiagonal = [&](const Position& p) {
         auto v = diagonal.first;
