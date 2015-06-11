@@ -24,6 +24,6 @@ TKoteg Agent::getOrders(TJatekos jatekos) {
     eraseOrders();
     std::cerr << "Working with " << jatekos.EgySzam << " units" << std::endl;
     short myOnlySon = jatekos.Egysegek[0].ID;
-    sendUnitTo(52, 52, jatekos.Egysegek[0]);
+    sendUnitTo(96, 97, jatekos.Egysegek[0]);
     return koteg;
 }
