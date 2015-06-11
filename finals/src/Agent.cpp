@@ -341,6 +341,9 @@ void Agent::logMap(const TJatekos& jatekos, std::ostream& os) {
     for (const auto& line : lines) {
         log(line);
     }
+#else
+    (void)(jatekos);
+    (void)(os);
 #endif
 }
 
