@@ -26,7 +26,8 @@ private:
         GetFood,
         GetWood,
         GetIron,
-        GoForLoter
+        GoForLoter,
+        DefendBorders
     } current_strategy = Strategy::GetFood;
 
     // returns true, if strategy changes
@@ -34,6 +35,7 @@ private:
     bool getWoodStrategy();
     bool getIronStrategy();
     bool goForLoterStrategy();
+    bool defendBordersStrategy();
 
     void logFeedback();
 
@@ -59,9 +61,9 @@ private:
     std::size_t getNumberOfUnitsProducingWare(Akcio akcio) const;
 
     bool isPieceTime() const;
-    std::vector<Position> getBoundaryPositions();
 
     bool isBuildablePosition(const Position& position) const;
+    std::vector<Position> getBoundaryPositions() const;
 };
 
 }

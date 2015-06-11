@@ -65,10 +65,12 @@ Position Agent::getLocationOfResourceNearBy(Mezo mezo, Position near) const {
     if (it == positions.end()) {
         log("Didnt find any resource");
 
+        auto poss= getBoundaryPositions();
+
+        std::uniform_int_distribution<int> uidd(0, poss.size() - 1);
         for (;;) {
-            const int dx = uid(gen);
-            const int dy = uid(gen);
-            const Position destination = Position{near.x + dx, near.y + dy};
+            const int ind = uidd(gen);
+            auto destination = poss[ind];
             if (isAvailableForMovement(destination)) {
                 if (jatekos.Vilag[destination.y][destination.x].Objektum ==
                     cvMezo) {
@@ -211,7 +213,7 @@ bool Agent::getFoodStrategy() {
         current_strategy = Strategy::GetWood;
         return true;
     }
-    log(__PRETTY_FUNCTION__);
+    log("getFood");
     getStuff(cvKaja);
     return false;
 }
@@ -221,7 +223,7 @@ bool Agent::getWoodStrategy() {
         current_strategy = Strategy::GetIron;
         return true;
     }
-    log(__PRETTY_FUNCTION__);
+    log("getwood");
     getStuff(cvFa);
     return false;
 }
@@ -231,13 +233,23 @@ bool Agent::getIronStrategy() {
         current_strategy = Strategy::GoForLoter;
         return true;
     }
-    log(__PRETTY_FUNCTION__);
+    log("getiron");
     getStuff(cvVasBanya);
     return false;
 }
 
 bool Agent::goForLoterStrategy() {
+    log("loter");
     log(__PRETTY_FUNCTION__);
+    if(getBuildingIndex(cvLoter) != -1) {
+        current_strategy = Strategy::DefendBorders;
+        return true;
+    }
+    return false;
+}
+
+bool Agent::defendBordersStrategy() {
+    log("defendBorders");
     return false;
 }
 
@@ -271,6 +283,8 @@ TKoteg Agent::getOrders(TJatekos jatekos) {
             case Strategy::GoForLoter:
                 strategy_changes = goForLoterStrategy();
                 break;
+            case Strategy::DefendBorders:
+                strategy_changes = defendBordersStrategy();
             default:
                 strategy_changes = false;
         }
@@ -352,11 +366,21 @@ bool Agent::isPieceTime() const {
     return jatekos.Ido <= jatekos.BekeIdo;
 }
 
-std::vector<Position> Agent::getBoundaryPositions() {
+std::vector<Position> Agent::getBoundaryPositions() const {
     std::vector<Position> res;
 
-    //for (int i = 0; i < )
-    return{};
+    auto c = getMainDiagonal();
+    for (int i = c.first.x + 1; i < c.second.x - 1; ++i) {
+        for (int j = c.first.y + 1; j < c.second.y - 1; ++j) {
+            if (jatekos.Vilag[j][i].Objektum != cvNemLatszik) {
+                if (jatekos.Vilag[j - 1][i].Objektum == cvNemLatszik || jatekos.Vilag[j + 1][i].Objektum == cvNemLatszik ||
+                    jatekos.Vilag[j][i - 1].Objektum == cvNemLatszik || jatekos.Vilag[j][i - 1].Objektum == cvNemLatszik) {
+                    res.push_back({ i, j });
+                }
+            }
+        }
+    }
+    return res;
 }
 
 bool Agent::isBuildablePosition(const Position& position) const {
