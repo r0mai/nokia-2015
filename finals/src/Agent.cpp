@@ -187,8 +187,7 @@ void Agent::getStuff(Mezo mezo) {
         short myOnlySon = jatekos.Egysegek[freeWorker].ID;
         Position ofMyOnlySon = Position{jatekos.Egysegek[freeWorker].X,
                                         jatekos.Egysegek[freeWorker].Y};
-        Position food =
-            getLocationOfResourceNearBy(jatekos, cvKaja, ofMyOnlySon);
+        Position food = getLocationOfResourceNearBy(jatekos, mezo, ofMyOnlySon);
         std::cerr << "Found food at: " << food.x << " " << food.y << std::endl;
         sendUnitTo(food, jatekos.Egysegek[freeWorker]);
     }
