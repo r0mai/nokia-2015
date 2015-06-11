@@ -25,7 +25,7 @@ private:
 
     bool makeWorkerIfPossible();
     short getFoHazId();
-    int getWorkerCount();
+    int getUnitCount(Egyseg e);
 };
 
 }

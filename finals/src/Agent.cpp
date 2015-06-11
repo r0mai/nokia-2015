@@ -105,10 +105,10 @@ short Agent::getFoHazId() {
     return -1;
 }
 
-int Agent::getWorkerCount() {
+int Agent::getUnitCount(Egyseg e) {
     int c = 0;
     for (int i = 0; i < jatekos.EgySzam; ++i) {
-        if (jatekos.Egysegek[i].Tipus == ceParaszt) {
+        if (jatekos.Egysegek[i].Tipus == e) {
             ++c;
         }
     }
@@ -116,7 +116,7 @@ int Agent::getWorkerCount() {
 }
 
 bool Agent::makeWorkersStrategy() {
-    if (getWorkerCount() > 6) {
+    if (getUnitCount(ceParaszt) > 6) {
         current_strategy = Strategy::GoForLoter;
         return true;
     }
