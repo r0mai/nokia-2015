@@ -61,6 +61,9 @@ class Units {
 
 public:
     Units(Context* context) : context(context) { }
+
+    const std::vector<Unit>& getUnits() const { return units; }
+
     friend struct Context;
 };
 
