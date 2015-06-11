@@ -47,6 +47,10 @@ if(NOT WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -O2")
 endif()
 
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+    add_definitions(-DCALMARE_DISABLE_LOG)
+endif()
+
 if(UNIX AND NOT APPLE)
 endif()
 
