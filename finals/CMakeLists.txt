@@ -76,4 +76,4 @@ endif()
 add_executable(${TEST_EXEC_NAME} ${TEST_SOURCES})
 target_link_libraries(${TEST_EXEC_NAME} ${SRC_LIB_NAME})
 
-configure_file(gui/assets/arial.ttf assets/arial.ttf)
+configure_file(gui/assets/arial.ttf assets/arial.ttf COPYONLY)
