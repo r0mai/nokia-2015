@@ -410,10 +410,9 @@ TKoteg Agent::getOrders(TJatekos jatekos) {
                 break;
             default:
                 strategy_changes = false;
+                break;
         }
     } while (strategy_changes);
-
-    handleFreeWorkers();
 
     return koteg;
 }
