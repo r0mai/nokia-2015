@@ -116,7 +116,7 @@ int Agent::getWorkerCount() {
 }
 
 bool Agent::makeWorkersStrategy() {
-    if (getWorkerCount() <= 6) {
+    if (getWorkerCount() > 6) {
         current_strategy = Strategy::GoForLoter;
         return true;
     }
