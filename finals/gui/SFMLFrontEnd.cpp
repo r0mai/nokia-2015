@@ -159,6 +159,10 @@ void SFMLFrontEnd::draw() {
     window.setView(worldView);
     drawWorld();
 
+    int w = model.getContext().mapState.getWidth();
+    int h = model.getContext().mapState.getHeight();
+
+    std::vector<std::vector<int>> unitCount(w, std::vector<int>(h));
     for (const auto& unit : model.getContext().units.getUnits()) {
         auto pos = model.getContext().mapState.getUnitPosition(unit);
 
