@@ -259,6 +259,24 @@ void Agent::getStuff(Mezo mezo) {
     while (makeUnitIfPossible(ceParaszt)) {}
 }
 
+bool Agent::areControlPointsVisible() const {
+    const auto middle = getPointTowardsMiddle();
+    const auto side1 = getPointTowardsSide1();
+    const auto side2 = getPointTowardsSide2();
+
+    if (jatekos.Vilag[middle.y][middle.x].Objektum == cvNemLatszik) {
+        return false;
+    }
+    if (jatekos.Vilag[side1.y][side1.x].Objektum == cvNemLatszik) {
+        return false;
+    }
+    if (jatekos.Vilag[side2.y][side2.x].Objektum == cvNemLatszik) {
+        return false;
+    }
+    return true;
+}
+
+
 bool Agent::getFoodStrategy() {
     if (getNumberOfUnitsProducingWare(caKaja) >= 6) {
         current_strategy = Strategy::GetWood;
@@ -292,7 +310,7 @@ bool Agent::getIronStrategy() {
 bool Agent::goForLoterStrategy() {
     log("loter");
     if(getBuildingIndex(cvLoter) != -1) {
-        current_strategy = Strategy::DefendBorders;
+        current_strategy = Strategy::ExploreBoundaries;
         return true;
     }
 
@@ -313,8 +331,13 @@ bool Agent::goForLoterStrategy() {
     return false;
 }
 
-bool Agent::defendBordersStrategy() {
-    log("defendBorders");
+bool Agent::exploreBoundariesStrategy() {
+    log("exploreBoundaries");
+
+    if (areControlPointsVisible()) {
+        current_strategy = Strategy::DefendBorders;
+        return true;
+    }
 
     for (const auto& freeArcher : getFreeArchers()) {
         Position ofMyOnlySon = Position{jatekos.Egysegek[freeArcher].X,
@@ -333,6 +356,10 @@ bool Agent::defendBordersStrategy() {
     }
 
     return false;
+}
+
+bool Agent::defendBordersStrategy() {
+    return true;
 }
 
 void Agent::logFeedback() {
@@ -366,8 +393,12 @@ TKoteg Agent::getOrders(TJatekos jatekos) {
             case Strategy::GoForLoter:
                 strategy_changes = goForLoterStrategy();
                 break;
+            case Strategy::ExploreBoundaries:
+                strategy_changes = exploreBoundariesStrategy();
+                break;
             case Strategy::DefendBorders:
                 strategy_changes = defendBordersStrategy();
+                break;
             default:
                 strategy_changes = false;
         }
@@ -555,4 +586,3 @@ Position Agent::getPointTowardsSide2() const {
     assert(false);
     return Position{};
 }
-
