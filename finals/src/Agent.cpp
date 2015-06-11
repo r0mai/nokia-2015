@@ -574,9 +574,9 @@ Position Agent::getPointTowardsMiddle() const {
     auto yMax = jatekos.YMax;
     switch (negyed()) {
         case 0: return Position{xMax/2 - 1, yMax/2 - 1};
-        case 1: return Position{xMax/2 + 1, yMax/2 - 1};
-        case 2: return Position{xMax/2 - 1, yMax/2 + 1};
-        case 3: return Position{xMax/2 + 1, yMax/2 + 1};
+        case 1: return Position{xMax/2, yMax/2 - 1};
+        case 2: return Position{xMax/2 - 1, yMax/2};
+        case 3: return Position{xMax/2, yMax/2};
     }
     assert(false);
     return Position{};
@@ -587,9 +587,9 @@ Position Agent::getPointTowardsSide1() const {
     auto yMax = jatekos.YMax;
     switch (negyed()) {
         case 0: return Position{xMax/2 - 1, 0};
-        case 1: return Position{xMax, yMax/2 - 1};
-        case 2: return Position{0, yMax/2 + 1};
-        case 3: return Position{xMax, yMax/2 + 1};
+        case 1: return Position{xMax - 1, yMax/2 - 1};
+        case 2: return Position{0, yMax/2};
+        case 3: return Position{xMax - 1, yMax/2 + 1};
     }
     assert(false);
     return Position{};
@@ -600,9 +600,9 @@ Position Agent::getPointTowardsSide2() const {
     auto yMax = jatekos.YMax;
     switch (negyed()) {
         case 0: return Position{0, yMax/2 - 1};
-        case 1: return Position{xMax/2 + 1, 0};
-        case 2: return Position{xMax/2 - 1, yMax};
-        case 3: return Position{xMax/2 + 1, yMax};
+        case 1: return Position{xMax/2, 0};
+        case 2: return Position{xMax/2 - 1, yMax - 1};
+        case 3: return Position{xMax/2 + 1, yMax - 1};
     }
     assert(false);
     return Position{};
