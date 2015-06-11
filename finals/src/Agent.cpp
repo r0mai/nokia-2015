@@ -43,7 +43,7 @@ Position getLocationOfResourceNearBy(const TJatekos& jatekos, Mezo mezo,
         });
     if (it == positions.end()) {
         std::cerr << "Didnt find any resource" << std::endl;
-        return Position{93, 93};
+        return Position{near.x - 2, near.y - 2};
     }
     return *it;
 }
