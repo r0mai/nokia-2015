@@ -33,8 +33,7 @@ private:
     void getStuff(Mezo mezo);
 
     bool makeWorkerIfPossible();
-    int getFoHazEpuletId();
-    short getFoHazId();
+    int getBuildingIndex(Mezo m);
     short getBuildingId(Mezo m);
     int negyed();
     int getUnitCount(Egyseg e);

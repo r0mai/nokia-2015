@@ -127,6 +127,15 @@ Mezo Agent::buildingTypeForUnit(Egyseg e) {
     return Mezo(-1);
 }
 
+int Agent::getBuildingIndex(Mezo m) {
+    for (int i = 0; i < jatekos.EpSzam; ++i) {
+        if (jatekos.Epuletek[i].Tipus == m) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 short Agent::getBuildingId(Mezo m) {
     for (int i = 0; i < jatekos.EpSzam; ++i) {
         if (jatekos.Epuletek[i].Tipus == m) {
@@ -136,18 +145,8 @@ short Agent::getBuildingId(Mezo m) {
     return -1;
 }
 
-short Agent::getFoHazId() {
-    int fohazEpuletId = getBuildingId(cvFohaz);
-    if (fohazEpuletId != -1) {
-        return jatekos.Epuletek[fohazEpuletId].ID;
-    }
-    else {
-        return -1;
-    }
-}
-
 int Agent::negyed() {
-    int fohazEpuletId = getBuildingId(cvFohaz);
+    int fohazEpuletId = getBuildingIndex(cvFohaz);
     if (fohazEpuletId != -1) {
         return (jatekos.Epuletek[fohazEpuletId].X > jatekos.XMax / 2) | ((jatekos.Epuletek[fohazEpuletId].Y > jatekos.YMax / 2) << 1);
     }
