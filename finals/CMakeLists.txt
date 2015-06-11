@@ -55,7 +55,7 @@ include_directories(src)
 set(TEST_EXEC_NAME test-${CMAKE_PROJECT_NAME})
 set(SRC_LIB_NAME src-${CMAKE_PROJECT_NAME})
 set(GUI_EXEC_NAME gui-${CMAKE_PROJECT_NAME})
-set(APP_EXEC_NAME app-${CMAKE_PROJECT_NAME})
+set(APP_EXEC_NAME calmare)
 
 add_library(${SRC_LIB_NAME} STATIC ${SRC_SOURCES})
 target_link_libraries(${SRC_LIB_NAME} ${Boost_LIBRARIES})
