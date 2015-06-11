@@ -120,8 +120,7 @@ void Agent::logMap(const TJatekos& jatekos, std::ostream& os) {
         lines[y][x] = ch;
     }
     for (const auto& line : lines) {
-        std::cout << line << '\n';
+        log(line);
     }
-    std::cout << std::endl;
 #endif
 }

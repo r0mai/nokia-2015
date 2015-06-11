@@ -2,6 +2,7 @@
 
 #include "VilagDef.h"
 #include <iostream>
+#include "Log.hpp"
 
 namespace calmare {
 
