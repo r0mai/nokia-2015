@@ -62,6 +62,7 @@ void sendUnitTo(Position position, const TEgyseg& unit) {
 }
 
 TKoteg Agent::getOrders(TJatekos jatekos) {
+    logMap(jatekos);
     eraseOrders();
     std::cerr << "Working with " << jatekos.EgySzam << " units" << std::endl;
     short myOnlySon = jatekos.Egysegek[0].ID;
