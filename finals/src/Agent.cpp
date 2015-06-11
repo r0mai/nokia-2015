@@ -72,12 +72,12 @@ Position Agent::getLocationOfResourceNearBy(Mezo mezo, Position near) const {
 
         for (unsigned i = 0; i < poss.size(); ++i) {
             int d2 = distanceBetween(near, poss[i]);
-            if (d2 < dist) {
+            if (d2 < dist && jatekos.Vilag[poss[i].y][poss[i].x].Objektum == cvMezo) {
                 dist = d2;
                 nearposs.clear();
                 nearposs.push_back(poss[i]);
             }
-            else if (d2 < dist + 3){
+            else if (d2 == dist && jatekos.Vilag[poss[i].y][poss[i].x].Objektum == cvMezo){
                 nearposs.push_back(poss[i]);
             }
         }
@@ -85,12 +85,7 @@ Position Agent::getLocationOfResourceNearBy(Mezo mezo, Position near) const {
         for (;;) {
             const int ind = uidd(gen);
             auto destination = nearposs[ind];
-            if (isAvailableForMovement(destination)) {
-                if (jatekos.Vilag[destination.y][destination.x].Objektum ==
-                    cvMezo) {
-                    return destination;
-                }
-            }
+            return destination;
         }
     }
     return *it;
@@ -243,7 +238,7 @@ void Agent::getStuff(Mezo mezo) {
 }
 
 bool Agent::getFoodStrategy() {
-    if (getNumberOfUnitsProducingWare(caKaja) >= 8) {
+    if (getNumberOfUnitsProducingWare(caKaja) >= 6) {
         current_strategy = Strategy::GetWood;
         return true;
     }
@@ -253,7 +248,7 @@ bool Agent::getFoodStrategy() {
 }
 
 bool Agent::getWoodStrategy() {
-    if (getNumberOfUnitsProducingWare(caFa) >= 8) {
+    if (getNumberOfUnitsProducingWare(caFa) >= 6) {
         current_strategy = Strategy::GetIron;
         return true;
     }
