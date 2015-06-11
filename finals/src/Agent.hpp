@@ -35,6 +35,8 @@ private:
     bool getIronStrategy();
     bool goForLoterStrategy();
 
+    void logFeedback();
+
     Mezo buildingTypeForUnit(Egyseg e);
 
     bool makeUnitIfPossible(Egyseg e);

@@ -239,7 +239,19 @@ bool Agent::goForLoterStrategy() {
     return false;
 }
 
+void Agent::logFeedback() {
+#ifndef CALMARE_DISABLE_LOG
+    for (int i = 0; i < jatekos.UtasitSzam; ++i) {
+        auto errorCode = jatekos.Utasitasok[i].Result;
+        if (errorCode != chOk) {
+            log("Warning: Got error code %c", errorCode);
+        }
+    }
+#endif
+}
+
 TKoteg Agent::getOrders(TJatekos jatekos) {
+    logFeedback();
     eraseOrders();
     this->jatekos = jatekos;
 
