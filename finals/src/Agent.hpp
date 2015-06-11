@@ -14,15 +14,20 @@ public:
     void logMap(const TJatekos& jatekos, std::ostream& os = std::cerr);
     TJatekos jatekos;
 private:
-
     enum class Strategy {
-        MakeWorkers,
+        GetFood,
+        GetWood,
+        GetIron,
         GoForLoter
-    } current_strategy = Strategy::MakeWorkers;
+    } current_strategy = Strategy::GetFood;
 
     // returns true, if strategy changes
-    bool makeWorkersStrategy();
+    bool getFoodStrategy();
+    bool getWoodStrategy();
+    bool getIronStrategy();
     bool goForLoterStrategy();
+
+    void getStuff(Mezo mezo);
 
     bool makeWorkerIfPossible();
     short getFoHazId();

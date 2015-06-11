@@ -125,11 +125,7 @@ int Agent::getUnitCount(Egyseg e) {
     return c;
 }
 
-bool Agent::makeWorkersStrategy() {
-    if (getUnitCount(ceParaszt) > 6) {
-        current_strategy = Strategy::GoForLoter;
-        return true;
-    }
+void Agent::getStuff(Mezo mezo) {
 
     for (const auto& freeWorker : getFreeWorkers(jatekos)) {
         short myOnlySon = jatekos.Egysegek[freeWorker].ID;
@@ -142,7 +138,32 @@ bool Agent::makeWorkersStrategy() {
     }
 
     while (makeWorkerIfPossible()) {}
+}
 
+bool Agent::getFoodStrategy() {
+    if (getUnitCount(ceParaszt) > 4) {
+        current_strategy = Strategy::GetWood;
+        return true;
+    }
+    getStuff(cvKaja);
+    return false;
+}
+
+bool Agent::getWoodStrategy() {
+    if (getUnitCount(ceParaszt) > 8) {
+        current_strategy = Strategy::GetIron;
+        return true;
+    }
+    getStuff(cvFa);
+    return false;
+}
+
+bool Agent::getIronStrategy() {
+    if (getUnitCount(ceParaszt) > 12) {
+        current_strategy = Strategy::GoForLoter;
+        return true;
+    }
+    getStuff(cvVasBanya);
     return false;
 }
 
@@ -157,9 +178,14 @@ TKoteg Agent::getOrders(TJatekos jatekos) {
     bool strategy_changes = false;
     do {
         switch (current_strategy) {
-            case Strategy::MakeWorkers:
-                strategy_changes = makeWorkersStrategy();
+            case Strategy::GetFood:
+                strategy_changes = getFoodStrategy();
                 break;
+            case Strategy::GetWood:
+                strategy_changes = getWoodStrategy();
+                break;
+            case Strategy::GetIron:
+                strategy_changes = getIronStrategy();
             case Strategy::GoForLoter:
                 strategy_changes = goForLoterStrategy();
                 break;
