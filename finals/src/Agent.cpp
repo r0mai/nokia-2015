@@ -146,9 +146,9 @@ short Agent::getBuildingId(Mezo m) {
 }
 
 int Agent::negyed() {
-    int fohazEpuletId = getBuildingIndex(cvFohaz);
-    if (fohazEpuletId != -1) {
-        return (jatekos.Epuletek[fohazEpuletId].X > jatekos.XMax / 2) | ((jatekos.Epuletek[fohazEpuletId].Y > jatekos.YMax / 2) << 1);
+    int fohazEpuletIndex = getBuildingIndex(cvFohaz);
+    if (fohazEpuletIndex != -1) {
+        return (jatekos.Epuletek[fohazEpuletIndex].X > jatekos.XMax / 2) | ((jatekos.Epuletek[fohazEpuletIndex].Y > jatekos.YMax / 2) << 1);
     }
     else {
         return -1;
