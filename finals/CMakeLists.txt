@@ -53,12 +53,14 @@ endif()
 aux_recursive_source_directory(src SRC_SOURCES)
 aux_recursive_source_directory(gui GUI_SOURCES)
 aux_recursive_source_directory(test TEST_SOURCES)
+aux_recursive_source_directory(app APP_SOURCES)
 
 include_directories(src)
 
 set(TEST_EXEC_NAME test-${CMAKE_PROJECT_NAME})
 set(SRC_LIB_NAME src-${CMAKE_PROJECT_NAME})
 set(GUI_EXEC_NAME gui-${CMAKE_PROJECT_NAME})
+set(APP_EXEC_NAME app-${CMAKE_PROJECT_NAME})
 
 add_library(${SRC_LIB_NAME} STATIC ${SRC_SOURCES})
 target_link_libraries(${SRC_LIB_NAME} ${Boost_LIBRARIES})
@@ -75,5 +77,8 @@ endif()
 
 add_executable(${TEST_EXEC_NAME} ${TEST_SOURCES})
 target_link_libraries(${TEST_EXEC_NAME} ${SRC_LIB_NAME})
+
+add_executable(${APP_EXEC_NAME} ${APP_SOURCES})
+target_link_libraries(${APP_EXEC_NAME} ${SRC_LIB_NAME})
 
 configure_file(gui/assets/arial.ttf assets/arial.ttf COPYONLY)
