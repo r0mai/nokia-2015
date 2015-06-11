@@ -69,10 +69,10 @@ Position Agent::getLocationOfResourceNearBy(Mezo mezo, Position near) const {
         decltype(poss) nearposs;
 
         int dist = jatekos.XMax;
-        
+
         for (unsigned i = 0; i < poss.size(); ++i) {
             int d2 = distanceBetween(near, poss[i]);
-            if (d2 < dist) { 
+            if (d2 < dist) {
                 dist = d2;
                 nearposs.clear();
                 nearposs.push_back(poss[i]);
@@ -115,6 +115,26 @@ std::vector<int> Agent::getFreeWorkers() const {
         }
     }
     return workers;
+}
+
+bool Agent::buildBuildingIfPossible(Mezo m, const Position& position) {
+    auto our = Resources::fromJatekos(jatekos);
+    auto cost = Cost::Building(m);
+
+    if (!(our - cost)) {
+        return false;
+    }
+
+    if (!isBuildablePosition(position)) {
+        return false;
+    }
+
+    Utasit_Epit(m, position.x, position.y);
+    jatekos.Eroforras.Kaja -= cost.food();
+    jatekos.Eroforras.Fa -= cost.wood();
+    jatekos.Eroforras.Vas -= cost.iron();
+    jatekos.Eroforras.Arany -= cost.gold();
+    return true;
 }
 
 bool Agent::makeUnitIfPossible(Egyseg e) {

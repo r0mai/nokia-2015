@@ -41,10 +41,10 @@ private:
 
     Mezo buildingTypeForUnit(Egyseg e);
 
+    bool buildBuildingIfPossible(Mezo m, const Position& position);
     bool makeUnitIfPossible(Egyseg e);
     void getStuff(Mezo mezo);
 
-    bool makeWorkerIfPossible();
     int getBuildingIndex(Mezo m) const;
     short getBuildingId(Mezo m);
     int negyed() const;
