@@ -63,6 +63,7 @@ Position Agent::getExplorationPosition(Position near) const {
         auto destination = nearposs[ind];
         return destination;
     }
+    return{ -1, -1 };
 }
 
 Position Agent::getLocationOfResourceNearBy(Mezo mezo, Position near) const {
@@ -318,7 +319,14 @@ bool Agent::defendBordersStrategy() {
     for (const auto& freeArcher : getFreeArchers()) {
         Position ofMyOnlySon = Position{jatekos.Egysegek[freeArcher].X,
                                         jatekos.Egysegek[freeArcher].Y};
-        moveUnitTo(getExplorationPosition(ofMyOnlySon), jatekos.Egysegek[freeArcher]);
+        auto nextPos = getExplorationPosition(ofMyOnlySon);
+        if (nextPos.x != -1){
+            moveUnitTo(nextPos, jatekos.Egysegek[freeArcher]);
+        }
+        else {
+
+        }
+
     }
 
     while (makeUnitIfPossible(ceIjasz)) {
