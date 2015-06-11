@@ -3,6 +3,7 @@
 #include "VilagDef.h"
 #include <iostream>
 #include "Log.hpp"
+#include "Resources.hpp"
 
 namespace calmare {
 

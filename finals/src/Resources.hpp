@@ -5,6 +5,8 @@
 #include <cassert>
 #include <cstdint>
 
+#include "VilagDef.h"
+
 namespace calmare {
 
     using Resource = int;
@@ -14,6 +16,16 @@ namespace calmare {
         std::valarray<Resource> resources;
     public:
         enum class ResourceId : std::int8_t { NO = -1, food = 0, wood, iron, gold, kp, last };
+
+        static Resources fromJatekos(const TJatekos& jatekos) {
+            return Resources({
+                jatekos.Eroforras.Kaja,
+                jatekos.Eroforras.Fa,
+                jatekos.Eroforras.Vas,
+                jatekos.Eroforras.Arany,
+                jatekos.Kepesseg.KP
+            });
+        }
 
         Resources(std::initializer_list<Resource>&& values = { Resource(), Resource(), Resource(), Resource(), Resource() }) :
             resources(values) {
@@ -130,6 +142,23 @@ namespace calmare {
 
         static Cost Puskas(){
             return Cost(Resources::food(50) + Resources::iron(30), 300);
+        }
+
+        static Cost Unit(Egyseg egyseg) {
+            switch (egyseg) {
+                case ceParaszt:
+                    return Paraszt();
+                case ceKardos:
+                    return Kardos();
+                case ceIjasz:
+                    return Ijasz();
+                case ceLovas:
+                    return Lovas();
+                case cePuskas:
+                    return Puskas();
+                default:
+                    return Cost(-1);
+            }
         }
 
 
