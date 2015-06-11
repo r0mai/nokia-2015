@@ -14,13 +14,6 @@ void eraseOrders() {
     koteg.UtasitSzam = 0;
 }
 
-struct Position {
-    int x = 0;
-    int y = 0;
-    Position() = default;
-    Position(int x, int y) : x(x), y(y) { }
-};
-
 std::size_t distanceBetween(Position position1, Position position2) {
     return std::max(std::abs(position1.x - position2.x),
             std::abs(position1.y - position2.y));
@@ -310,4 +303,19 @@ void Agent::logMap(const TJatekos& jatekos, std::ostream& os) {
         log(line);
     }
 #endif
+}
+
+bool Agent::isValidPosition(Position p) {
+    return p.x >= 0 && p.x < jatekos.XMax && p.y >= 0 && p.y < jatekos.YMax;
+}
+
+bool Agent::isValidSafePosition(Position p) {
+    switch (negyed())
+    {
+    case 0: return p.x >= 0 && p.x < jatekos.XMax / 2 && p.y >= 0 && p.y < jatekos.YMax / 2;
+    case 1: return p.x >= jatekos.XMax / 2 && p.x < jatekos.XMax && p.y >= 0 && p.y < jatekos.YMax / 2;
+    case 2: return p.x >= 0 && p.x < jatekos.XMax / 2 && p.y >= jatekos.YMax / 2 && p.y < jatekos.YMax;
+    case 3: return p.x >= jatekos.XMax / 2 && p.x < jatekos.XMax && p.y >= jatekos.YMax / 2 && p.y < jatekos.YMax;
+    default: return true;
+    }
 }
