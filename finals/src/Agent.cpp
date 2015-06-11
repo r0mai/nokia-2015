@@ -1,11 +1,13 @@
 #include "Agent.hpp"
 #include "Utasitas.h"
 
+using namespace calmare;
+
 void eraseOrders() {
     koteg.UtasitSzam = 0;
 }
 
-TKoteg getOrders(TJatekos jatekos) {
+TKoteg Agent::getOrders(TJatekos jatekos) {
     eraseOrders();
     return koteg;
 }

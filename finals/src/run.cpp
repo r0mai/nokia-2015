@@ -3,20 +3,19 @@
 #include "VilagDef.h"
 #include "Comm.h"
 #include "Player.h"
+#include "Agent.hpp"
 
 using namespace std;
 
 int run() {
-	initComm();
+    initComm();
 
-	TJatekos jatekos;
-    // readData fuggvennyel beolvassuk a vilag allapotat (TJatekos)
-	while(readData(jatekos)!=0) {		
-        // A DemoPlayer fuggveny visszater egy TKoteg tipusu strukturaval.
-        // Ebben vannak az utasitasok, amelyet a szervernek kuldunk.
-        // Harom DemoPlayer-t definialtunk a Player.cpp-ben.
-        writeData(DemoPlayer_2(jatekos));
-	}
+    calmare::Agent agent;
+    TJatekos jatekos;
+    while (readData(jatekos) != 0) {
+	TKoteg response = agent.getOrders(jatekos);
+	writeData(response);
+    }
 
-	return 0;
+    return 0;
 }
