@@ -35,7 +35,7 @@ find_package(Boost)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 if(NOT WIN32)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -O2")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -O2 -Wno-format-security")
 endif()
 
 if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
