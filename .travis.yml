@@ -12,27 +12,9 @@ install:
         clang
         g++-4.8
         boost1.55
-        doxygen
-        xorg-dev
-        libgl1-mesa-dev
-        libudev-dev
-        libglew-dev
-        libjpeg-dev
-        libopenal-dev
-        libsndfile-dev
-        libx11-xcb-dev
-        libxcb-image0-dev
-        libxcb-randr0-dev
 
     - if [ "$CXX" == "g++" ]; then export CXX="g++-4.8"; fi
 
-    - wget http://www.sfml-dev.org/files/SFML-2.3-sources.zip
-    - unzip SFML-2.3-sources.zip
-    - mkdir -p SFML-2.3/build
-    - cd SFML-2.3/build
-    - cmake ..
-    - sudo make install
-    - cd -
 script:
     - mkdir -p finals/build
     - cd finals/build

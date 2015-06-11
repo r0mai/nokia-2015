@@ -32,16 +32,7 @@ endmacro()
 
 find_package(Boost)
 
-if(WIN32)
-    set(SFML_STATIC_LIBRARIES TRUE)
-endif()
-find_package(SFML 2.3 REQUIRED
-    system
-    window
-    graphics)
-
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
-include_directories(SYSTEM ${SFML_INCLUDE_DIR})
 
 if(NOT WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -O2")
@@ -71,8 +62,6 @@ target_link_libraries(${SRC_LIB_NAME} ${Boost_LIBRARIES})
 
 add_executable(${GUI_EXEC_NAME} ${GUI_SOURCES})
 target_link_libraries(${GUI_EXEC_NAME} ${SRC_LIB_NAME})
-target_link_libraries(${GUI_EXEC_NAME} ${SFML_LIBRARIES})
-target_link_libraries(${GUI_EXEC_NAME} ${SFML_DEPENDENCIES})
 if(UNIX AND NOT APPLE)
     target_link_libraries(${GUI_EXEC_NAME} "-lX11")
     target_link_libraries(${GUI_EXEC_NAME} "-lxcb")
