@@ -24,9 +24,45 @@ enum class UnitType {
     Torony,
     Fal,
 
-    Akadaly,
-    Egyeb
+    Ko,
+    Fa,
+    Banya,
+    Tokfold,
+
+    Ismeretlen
 };
+
+struct EnumClassHash
+{
+    template <typename T>
+    std::size_t operator()(T t) const
+    {
+        return static_cast<std::size_t>(t);
+    }
+};
+
+const std::unordered_map<UnitType, Capabilities, EnumClassHash> beginCapatibilities
+{ { UnitType::Paraszt, {} },
+{ UnitType::Kardos, {} },
+{ UnitType::Ijasz, {} },
+{ UnitType::Lovas, {} },
+{ UnitType::Puskas, {} },
+{ UnitType::Varoshaza, {} },
+{ UnitType::Laktanya, {} },
+{ UnitType::Loter, {} },
+{ UnitType::Istallo, {} },
+{ UnitType::Akademia, {} },
+{ UnitType::Korhaz, {} },
+{ UnitType::Torony, {} },
+{ UnitType::Fal, {} },
+{ UnitType::Ko, {} },
+{ UnitType::Fa, {} },
+{ UnitType::Banya, {} },
+{ UnitType::Tokfold, {} },
+{ UnitType::Ismeretlen, {} }
+};
+
+
 
 enum class UnitKind {
     friendly = 1,
@@ -36,7 +72,7 @@ enum class UnitKind {
 
 class Unit : public OwnedByContext {
     Capabilities currentCapabilities;
-    UnitType unitType = UnitType::Egyeb;
+    UnitType unitType = UnitType::Ismeretlen;
     UnitKind unitKind = UnitKind::friendly;
     UnitId unitId;
     unsigned visibilityRadius = 2;
