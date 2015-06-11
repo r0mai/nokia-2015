@@ -48,9 +48,13 @@ private:
     int negyed();
     int getUnitCount(Egyseg e);
 
-    bool isValidPosition(Position p);
-    bool isValidSafePosition(Position p);
+    bool isAvailableForMovement(Position cell);
+    bool isValidPosition(Position p); // benne vagyunk e a mezobe
 
+    std::pair<Position, Position> getMainDiagonal();
+
+    bool isPieceTime();
+    std::vector<Position> getBoundaryPositions(); 
 };
 
 }

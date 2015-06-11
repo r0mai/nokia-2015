@@ -31,8 +31,8 @@ std::size_t unitsOnCell(const TJatekos& jatekos, Position position) {
     return count;
 }
 
-bool isAvailableForMovement(const TJatekos& jatekos, Position cell) {
-    if(cell.x>=0 && cell.y>=0 && (cell.x<jatekos.XMax) && (cell.y<jatekos.YMax)) {
+bool Agent::isAvailableForMovement(Position cell) {
+    if (isValidPosition(cell)) {
         const auto worldCell = jatekos.Vilag[cell.y][cell.x].Objektum;
         if(worldCell == cvMezo || worldCell == cvKaja || worldCell == cvFa || worldCell == cvVasBanya || worldCell == cvAranyBanya) {
             return true;
@@ -70,12 +70,12 @@ Position getLocationOfResourceNearBy(const TJatekos& jatekos, Mezo mezo,
             const int dx = uid(gen);
             const int dy = uid(gen);
             const Position destination = Position{near.x + dx, near.y + dy};
-            if (isAvailableForMovement(jatekos, destination)) {
+            /*if (isAvailableForMovement(destination)) {
                 if (jatekos.Vilag[destination.y][destination.x].Objektum ==
                     cvMezo) {
                     return destination;
                 }
-            }
+            }*/
         }
     }
     return *it;
@@ -213,6 +213,7 @@ bool Agent::getFoodStrategy() {
         current_strategy = Strategy::GetWood;
         return true;
     }
+    log(__PRETTY_FUNCTION__);
     getStuff(cvKaja);
     return false;
 }
@@ -222,6 +223,7 @@ bool Agent::getWoodStrategy() {
         current_strategy = Strategy::GetIron;
         return true;
     }
+    log(__PRETTY_FUNCTION__);
     getStuff(cvFa);
     return false;
 }
@@ -231,11 +233,13 @@ bool Agent::getIronStrategy() {
         current_strategy = Strategy::GoForLoter;
         return true;
     }
+    log(__PRETTY_FUNCTION__);
     getStuff(cvVasBanya);
     return false;
 }
 
 bool Agent::goForLoterStrategy() {
+    log(__PRETTY_FUNCTION__);
     return false;
 }
 
@@ -329,16 +333,30 @@ void Agent::logMap(const TJatekos& jatekos, std::ostream& os) {
 }
 
 bool Agent::isValidPosition(Position p) {
-    return p.x >= 0 && p.x < jatekos.XMax && p.y >= 0 && p.y < jatekos.YMax;
+    auto c = getMainDiagonal();
+    return c.first.x <= p.x && p.x < c.second.x && c.first.y <= p.y && p.y < c.second.y;
+}
+std::pair<Position, Position> Agent::getMainDiagonal() {
+    if (isPieceTime())
+    {
+        switch (negyed())
+        {
+        case 0: return{ { 0, 0 }, { jatekos.XMax / 2, jatekos.YMax / 2 } };
+        case 1: return{ { jatekos.XMax / 2, 0 }, { jatekos.XMax, jatekos.YMax / 2 } };
+        case 2: return{ { 0, jatekos.YMax / 2 }, { jatekos.XMax / 2, jatekos.YMax } };
+        case 3: return{ { jatekos.XMax / 2, jatekos.YMax / 2 }, { jatekos.XMax, jatekos.YMax } };
+        }
+    }
+    return{ { 0, 0 }, { jatekos.XMax, jatekos.YMax } };
 }
 
-bool Agent::isValidSafePosition(Position p) {
-    switch (negyed())
-    {
-    case 0: return p.x >= 0 && p.x < jatekos.XMax / 2 && p.y >= 0 && p.y < jatekos.YMax / 2;
-    case 1: return p.x >= jatekos.XMax / 2 && p.x < jatekos.XMax && p.y >= 0 && p.y < jatekos.YMax / 2;
-    case 2: return p.x >= 0 && p.x < jatekos.XMax / 2 && p.y >= jatekos.YMax / 2 && p.y < jatekos.YMax;
-    case 3: return p.x >= jatekos.XMax / 2 && p.x < jatekos.XMax && p.y >= jatekos.YMax / 2 && p.y < jatekos.YMax;
-    default: return true;
-    }
+bool Agent::isPieceTime() {
+    return jatekos.Ido <= jatekos.BekeIdo;
+}
+
+std::vector<Position> Agent::getBoundaryPositions() {
+    std::vector<Position> res;
+
+    //for (int i = 0; i < )
+    return{};
 }
