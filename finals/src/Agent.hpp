@@ -60,6 +60,8 @@ private:
 
     bool isPieceTime() const;
     std::vector<Position> getBoundaryPositions();
+
+    bool isBuildablePosition(const Position& position) const;
 };
 
 }
