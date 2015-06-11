@@ -85,11 +85,15 @@ std::vector<int> getFreeWorkers(const TJatekos& jatekos) {
 
 void Agent::makeWorkersStrategy() {
 
-    short myOnlySon = jatekos.Egysegek[0].ID;
-    Position ofMyOnlySon = Position{jatekos.Egysegek[0].X, jatekos.Egysegek[0].Y};
-    Position food = getLocationOfResourceNearBy(jatekos, cvKaja, ofMyOnlySon);
-    std::cerr << "Found food at: " << food.x << " " << food.y << std::endl;
-    sendUnitTo(food, jatekos.Egysegek[0]);
+    for (const auto& freeWorker : getFreeWorkers(jatekos)) {
+        short myOnlySon = jatekos.Egysegek[freeWorker].ID;
+        Position ofMyOnlySon = Position{jatekos.Egysegek[freeWorker].X,
+                                        jatekos.Egysegek[freeWorker].Y};
+        Position food =
+            getLocationOfResourceNearBy(jatekos, cvKaja, ofMyOnlySon);
+        std::cerr << "Found food at: " << food.x << " " << food.y << std::endl;
+        sendUnitTo(food, jatekos.Egysegek[freeWorker]);
+    }
 }
 
 TKoteg Agent::getOrders(TJatekos jatekos) {
