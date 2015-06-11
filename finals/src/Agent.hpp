@@ -14,14 +14,18 @@ public:
     TJatekos jatekos;
 private:
 
-    enum Strategy {
-        MakeWorkers
+    enum class Strategy {
+        MakeWorkers,
+        GoForLoter
     } current_strategy = Strategy::MakeWorkers;
 
-    void makeWorkersStrategy();
+    // returns true, if strategy changes
+    bool makeWorkersStrategy();
+    bool goForLoterStrategy();
 
     bool makeWorkerIfPossible();
     short getFoHazId();
+    int getWorkerCount();
 };
 
 }

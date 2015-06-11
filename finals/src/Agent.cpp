@@ -105,7 +105,21 @@ short Agent::getFoHazId() {
     return -1;
 }
 
-void Agent::makeWorkersStrategy() {
+int Agent::getWorkerCount() {
+    int c = 0;
+    for (int i = 0; i < jatekos.EgySzam; ++i) {
+        if (jatekos.Egysegek[i].Tipus == ceParaszt) {
+            ++c;
+        }
+    }
+    return c;
+}
+
+bool Agent::makeWorkersStrategy() {
+    if (getWorkerCount() <= 6) {
+        current_strategy = Strategy::GoForLoter;
+        return true;
+    }
 
     for (const auto& freeWorker : getFreeWorkers(jatekos)) {
         short myOnlySon = jatekos.Egysegek[freeWorker].ID;
@@ -118,13 +132,31 @@ void Agent::makeWorkersStrategy() {
     }
 
     while (makeWorkerIfPossible()) {}
+
+    return false;
+}
+
+bool Agent::goForLoterStrategy() {
+    return false;
 }
 
 TKoteg Agent::getOrders(TJatekos jatekos) {
     eraseOrders();
     this->jatekos = jatekos;
-    std::cerr << "Working with " << jatekos.EgySzam << " units" << std::endl;
-    makeWorkersStrategy();
+
+    bool strategy_changes = false;
+    do {
+        switch (current_strategy) {
+            case Strategy::MakeWorkers:
+                strategy_changes = makeWorkersStrategy();
+                break;
+            case Strategy::GoForLoter:
+                strategy_changes = goForLoterStrategy();
+                break;
+            default:
+                strategy_changes = false;
+        }
+    } while (strategy_changes);
     return koteg;
 }
 
