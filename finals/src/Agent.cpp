@@ -65,12 +65,26 @@ Position Agent::getLocationOfResourceNearBy(Mezo mezo, Position near) const {
     if (it == positions.end()) {
         log("Didnt find any resource");
 
-        auto poss= getBoundaryPositions();
+        auto poss = getBoundaryPositions();
+        decltype(poss) nearposs;
 
-        std::uniform_int_distribution<int> uidd(0, poss.size() - 1);
+        int dist = jatekos.XMax;
+        
+        for (unsigned i = 0; i < poss.size(); ++i) {
+            int d2 = distanceBetween(near, poss[i]);
+            if (d2 < dist) { 
+                dist = d2;
+                nearposs.clear();
+                nearposs.push_back(poss[i]);
+            }
+            else if (d2 < dist + 3){
+                nearposs.push_back(poss[i]);
+            }
+        }
+        std::uniform_int_distribution<int> uidd(0, nearposs.size() - 1);
         for (;;) {
             const int ind = uidd(gen);
-            auto destination = poss[ind];
+            auto destination = nearposs[ind];
             if (isAvailableForMovement(destination)) {
                 if (jatekos.Vilag[destination.y][destination.x].Objektum ==
                     cvMezo) {
@@ -240,7 +254,6 @@ bool Agent::getIronStrategy() {
 
 bool Agent::goForLoterStrategy() {
     log("loter");
-    log(__PRETTY_FUNCTION__);
     if(getBuildingIndex(cvLoter) != -1) {
         current_strategy = Strategy::DefendBorders;
         return true;
