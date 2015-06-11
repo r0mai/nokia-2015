@@ -7,6 +7,14 @@
 
 namespace calmare {
 
+
+struct Position {
+    int x = 0;
+    int y = 0;
+    Position() = default;
+    Position(int x, int y) : x(x), y(y) { }
+};
+
 class Agent {
 public:
     TKoteg getOrders(TJatekos jatekos);
@@ -37,6 +45,10 @@ private:
     short getBuildingId(Mezo m);
     int negyed();
     int getUnitCount(Egyseg e);
+
+    bool isValidPosition(Position p);
+    bool isValidSafePosition(Position p);
+
 };
 
 }
