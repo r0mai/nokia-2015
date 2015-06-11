@@ -242,12 +242,13 @@ bool Agent::goForLoterStrategy() {
     log("loter");
     log(__PRETTY_FUNCTION__);
     if(getBuildingIndex(cvLoter) != -1) {
+        current_strategy = Strategy::DefendBorders;
         return true;
     }
     return false;
 }
 
-bool Agent::defendBordersStategy() {
+bool Agent::defendBordersStrategy() {
     log("defendBorders");
     return false;
 }
@@ -282,6 +283,8 @@ TKoteg Agent::getOrders(TJatekos jatekos) {
             case Strategy::GoForLoter:
                 strategy_changes = goForLoterStrategy();
                 break;
+            case Strategy::DefendBorders:
+                strategy_changes = defendBordersStrategy();
             default:
                 strategy_changes = false;
         }

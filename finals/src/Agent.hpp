@@ -35,7 +35,7 @@ private:
     bool getWoodStrategy();
     bool getIronStrategy();
     bool goForLoterStrategy();
-    bool defendBordersStategy();
+    bool defendBordersStrategy();
 
     void logFeedback();
 
