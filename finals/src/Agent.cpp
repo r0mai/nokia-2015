@@ -293,6 +293,9 @@ bool Agent::goForLoterStrategy() {
 
 bool Agent::defendBordersStrategy() {
     log("defendBorders");
+    while (makeUnitIfPossible(ceIjasz)) {
+    }
+
     return false;
 }
 
