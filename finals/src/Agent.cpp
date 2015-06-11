@@ -37,6 +37,16 @@ std::size_t unitsOnCell(const TJatekos& jatekos, Position position) {
     return count;
 }
 
+bool isAvailableForMovement(const TJatekos& jatekos, Position cell) {
+    if(cell.x>=0 && cell.y>=0 && (cell.x<jatekos.XMax) && (cell.y<jatekos.YMax)) {
+        const auto worldCell = jatekos.Vilag[cell.y][cell.x].Objektum;
+        if(worldCell == cvMezo || worldCell == cvKaja || worldCell == cvFa || worldCell == cvVasBanya || worldCell == cvAranyBanya) {
+            return true;
+        }
+    }
+    return false;
+}
+
 Position getLocationOfResourceNearBy(const TJatekos& jatekos, Mezo mezo,
                                      Position near) {
     const int maxX = jatekos.XMax;
