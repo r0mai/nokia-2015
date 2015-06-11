@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <random>
 
 using namespace calmare;
 
@@ -49,6 +50,10 @@ bool isAvailableForMovement(const TJatekos& jatekos, Position cell) {
 
 Position getLocationOfResourceNearBy(const TJatekos& jatekos, Mezo mezo,
                                      Position near) {
+    static std::random_device rnd;
+    static std::mt19937 gen(rnd());
+    std::uniform_int_distribution<int> uid(-jatekos.Kepesseg.LatEgy / 1.414,
+                                           jatekos.Kepesseg.LatEgy / 1.414);
     const int maxX = jatekos.XMax;
     const int maxY = jatekos.YMax;
     std::vector<Position> positions;
@@ -67,7 +72,10 @@ Position getLocationOfResourceNearBy(const TJatekos& jatekos, Mezo mezo,
         });
     if (it == positions.end()) {
         log("Didnt find any resource");
-        return Position{near.x - 2, near.y - 2};
+        const int dx = uid(gen);
+        const int dy = uid(gen);
+
+        return Position{near.x + dx, near.y + dy};
     }
     return *it;
 }
