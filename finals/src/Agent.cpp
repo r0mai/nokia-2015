@@ -93,6 +93,7 @@ bool Agent::makeWorkerIfPossible() {
     }
     Utasit_Kepez(ceParaszt, fohazid);
     jatekos.Eroforras.Kaja -= 50;
+    return true;
 }
 
 short Agent::getFoHazId() {
