@@ -183,10 +183,20 @@ int Agent::getUnitCount(Egyseg e) {
     return c;
 }
 
+std::size_t getNumberOfUnitsProducingWare(const TJatekos& jatekos, Mezo mezo) {
+    std::size_t count = 0;
+    for (int i = 0; i < jatekos.EgySzam; ++i) {
+        const auto unit = jatekos.Egysegek[i];
+        if (unit.AkcioKod == mezo) {
+            ++count;
+        }
+    }
+    return count;
+}
+
 void Agent::getStuff(Mezo mezo) {
 
     for (const auto& freeWorker : getFreeWorkers(jatekos)) {
-        short myOnlySon = jatekos.Egysegek[freeWorker].ID;
         Position ofMyOnlySon = Position{jatekos.Egysegek[freeWorker].X,
                                         jatekos.Egysegek[freeWorker].Y};
         Position food = getLocationOfResourceNearBy(jatekos, mezo, ofMyOnlySon);
