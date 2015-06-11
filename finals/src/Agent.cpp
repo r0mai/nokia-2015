@@ -5,7 +5,6 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include <random>
 
 using namespace calmare;
 
@@ -41,9 +40,32 @@ bool Agent::isAvailableForMovement(Position cell) const {
     return false;
 }
 
+Position Agent::getExplorationPosition(Position near) const {
+    auto poss = getBoundaryPositions();
+    decltype(poss) nearposs;
+
+    int dist = jatekos.XMax;
+
+    for (unsigned i = 0; i < poss.size(); ++i) {
+        int d2 = distanceBetween(near, poss[i]);
+        if (d2 < dist && jatekos.Vilag[poss[i].y][poss[i].x].Objektum == cvMezo) {
+            dist = d2;
+            nearposs.clear();
+            nearposs.push_back(poss[i]);
+        }
+        else if (d2 == dist && jatekos.Vilag[poss[i].y][poss[i].x].Objektum == cvMezo){
+            nearposs.push_back(poss[i]);
+        }
+    }
+    std::uniform_int_distribution<int> uidd(0, nearposs.size() - 1);
+    for (;;) {
+        const int ind = uidd(gen);
+        auto destination = nearposs[ind];
+        return destination;
+    }
+}
+
 Position Agent::getLocationOfResourceNearBy(Mezo mezo, Position near) const {
-    static std::random_device rnd;
-    static std::mt19937 gen(rnd());
     std::uniform_int_distribution<int> uid(-jatekos.Kepesseg.LatEgy / 1.414,
                                            jatekos.Kepesseg.LatEgy / 1.414);
     const int maxX = jatekos.XMax;
@@ -65,28 +87,6 @@ Position Agent::getLocationOfResourceNearBy(Mezo mezo, Position near) const {
     if (it == positions.end()) {
         log("Didnt find any resource");
 
-        auto poss = getBoundaryPositions();
-        decltype(poss) nearposs;
-
-        int dist = jatekos.XMax;
-
-        for (unsigned i = 0; i < poss.size(); ++i) {
-            int d2 = distanceBetween(near, poss[i]);
-            if (d2 < dist && jatekos.Vilag[poss[i].y][poss[i].x].Objektum == cvMezo) {
-                dist = d2;
-                nearposs.clear();
-                nearposs.push_back(poss[i]);
-            }
-            else if (d2 == dist && jatekos.Vilag[poss[i].y][poss[i].x].Objektum == cvMezo){
-                nearposs.push_back(poss[i]);
-            }
-        }
-        std::uniform_int_distribution<int> uidd(0, nearposs.size() - 1);
-        for (;;) {
-            const int ind = uidd(gen);
-            auto destination = nearposs[ind];
-            return destination;
-        }
     }
     return *it;
 }
@@ -97,6 +97,17 @@ void sendUnitTo(Position position, const TEgyseg& unit) {
     if(unit.AkcioKod == caNincs) {
         log("Unit %d was idle, sending to %d, %d", int(unit.ID), x, y);
         Utasit_Termel(unit.ID, x, y);
+    } else {
+        log("Unit %d was already in movement", int(unit.ID));
+    }
+}
+
+void moveUnitTo(Position position, const TEgyseg& unit) {
+    const auto x = position.x;
+    const auto y = position.y;
+    if(unit.AkcioKod == caNincs) {
+        log("Unit %d was idle, sending to %d, %d", int(unit.ID), x, y);
+        Utasit_Mozog(unit.ID, x, y);
     } else {
         log("Unit %d was already in movement", int(unit.ID));
     }
@@ -303,6 +314,13 @@ bool Agent::goForLoterStrategy() {
 
 bool Agent::defendBordersStrategy() {
     log("defendBorders");
+
+    for (const auto& freeArcher : getFreeArchers()) {
+        Position ofMyOnlySon = Position{jatekos.Egysegek[freeArcher].X,
+                                        jatekos.Egysegek[freeArcher].Y};
+        moveUnitTo(getExplorationPosition(ofMyOnlySon), jatekos.Egysegek[freeArcher]);
+    }
+
     while (makeUnitIfPossible(ceIjasz)) {
     }
 

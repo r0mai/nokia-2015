@@ -1,6 +1,7 @@
 #pragma once
 
 #include "VilagDef.h"
+#include <random>
 #include <iostream>
 #include "Log.hpp"
 #include "Resources.hpp"
@@ -21,7 +22,12 @@ public:
 
     void logMap(const TJatekos& jatekos);
     TJatekos jatekos;
+    Agent() : gen(rnd()) {
+    }
+
 private:
+    std::random_device rnd;
+    mutable std::mt19937 gen;
     enum class Strategy {
         GetFood,
         GetWood,
@@ -56,6 +62,7 @@ private:
     std::pair<Position, Position> getMainDiagonal() const;
 
     std::size_t unitsOnCell(Position position) const;
+    Position getExplorationPosition(Position near) const;
     Position getLocationOfResourceNearBy(Mezo mezo, Position near) const;
     std::vector<int> getFreeWorkers() const;
     std::vector<int> getFreeArchers() const;
