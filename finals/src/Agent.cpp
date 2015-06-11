@@ -240,6 +240,15 @@ bool Agent::getIronStrategy() {
 
 bool Agent::goForLoterStrategy() {
     log("loter");
+    log(__PRETTY_FUNCTION__);
+    if(getBuildingIndex(cvLoter) != -1) {
+        return true;
+    }
+    return false;
+}
+
+bool Agent::defendBordersStategy() {
+    log("defendBorders");
     return false;
 }
 
