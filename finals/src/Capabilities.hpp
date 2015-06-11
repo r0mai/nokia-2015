@@ -14,8 +14,5 @@ public:
     Capability(Context* context) : OwnedByContext(context) {}
 };
 
-
 using Capabilities = std::vector < Capability > ;
-
-
 }
