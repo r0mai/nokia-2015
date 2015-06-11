@@ -176,6 +176,7 @@ bool Agent::makeUnitIfPossible(Egyseg e) {
         return false;
     }
     Utasit_Kepez(e, jatekos.Epuletek[epuletIndex].ID);
+    jatekos.Epuletek[epuletIndex].AkcioKod = cuKepzes;
     jatekos.Eroforras.Kaja -= cost.food();
     jatekos.Eroforras.Fa -= cost.wood();
     jatekos.Eroforras.Vas -= cost.iron();
