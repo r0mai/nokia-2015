@@ -343,11 +343,6 @@ bool Agent::goForLoterStrategy() {
 bool Agent::exploreBoundariesStrategy() {
     log("exploreBoundaries");
 
-    if (areControlPointsVisible()) {
-        current_strategy = Strategy::DefendBorders;
-        return true;
-    }
-
     for (const auto& freeArcher : getFreeArchers()) {
         Position ofMyOnlySon = Position{jatekos.Egysegek[freeArcher].X,
                                         jatekos.Egysegek[freeArcher].Y};
@@ -356,7 +351,8 @@ bool Agent::exploreBoundariesStrategy() {
             moveUnitTo(nextPos, jatekos.Egysegek[freeArcher]);
         }
         else {
-
+            current_strategy = Strategy::DefendBorders;
+            return true;
         }
 
     }
@@ -368,6 +364,7 @@ bool Agent::exploreBoundariesStrategy() {
 }
 
 bool Agent::defendBordersStrategy() {
+    log("defendBorders");
     return true;
 }
 
