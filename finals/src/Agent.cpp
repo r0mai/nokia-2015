@@ -57,11 +57,13 @@ Position Agent::getExplorationPosition(Position near) const {
             nearposs.push_back(poss[i]);
         }
     }
-    std::uniform_int_distribution<int> uidd(0, nearposs.size() - 1);
-    for (;;) {
-        const int ind = uidd(gen);
-        auto destination = nearposs[ind];
-        return destination;
+    if (nearposs.size()) {
+        std::uniform_int_distribution<int> uidd(0, nearposs.size() - 1);
+        for (;;) {
+            const int ind = uidd(gen);
+            auto destination = nearposs[ind];
+            return destination;
+        }
     }
     return{ -1, -1 };
 }
@@ -298,7 +300,7 @@ bool Agent::areControlPointsVisible() const {
 }
 
 bool Agent::getFoodStrategy() {
-    if (getNumberOfUnitsProducingWare(caKaja) >= 6) {
+    if (getNumberOfUnitsProducingWare(caKaja) >= 4) {
         current_strategy = Strategy::GetWood;
         return true;
     }
