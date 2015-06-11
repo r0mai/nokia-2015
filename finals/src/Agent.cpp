@@ -406,12 +406,11 @@ bool Agent::defendBordersStrategy() {
         }
     );
 
-    std::string towerDistances;
-    for (const Position& p : positions) {
-        towerDistances += std::to_string(distanceFromDiagonal(p));
-        towerDistances += ", ";
-    }
-    log("Tower distances: %s", towerDistances.c_str());
+    log("diagonal for towers (%d, %d), (%d, %d)",
+        diagonal.first.x,
+        diagonal.first.y,
+        diagonal.second.x,
+        diagonal.second.y);
 
     for (const Position& p : positions) {
         if (distanceFromDiagonal(p) > 5.) {
