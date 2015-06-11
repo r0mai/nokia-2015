@@ -2,6 +2,8 @@
  * Kommunikacio.
  */
 
+#if defined(__WIN32__) || defined(_WIN32_) || defined(_MSC_VER)
+
 #include <iostream>
 #include <windows.h>
 #include "Comm.h"
@@ -70,3 +72,13 @@ bool writeData( const TKoteg& koteg )
   const int res = write_data_proc( &writeBuffer );
   return res != 0;
 }
+
+#else
+
+#include "Comm.h"
+
+void initComm( ) { }
+bool readData( TJatekos &jatekos ) { return true; }
+bool writeData( const TKoteg &koteg ) { return true; }
+
+#endif
