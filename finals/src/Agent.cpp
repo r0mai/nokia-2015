@@ -276,6 +276,38 @@ bool Agent::makeUnitIfPossible(Egyseg e) {
     return true;
 }
 
+bool Agent::researchBuildingDefence() {
+    const int currentLevel = jatekos.Kepesseg.Szintek[cfEpVed];
+    auto our = Resources::fromJatekos(jatekos);
+    auto cost = Cost::Epulet_Vedelem(currentLevel + 1);
+
+    if (!(our - cost)) {
+        return false;
+    }
+
+    Utasit_Fejleszt(cfEpVed);
+    jatekos.Eroforras.Kaja -= cost.food();
+    jatekos.Eroforras.Fa -= cost.wood();
+    jatekos.Eroforras.Vas -= cost.iron();
+    jatekos.Eroforras.Arany -= cost.gold();
+    return true;
+}
+
+bool Agent::conductBasicResearchTillReachQuantity(short q) {
+    if (q >= jatekos.Kepesseg.KP) {
+        return false;
+    }
+
+    auto our = Resources::fromJatekos(jatekos);
+    auto cost = Cost(Resources::iron(10), 400);
+
+    if(!(our - cost) ) {
+        return false;
+    }
+    Utasit_Kutat(caVas, 10);
+    return true;
+}
+
 Mezo Agent::buildingTypeForUnit(Egyseg e) {
     switch (e) {
         case ceParaszt:
@@ -470,6 +502,7 @@ bool Agent::goForLoterStrategy() {
         buildBuildingIfNotAlreadyPresent(cvAkademia, buildingSite);
         buildBuildingIfPossible(cvLoter, buildingSite);
     }
+    while(conductBasicResearchTillReachQuantity(20)) { }
     return false;
 }
 
