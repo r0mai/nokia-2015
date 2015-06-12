@@ -320,6 +320,12 @@ bool Agent::conductBasicResearchTillReachQuantity(short q) {
         log("We don't have enough resources to create a KP");
         return false;
     }
+
+    if (jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod != caNincs) {
+        log("Cannot research at this time, research is already under way");
+        return false;
+    }
+
     Utasit_Kutat(caVas, 10);
     log("Ordered research");
     jatekos.Eroforras.Vas -= cost.iron();
