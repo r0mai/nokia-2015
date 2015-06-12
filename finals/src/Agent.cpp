@@ -664,7 +664,7 @@ bool Agent::attackShit() {
     for (int index : getArchers()) {
         const auto& archer = jatekos.Egysegek[index];
         Position nearOpponent = getPositionNearOpponentIfAny(
-            {archer.X, archer.Y}, 3);
+            {archer.X, archer.Y}, 6);
         if (nearOpponent.x >= 0) {
             unitTo(
                 cviJaror,
