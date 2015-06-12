@@ -308,6 +308,30 @@ bool Agent::researchBuildingDefence() {
     return true;
 }
 
+bool Agent::researchFoodProduction() {
+    const int currentLevel = jatekos.Kepesseg.Szintek[cfKaja];
+    log("currentLevel for building defence is %d", currentLevel);
+    auto our = Resources::fromJatekos(jatekos);
+    auto cost = Cost::Kaja_Termeles(currentLevel + 1);
+
+    if (!(our - cost)) {
+        return false;
+    }
+
+    if (jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod != caNincs) {
+        log("Cannot research at this time, research is already under way");
+        return false;
+    }
+
+    Utasit_Fejleszt(cfKaja);
+    jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod = caVar;
+    jatekos.Eroforras.Kaja -= cost.food();
+    jatekos.Eroforras.Fa -= cost.wood();
+    jatekos.Eroforras.Vas -= cost.iron();
+    jatekos.Eroforras.Arany -= cost.gold();
+    return true;
+}
+
 bool Agent::researchArchery() {
     const int currentLevel = jatekos.Kepesseg.Szintek[cfIjasz];
     log("currentLevel for archery is %d", currentLevel);
@@ -595,7 +619,7 @@ bool Agent::areControlPointsVisible() const {
 
 bool Agent::getFoodStrategy() {
     log("getFood");
-    if (getNumberOfUnitsProducingWare(caKaja) >= 8) {
+    if (getNumberOfUnitsProducingWare(caKaja) >= 12) {
         current_strategy = Strategy::GetWood;
         return true;
     }
@@ -605,7 +629,8 @@ bool Agent::getFoodStrategy() {
 
 bool Agent::getWoodStrategy() {
     log("getwood");
-    if (getNumberOfUnitsProducingWare(caFa) >= 10) {
+    if (getNumberOfUnitsProducingWare(caFa) >= 4) {
+        reAllocateWorkers(0.5, 0.5, 0.0, 0.0);
         current_strategy = Strategy::GetIron;
         return true;
     }
@@ -634,6 +659,9 @@ bool Agent::goForLoterStrategy() {
     reAllocateWorkers(0.3, 0.6, 0.1, 0.0);
 
     const auto buildingSite = getClosestBuildingSite();
+    if (getNumberOfBuildings(cvAkademia)) {
+        while (researchResearch()) { }
+    }
     buildBuildingIfNotAlreadyPresent(cvAkademia, buildingSite);
     buildBuildingIfPossible(cvLoter, buildingSite);
 
@@ -666,9 +694,11 @@ bool Agent::exploreBoundariesStrategy() {
     while (makeUnitIfPossible(ceLovas)) { }
     while (makeUnitIfPossible(ceIjasz)) {
     }
+    createWorkersForTargetCount(30);
     const auto buildingSite = getClosestBuildingSite();
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
     while(researchResearch()) { }
+    while(researchFoodProduction()) { }
     while(conductBasicResearchTillReachQuantity(80)) { }
 
     return false;
@@ -700,6 +730,7 @@ bool Agent::defendBordersStrategy() {
             unitTo(cviJaror, pos, jatekos.Egysegek[freeArcher]);
         }
     }
+    createWorkersForTargetCount(30);
     reAllocateWorkers(0.2, 0.65, 0.15, 0.0);
 
     // Find tower locations closest to borders
@@ -751,6 +782,7 @@ bool Agent::defendBordersStrategy() {
     while (makeUnitIfPossible(ceLovas)) { }
     while (makeUnitIfPossible(ceIjasz)) {}
     while(researchBuildingDefence()) { }
+    while(researchFoodProduction()) { }
     while(researchArchery()) { }
     while(researchCavalry()) { }
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }

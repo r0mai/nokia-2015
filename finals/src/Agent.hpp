@@ -55,6 +55,7 @@ private:
     void getStuff(Mezo mezo);
 
     bool researchBuildingDefence();
+    bool researchFoodProduction();
     bool researchArchery();
     bool researchCavalry();
     bool conductBasicResearchTillReachQuantity(short q);
