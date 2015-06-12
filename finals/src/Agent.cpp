@@ -300,6 +300,7 @@ bool Agent::researchBuildingDefence() {
     }
 
     Utasit_Fejleszt(cfEpVed);
+    jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod = caVar;
     jatekos.Eroforras.Kaja -= cost.food();
     jatekos.Eroforras.Fa -= cost.wood();
     jatekos.Eroforras.Vas -= cost.iron();
@@ -327,6 +328,7 @@ bool Agent::conductBasicResearchTillReachQuantity(short q) {
     }
 
     Utasit_Kutat(caVas, 10);
+    jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod = caVar;
     log("Ordered research");
     jatekos.Eroforras.Vas -= cost.iron();
     return true;
@@ -353,6 +355,7 @@ bool Agent::conductBasicResearchTillReachQuantityWithGold(short q) {
 
     Utasit_Kutat(caArany, 4);
     log("Ordered research");
+    jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod = caVar;
     jatekos.Eroforras.Arany -= cost.gold();
     return true;
 }
@@ -397,6 +400,25 @@ short Agent::getBuildingId(Mezo m) {
         }
     }
     return -1;
+}
+
+Position Agent::getClosestBuildingSite() const {
+    const auto buildingSites = findBuildablePositions();
+    if (!buildingSites.empty()) {
+        const auto baseIndex = getBuildingIndex(cvFohaz);
+        const auto base = jatekos.Epuletek[baseIndex];
+        const auto basePos = Position{base.X, base.Y};
+        const auto buildingSite =
+                *std::min_element(buildingSites.begin(), buildingSites.end(),
+                                  [&basePos](const Position& p1,
+                                             const Position& p2) {
+                    return distanceBetween(p1, basePos) <
+                           distanceBetween(p2, basePos);
+                });
+        return buildingSite;
+    } else {
+        return {};
+    }
 }
 
 int Agent::negyed() const {
@@ -536,21 +558,11 @@ bool Agent::goForLoterStrategy() {
     createWorkersForTargetCount(30);
     reAllocateWorkers(0.3, 0.6, 0.1, 0.0);
 
-    const auto buildingSites = findBuildablePositions();
-    if (!buildingSites.empty()) {
-        const auto baseIndex = getBuildingIndex(cvFohaz);
-        const auto base = jatekos.Epuletek[baseIndex];
-        const auto basePos = Position{base.X, base.Y};
-        const auto buildingSite =
-                *std::min_element(buildingSites.begin(), buildingSites.end(),
-                                  [&basePos](const Position& p1,
-                                             const Position& p2) {
-                    return distanceBetween(p1, basePos) <
-                           distanceBetween(p2, basePos);
-                });
-        buildBuildingIfNotAlreadyPresent(cvAkademia, buildingSite);
-        buildBuildingIfPossible(cvLoter, buildingSite);
-    }
+    const auto buildingSite = getClosestBuildingSite();
+    buildBuildingIfNotAlreadyPresent(cvAkademia, buildingSite);
+    buildBuildingIfPossible(cvLoter, buildingSite);
+    buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite);
+
     while(conductBasicResearchTillReachQuantity(80)) { }
     return false;
 }
@@ -611,7 +623,7 @@ bool Agent::defendBordersStrategy() {
             unitTo(cviJaror, pos, jatekos.Egysegek[freeArcher]);
         }
     }
-    reAllocateWorkers(0.1, 0.8, 0.1, 0.0);
+    reAllocateWorkers(0.1, 0.7, 0.2, 0.0);
 
     // Find tower locations closest to borders
     auto positions = findBuildablePositions();
@@ -670,7 +682,7 @@ bool Agent::attackShit() {
         return true;
     }
 
-    reAllocateWorkers(0.1, 0.5, 0.2, 0.2);
+    reAllocateWorkers(0.1, 0.4, 0.3, 0.2);
 
     if (attackTarget < 0) {
         // decide where to attack
