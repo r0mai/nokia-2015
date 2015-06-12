@@ -727,20 +727,18 @@ bool Agent::attackShit() {
     log("targetPosition: (%d, %d), negyed %d",
         targetPosition.x, targetPosition.y, attackTarget);
 
-    int closesArcherSquared = 1000000;
+    bool goNext = false;
     for (int index : getArchers()) {
         const auto& archer = jatekos.Egysegek[index];
+        if (lengthSquared(
+                Position{archer.X, archer.Y},
+                targetPosition) <= 9)
+        {
+            goNext = true;
+        }
+
         Position nearOpponent = getPositionNearOpponentIfAny(
             {archer.X, archer.Y}, 6);
-
-        if (closesArcherSquared > lengthSquared(
-                Position{archer.X, archer.Y},
-                targetPosition))
-        {
-            closesArcherSquared = lengthSquared(
-                Position{archer.X, archer.Y},
-                targetPosition);
-        }
 
         if (nearOpponent.x >= 0) {
             unitTo(
@@ -760,7 +758,7 @@ bool Agent::attackShit() {
         }
     }
 
-    if (closesArcherSquared <= 9) {
+    if (goNext) {
         attackTarget++;
         attackTarget %= 4;
     }
