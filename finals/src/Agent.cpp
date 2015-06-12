@@ -807,7 +807,7 @@ bool Agent::attackShit() {
         }
     }
 
-    if (goNext || jatekos.Ido - attackStartedOn > 3000) {
+    if (goNext || jatekos.Ido - attackStartedOn > 10000) {
         attackTarget++;
         attackTarget %= 4;
         attackStartedOn = jatekos.Ido;
