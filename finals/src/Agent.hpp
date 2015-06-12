@@ -91,6 +91,9 @@ private:
 
     bool isPieceTime() const;
 
+    void attackOpponentUnit(int ourIndex, int opponentIndex);
+    void attackOpponentBuilding(int ourIndex, int opponentIndex);
+
     std::vector<Position> findBuildablePositions() const;
     bool isBuildablePosition(const Position& position) const;
     std::vector<Position> getBoundaryPositions() const;
@@ -103,6 +106,9 @@ private:
     Position getPointTowardsMiddle() const;
     Position getPointTowardsSide1() const;
     Position getPointTowardsSide2() const;
+
+    int getOpponentUnitIndexNear(const Position& p, int radius);
+    int getOpponentBuildingIndexNear(const Position& p, int radius);
 };
 
 }

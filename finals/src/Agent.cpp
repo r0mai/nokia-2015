@@ -639,6 +639,17 @@ bool Agent::attackShit() {
 
     for (int index : getArchers()) {
         const auto& archer = jatekos.Egysegek[index];
+        int opUIdx = getOpponentUnitIndexNear(Position{archer.X, archer.Y}, 3);
+        if (opUIdx >= 0) {
+            attackOpponentUnit(index, opUIdx);
+            continue;
+        }
+        int opBIdx = getOpponentBuildingIndexNear(Position{archer.X, archer.Y}, 3);
+        if (opBIdx >= 0) {
+            attackOpponentBuilding(index, opBIdx);
+            continue;
+        }
+
         unitTo(
             cviMozog,
             getDiscoveredPointTowards(targetPosition),
@@ -646,6 +657,49 @@ bool Agent::attackShit() {
     }
 
     return false;
+}
+
+void Agent::attackOpponentUnit(int ourIndex, int opponentIndex) {
+    Utasit_Tamad(
+        jatekos.Egysegek[ourIndex].ID,
+        jatekos.MasEgysegek[opponentIndex].ID,
+        jatekos.MasEgysegek[opponentIndex].Szin);
+}
+
+void Agent::attackOpponentBuilding(int ourIndex, int opponentIndex) {
+    Utasit_Tamad(
+        jatekos.Egysegek[ourIndex].ID,
+        jatekos.MasEpuletek[opponentIndex].ID,
+        jatekos.Vilag[jatekos.MasEpuletek[opponentIndex].Y][jatekos.MasEpuletek[opponentIndex].X].Szin);
+}
+
+int Agent::getOpponentUnitIndexNear(const Position& p, int radius) {
+    for (int i = 0; i < jatekos.MasEgySzam; ++i) {
+        if (lengthSquared(
+            p,
+            Position{jatekos.MasEgysegek[i].X, jatekos.MasEgysegek[i].Y}) <
+            radius*radius)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int Agent::getOpponentBuildingIndexNear(const Position& p, int radius) {
+    int w = jatekos.XMax;
+    int h = jatekos.YMax;
+
+    for (int i = 0; i < jatekos.MasEpSzam; ++i) {
+        if (lengthSquared(
+            p,
+            Position{jatekos.MasEpuletek[i].X, jatekos.MasEpuletek[i].Y}) <
+            radius*radius)
+        {
+            return i;
+        }
+    }
+    return -1;
 }
 
 void Agent::logFeedback() {
