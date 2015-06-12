@@ -499,7 +499,7 @@ int Agent::negyed() const {
         return (jatekos.Epuletek[fohazEpuletIndex].X > jatekos.XMax / 2) | ((jatekos.Epuletek[fohazEpuletIndex].Y > jatekos.YMax / 2) << 1);
     }
     else {
-        return -1;
+        return 0;
     }
 }
 
