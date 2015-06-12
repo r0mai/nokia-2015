@@ -1037,10 +1037,13 @@ Position Agent::getDiscoveredPointTowards(const Position& to) {
     if (jatekos.Vilag[to.y][to.x].Objektum == cvMezo) {
         return to;
     }
+    if (jatekos.Vilag[to.y][to.x].Objektum != cvNemLatszik) {
+        return getLocationOfResourceNearBy(cvMezo, to);
+    }
 
     auto positions = getBoundaryPositionsMezo();
     if (positions.empty()) {
-        return to; // TODO??
+        return getLocationOfResourceNearBy(cvMezo, to);
     }
     std::sort(positions.begin(), positions.end(),
         [&](const Position& p1, const Position& p2) {
