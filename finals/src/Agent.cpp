@@ -148,7 +148,7 @@ void Agent::reAllocateWorkers(float food, float wood, float iron) {
     const int woodDeficit = neededForWood - actualWood.size();
     const int ironDeficit = neededForIron - actualIron.size();
 
-    std::vector<int> surplusWorkers;
+    std::vector<int> surplusWorkers = getFreeWorkers();
 
     for(int i=0; i<-foodDeficit;++i) {
         surplusWorkers.push_back(actualFood[i]);
