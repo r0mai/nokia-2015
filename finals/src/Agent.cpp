@@ -947,10 +947,10 @@ bool Agent::isPointInNegyed(const Position& p, int negyed) {
 
 Position Agent::getPointInNegyed(int negyed) {
     switch (negyed) {
-        case 0: return Position{10, 10};
-        case 1: return Position{90, 10};
-        case 2: return Position{10, 90};
-        case 3: return Position{90, 90};
+        case 0: return Position{2, 2};
+        case 1: return Position{97, 2};
+        case 2: return Position{2, 97};
+        case 3: return Position{97, 97};
     }
     return Position{0, 0};
 }
