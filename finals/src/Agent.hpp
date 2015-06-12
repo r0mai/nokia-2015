@@ -66,6 +66,9 @@ private:
     std::vector<int> getFreeWorkers() const;
     std::vector<int> getFreeArchers() const;
     std::size_t getNumberOfUnitsProducingWare(Akcio akcio) const;
+    std::vector<int> getUnitsProducingWare(Akcio akcio) const;
+
+    void reAllocateWorkers(float food, float wood, float iron);
 
     bool isPieceTime() const;
 
