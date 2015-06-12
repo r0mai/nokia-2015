@@ -71,7 +71,7 @@ private:
     std::size_t getNumberOfUnitsProducingWare(Akcio akcio) const;
     std::vector<int> getUnitsProducingWare(Akcio akcio) const;
 
-    void reAllocateWorkers(float food, float wood, float iron);
+    void reAllocateWorkers(float food, float wood, float iron, float gold);
 
     bool isPieceTime() const;
 

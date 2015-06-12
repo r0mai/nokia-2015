@@ -133,19 +133,22 @@ std::vector<int> Agent::getFreeWorkers() const {
     return workers;
 }
 
-void Agent::reAllocateWorkers(float food, float wood, float iron) {
+void Agent::reAllocateWorkers(float food, float wood, float iron, float gold) {
     const auto numberOfWorkers = getUnitCount(ceParaszt);
     const int neededForFood = numberOfWorkers * food;
     const int neededForWood = numberOfWorkers * wood;
     const int neededForIron = numberOfWorkers * iron;
+    const int neededForGold = numberOfWorkers * gold;
 
     auto actualFood = getUnitsProducingWare(caKaja);
     auto actualWood = getUnitsProducingWare(caFa);
     auto actualIron = getUnitsProducingWare(caVas);
+    auto actualGold = getUnitsProducingWare(caArany);
 
     const int foodDeficit = neededForFood - actualFood.size();
     const int woodDeficit = neededForWood - actualWood.size();
     const int ironDeficit = neededForIron - actualIron.size();
+    const int goldDeficit = neededForGold - actualGold.size();
 
     std::vector<int> surplusWorkers = getFreeWorkers();
 
@@ -159,6 +162,10 @@ void Agent::reAllocateWorkers(float food, float wood, float iron) {
 
     for(int i=0; i<-ironDeficit;++i) {
         surplusWorkers.push_back(actualIron[i]);
+    }
+
+    for(int i=0; i<-goldDeficit;++i) {
+        surplusWorkers.push_back(actualGold[i]);
     }
 
     // ------ //
@@ -185,6 +192,13 @@ void Agent::reAllocateWorkers(float food, float wood, float iron) {
     for (int i = 0; i < ironDeficit && !surplusWorkers.empty(); ++i) {
         Position resource = getLocationOfResourceNearBy(
                 cvVasBanya, getPos(surplusWorkers.back()));
+        unitTo(cviTermel, resource, jatekos.Egysegek[surplusWorkers.back()]);
+        surplusWorkers.pop_back();
+    }
+
+    for (int i = 0; i < goldDeficit && !surplusWorkers.empty(); ++i) {
+        Position resource = getLocationOfResourceNearBy(
+                cvAranyBanya, getPos(surplusWorkers.back()));
         unitTo(cviTermel, resource, jatekos.Egysegek[surplusWorkers.back()]);
         surplusWorkers.pop_back();
     }
@@ -424,7 +438,7 @@ bool Agent::goForLoterStrategy() {
     }
 
     createWorkersForTargetCount(30);
-    reAllocateWorkers(0.3, 0.6, 0.1);
+    reAllocateWorkers(0.3, 0.6, 0.1, 0.0);
 
     const auto buildingSites = findBuildablePositions();
     if (!buildingSites.empty()) {
