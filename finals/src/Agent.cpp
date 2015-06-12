@@ -774,13 +774,10 @@ bool Agent::attackShit() {
                 archer);
         } else {
             if (archer.Viselkedes != cviMozog) {
-                log("archerts mozgatunk, mert %d-zett", int(archer.Viselkedes));
                 unitTo(
                     cviMozog,
                     getDiscoveredPointTowards(targetPosition),
                     archer);
-            } else {
-                log("archerts nem mozgatunk, mert mar mozog");
             }
         }
     }
