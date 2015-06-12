@@ -308,6 +308,30 @@ bool Agent::researchBuildingDefence() {
     return true;
 }
 
+bool Agent::researchFoodProduction() {
+    const int currentLevel = jatekos.Kepesseg.Szintek[cfKaja];
+    log("currentLevel for building defence is %d", currentLevel);
+    auto our = Resources::fromJatekos(jatekos);
+    auto cost = Cost::Kaja_Termeles(currentLevel + 1);
+
+    if (!(our - cost)) {
+        return false;
+    }
+
+    if (jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod != caNincs) {
+        log("Cannot research at this time, research is already under way");
+        return false;
+    }
+
+    Utasit_Fejleszt(cfKaja);
+    jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod = caVar;
+    jatekos.Eroforras.Kaja -= cost.food();
+    jatekos.Eroforras.Fa -= cost.wood();
+    jatekos.Eroforras.Vas -= cost.iron();
+    jatekos.Eroforras.Arany -= cost.gold();
+    return true;
+}
+
 bool Agent::researchArchery() {
     const int currentLevel = jatekos.Kepesseg.Szintek[cfIjasz];
     log("currentLevel for archery is %d", currentLevel);
@@ -674,6 +698,7 @@ bool Agent::exploreBoundariesStrategy() {
     const auto buildingSite = getClosestBuildingSite();
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
     while(researchResearch()) { }
+    while(researchFoodProduction()) { }
     while(conductBasicResearchTillReachQuantity(80)) { }
 
     return false;
@@ -755,6 +780,7 @@ bool Agent::defendBordersStrategy() {
     while (makeUnitIfPossible(ceLovas)) { }
     while (makeUnitIfPossible(ceIjasz)) {}
     while(researchBuildingDefence()) { }
+    while(researchFoodProduction()) { }
     while(researchArchery()) { }
     while(researchCavalry()) { }
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
