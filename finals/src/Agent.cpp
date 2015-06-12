@@ -96,17 +96,25 @@ Position Agent::getLocationOfResourceNearBy(Mezo mezo, Position near) const {
 void unitTo(Viselkedes v, Position position, const TEgyseg& unit) {
     const auto x = position.x;
     const auto y = position.y;
-    log("Unit %d was idle, sending (viselkedes %d) to %d, %d from %d, %d", int(unit.ID), int(v), x, y, unit.X, unit.Y);
     switch (v)
     {
     case cviTermel : 
-        Utasit_Termel(unit.ID, x, y);
+        if (unit.Viselkedes != cviTermel || unit.CelX != x || unit.CelY != y) {
+            log("Unit %d was idle, sending (viselkedes %d) to %d, %d from %d, %d", int(unit.ID), int(v), x, y, unit.X, unit.Y);
+            Utasit_Termel(unit.ID, x, y);
+        }
         break;
     case cviMozog :
-        Utasit_Mozog(unit.ID, x, y);
+        if (unit.Viselkedes != cviMozog || unit.CelX != x || unit.CelY != y) {
+            log("Unit %d was idle, sending (viselkedes %d) to %d, %d from %d, %d", int(unit.ID), int(v), x, y, unit.X, unit.Y);
+            Utasit_Mozog(unit.ID, x, y);
+        }
         break;
     case cviJaror :
-        Utasit_Jaror(unit.ID, x, y);
+        if (unit.Viselkedes != cviJaror || unit.CelX != x || unit.CelY != y) {
+            log("Unit %d was idle, sending (viselkedes %d) to %d, %d from %d, %d", int(unit.ID), int(v), x, y, unit.X, unit.Y);
+            Utasit_Jaror(unit.ID, x, y);
+        }
         break;
     default:
         assert(false);
