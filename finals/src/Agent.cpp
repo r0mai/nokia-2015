@@ -790,12 +790,15 @@ bool Agent::attackShit() {
         }
 
         Position nearOpponent = getPositionNearOpponentIfAny(
-            {archer.X, archer.Y}, 6);
+            {archer.X, archer.Y}, 2);
 
         if (nearOpponent.x >= 0) {
-            unitTo(
-                cviJaror,
-                nearOpponent,
+            //unitTo(
+             //   cviJaror,
+             //   nearOpponent,
+             //   archer);
+            unitTo(cviMozog,
+                {archer.X, archer.Y},
                 archer);
         } else {
             if (archer.Viselkedes != cviMozog) {
