@@ -418,7 +418,7 @@ bool Agent::getIronStrategy() {
 
 bool Agent::goForLoterStrategy() {
     log("loter");
-    if(getNumberOfBuildings(cvLoter) >= 2) {
+    if(getNumberOfBuildings(cvLoter) >= 2 && getNumberOfBuildings(cvAkademia)) {
         current_strategy = Strategy::ExploreBoundaries;
         return true;
     }
@@ -438,6 +438,7 @@ bool Agent::goForLoterStrategy() {
                     return distanceBetween(p1, basePos) <
                            distanceBetween(p2, basePos);
                 });
+        buildBuildingIfNotAlreadyPresent(cvAkademia, buildingSite);
         buildBuildingIfPossible(cvLoter, buildingSite);
     }
     return false;
