@@ -71,11 +71,10 @@ Position Agent::getExplorationPosition(Position near) const {
 Position Agent::getLocationOfResourceNearBy(Mezo mezo, Position near) const {
     std::uniform_int_distribution<int> uid(-jatekos.Kepesseg.LatEgy / 1.414,
                                            jatekos.Kepesseg.LatEgy / 1.414);
-    const int maxX = jatekos.XMax;
-    const int maxY = jatekos.YMax;
+    auto bound = getMainDiagonal();
     std::vector<Position> positions;
-    for(int x = 0; x < maxX ; ++x) {
-        for(int y = 0; y < maxY; ++y) {
+    for (int x = bound.first.x; x < bound.second.x; ++x) {
+        for (int y = bound.first.y; y < bound.second.y; ++y) {
             if (jatekos.Vilag[y][x].Objektum == mezo &&
                 unitsOnCell(Position{ x, y }) < (mezo == cvFa ? 2U : 4U) ) {
                 positions.push_back(Position{x, y});
@@ -475,10 +474,13 @@ bool Agent::defendBordersStrategy() {
         int distanceFromSide1 = distanceBetween(ofMyOnlySon, getPointTowardsSide1());
         int distanceFromSide2 = distanceBetween(ofMyOnlySon, getPointTowardsSide2());
         if (distanceFromSide1 > distanceFromSide2) {
-            unitTo(cviJaror, getPointTowardsSide1(), jatekos.Egysegek[freeArcher]);
+            auto pos = getLocationOfResourceNearBy(cvMezo, getPointTowardsSide1());
+
+            unitTo(cviJaror, pos, jatekos.Egysegek[freeArcher]);
         }
         else {
-            unitTo(cviJaror, getPointTowardsSide2(), jatekos.Egysegek[freeArcher]);
+            auto pos = getLocationOfResourceNearBy(cvMezo, getPointTowardsSide2());
+            unitTo(cviJaror, pos, jatekos.Egysegek[freeArcher]);
         }
     }
 
