@@ -308,11 +308,6 @@ bool Agent::researchBuildingDefence() {
 }
 
 bool Agent::conductBasicResearchTillReachQuantity(short q) {
-    log("--------------------------------------");
-    log("--------------------------------------");
-    log("----------------%d---------------------", jatekos.Kepesseg.KP);
-    log("--------------------------------------");
-    log("--------------------------------------");
     if (q <= jatekos.Kepesseg.KP) {
         log("We already have enough KP, not creating any more");
         return false;
@@ -334,6 +329,31 @@ bool Agent::conductBasicResearchTillReachQuantity(short q) {
     Utasit_Kutat(caVas, 10);
     log("Ordered research");
     jatekos.Eroforras.Vas -= cost.iron();
+    return true;
+}
+
+bool Agent::conductBasicResearchTillReachQuantityWithGold(short q) {
+    if (q <= jatekos.Kepesseg.KP) {
+        log("We already have enough KP, not creating any more");
+        return false;
+    }
+
+    auto our = Resources::fromJatekos(jatekos);
+    auto cost = Cost(Resources::gold(4), 400);
+
+    if (!(our - cost)) {
+        log("We don't have enough resources to create a KP");
+        return false;
+    }
+
+    if (jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod != caNincs) {
+        log("Cannot research at this time, research is already under way");
+        return false;
+    }
+
+    Utasit_Kutat(caArany, 4);
+    log("Ordered research");
+    jatekos.Eroforras.Arany -= cost.gold();
     return true;
 }
 
@@ -694,7 +714,8 @@ bool Agent::attackShit() {
         attackTarget %= 4;
     }
     while(researchBuildingDefence()) { }
-    while(conductBasicResearchTillReachQuantity(80)) { }
+    while (conductBasicResearchTillReachQuantityWithGold(80)) {
+    }
 
     return false;
 }
