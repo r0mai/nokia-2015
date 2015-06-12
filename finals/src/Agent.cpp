@@ -592,12 +592,10 @@ bool Agent::attackShit() {
 
     for (int index : getArchers()) {
         const auto& archer = jatekos.Egysegek[index];
-        if (!isPointInNegyed({archer.CelX, archer.CelY}, attackTarget)) {
-            unitTo(
-                cviJaror,
-                getDiscoveredPointTowards(getPointInNegyed(attackTarget)),
-                archer);
-        }
+        unitTo(
+            cviJaror,
+            getDiscoveredPointTowards(getPointInNegyed(attackTarget)),
+            archer);
     }
 
     return false;
