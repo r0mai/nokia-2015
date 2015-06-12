@@ -302,6 +302,11 @@ bool Agent::researchBuildingDefence() {
 }
 
 bool Agent::conductBasicResearchTillReachQuantity(short q) {
+    log("--------------------------------------");
+    log("--------------------------------------");
+    log("--------------------------------------");
+    log("--------------------------------------");
+    log("--------------------------------------");
     if (q >= jatekos.Kepesseg.KP) {
         return false;
     }
@@ -313,6 +318,7 @@ bool Agent::conductBasicResearchTillReachQuantity(short q) {
         return false;
     }
     Utasit_Kutat(caVas, 10);
+    jatekos.Eroforras.Vas -= cost.iron();
     return true;
 }
 
