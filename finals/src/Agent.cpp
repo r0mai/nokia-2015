@@ -136,6 +136,63 @@ std::vector<int> Agent::getFreeWorkers() const {
     return workers;
 }
 
+void Agent::reAllocateWorkers(float food, float wood, float iron) {
+    const auto numberOfWorkers = getUnitCount(ceParaszt);
+    const int neededForFood = numberOfWorkers * food;
+    const int neededForWood = numberOfWorkers * wood;
+    const int neededForIron = numberOfWorkers * iron;
+
+    auto actualFood = getUnitsProducingWare(caKaja);
+    auto actualWood = getUnitsProducingWare(caFa);
+    auto actualIron = getUnitsProducingWare(caVas);
+
+    const int foodDeficit = neededForFood - actualFood.size();
+    const int woodDeficit = neededForWood - actualWood.size();
+    const int ironDeficit = neededForIron - actualIron.size();
+
+    std::vector<int> surplusWorkers;
+
+    for(int i=0; i<-foodDeficit;++i) {
+        surplusWorkers.push_back(actualFood[i]);
+    }
+
+    for(int i=0; i<-woodDeficit;++i) {
+        surplusWorkers.push_back(actualWood[i]);
+    }
+
+    for(int i=0; i<-ironDeficit;++i) {
+        surplusWorkers.push_back(actualIron[i]);
+    }
+
+    // ------ //
+
+    auto getPos = [&](int p) {
+        Position pos{jatekos.Egysegek[p].X, jatekos.Egysegek[p].X};
+        return pos;
+    };
+
+    for (int i = 0; i < foodDeficit && !surplusWorkers.empty(); ++i) {
+        Position resource = getLocationOfResourceNearBy(
+                cvKaja, getPos(surplusWorkers.back()));
+        sendUnitTo(resource, jatekos.Egysegek[surplusWorkers.back()]);
+        surplusWorkers.pop_back();
+    }
+
+    for (int i = 0; i < woodDeficit && !surplusWorkers.empty(); ++i) {
+        Position resource = getLocationOfResourceNearBy(
+                cvFa, getPos(surplusWorkers.back()));
+        sendUnitTo(resource, jatekos.Egysegek[surplusWorkers.back()]);
+        surplusWorkers.pop_back();
+    }
+
+    for (int i = 0; i < ironDeficit && !surplusWorkers.empty(); ++i) {
+        Position resource = getLocationOfResourceNearBy(
+                cvVasBanya, getPos(surplusWorkers.back()));
+        sendUnitTo(resource, jatekos.Egysegek[surplusWorkers.back()]);
+        surplusWorkers.pop_back();
+    }
+}
+
 bool Agent::buildBuildingIfPossible(Mezo m, const Position& position) {
     auto our = Resources::fromJatekos(jatekos);
     auto cost = Cost::Building(m);
@@ -257,6 +314,17 @@ std::size_t Agent::getNumberOfUnitsProducingWare(Akcio akcio) const {
         }
     }
     return count;
+}
+
+std::vector<int> Agent::getUnitsProducingWare(Akcio akcio) const {
+    std::vector<int> units;
+    for (int i = 0; i < jatekos.EgySzam; ++i) {
+        const auto unit = jatekos.Egysegek[i];
+        if (unit.AkcioKod == akcio) {
+            units.push_back(i);
+        }
+    }
+    return units;
 }
 
 void Agent::getStuff(Mezo mezo) {
