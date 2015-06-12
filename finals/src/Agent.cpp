@@ -304,7 +304,7 @@ bool Agent::researchBuildingDefence() {
 bool Agent::conductBasicResearchTillReachQuantity(short q) {
     log("--------------------------------------");
     log("--------------------------------------");
-    log("--------------------------------------");
+    log("----------------%d---------------------", jatekos.Kepesseg.KP);
     log("--------------------------------------");
     log("--------------------------------------");
     if (q >= jatekos.Kepesseg.KP) {
