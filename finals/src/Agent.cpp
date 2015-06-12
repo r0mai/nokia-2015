@@ -384,6 +384,30 @@ bool Agent::conductBasicResearchTillReachQuantityWithGold(short q) {
     return true;
 }
 
+bool Agent::researchResearch() {
+    const int currentLevel = jatekos.Kepesseg.Szintek[cfKutGyors];
+    log("currentLevel for building defence is %d", currentLevel);
+    auto our = Resources::fromJatekos(jatekos);
+    auto cost = Cost::Kutatas_Gyorsitas(currentLevel + 1);
+
+    if (!(our - cost)) {
+        return false;
+    }
+
+    if (jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod != caNincs) {
+        log("Cannot research at this time, research is already under way");
+        return false;
+    }
+
+    Utasit_Fejleszt(cfKutGyors);
+    jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod = caVar;
+    jatekos.Eroforras.Kaja -= cost.food();
+    jatekos.Eroforras.Fa -= cost.wood();
+    jatekos.Eroforras.Vas -= cost.iron();
+    jatekos.Eroforras.Arany -= cost.gold();
+    return true;
+}
+
 Mezo Agent::buildingTypeForUnit(Egyseg e) {
     switch (e) {
         case ceParaszt:
@@ -589,6 +613,7 @@ bool Agent::goForLoterStrategy() {
     buildBuildingIfPossible(cvLoter, buildingSite);
     buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite);
 
+    while(researchResearch()) { }
     while(conductBasicResearchTillReachQuantity(80)) { }
     return false;
 }
@@ -621,6 +646,7 @@ bool Agent::exploreBoundariesStrategy() {
     }
     const auto buildingSite = getClosestBuildingSite();
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
+    while(researchResearch()) { }
     while(conductBasicResearchTillReachQuantity(80)) { }
 
     return false;
@@ -702,6 +728,7 @@ bool Agent::defendBordersStrategy() {
     while (makeUnitIfPossible(ceIjasz)) {}
     while(researchBuildingDefence()) { }
     while(researchCavalry()) { }
+    while(researchResearch()) { }
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
     while(conductBasicResearchTillReachQuantity(80)) { }
 
@@ -768,6 +795,7 @@ bool Agent::attackShit() {
     while (makeUnitIfPossible(ceLovas)) { }
     while(researchBuildingDefence()) { }
     while(researchCavalry()) { }
+    while(researchResearch()) { }
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
     while (conductBasicResearchTillReachQuantityWithGold(80)) { }
 

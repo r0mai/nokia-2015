@@ -57,6 +57,7 @@ private:
     bool researchCavalry();
     bool conductBasicResearchTillReachQuantity(short q);
     bool conductBasicResearchTillReachQuantityWithGold(short q);
+    bool researchResearch();
 
     void handleFreeWorkers();
 
