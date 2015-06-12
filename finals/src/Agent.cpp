@@ -650,7 +650,7 @@ bool Agent::attackShit() {
         return true;
     }
 
-    reAllocateWorkers(0.1, 0.6, 0.1, 0.2);
+    reAllocateWorkers(0.1, 0.5, 0.2, 0.2);
 
     if (attackTarget < 0) {
         // decide where to attack
