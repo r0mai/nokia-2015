@@ -531,7 +531,7 @@ bool Agent::goForLoterStrategy() {
         buildBuildingIfNotAlreadyPresent(cvAkademia, buildingSite);
         buildBuildingIfPossible(cvLoter, buildingSite);
     }
-    while(conductBasicResearchTillReachQuantity(20)) { }
+    while(conductBasicResearchTillReachQuantity(80)) { }
     return false;
 }
 
@@ -560,7 +560,7 @@ bool Agent::exploreBoundariesStrategy() {
 
     while (makeUnitIfPossible(ceIjasz)) {
     }
-    while(conductBasicResearchTillReachQuantity(20)) { }
+    while(conductBasicResearchTillReachQuantity(80)) { }
 
     return false;
 }
@@ -636,7 +636,7 @@ bool Agent::defendBordersStrategy() {
     }
 
     while (makeUnitIfPossible(ceIjasz)) {}
-    while(conductBasicResearchTillReachQuantity(20)) { }
+    while(conductBasicResearchTillReachQuantity(80)) { }
     while(researchBuildingDefence()) { }
 
     return false;
@@ -677,7 +677,7 @@ bool Agent::attackShit() {
                 archer);
         }
     }
-    while(conductBasicResearchTillReachQuantity(20)) { }
+    while(conductBasicResearchTillReachQuantity(80)) { }
     while(researchBuildingDefence()) { }
 
     return false;
