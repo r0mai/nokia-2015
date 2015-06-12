@@ -658,6 +658,9 @@ TKoteg Agent::getOrders(TJatekos jatekos) {
             case Strategy::DefendBorders:
                 strategy_changes = defendBordersStrategy();
                 break;
+            case Strategy::AttackShit:
+                strategy_changes = attackShit();
+                break;
             default:
                 strategy_changes = false;
                 break;
