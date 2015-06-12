@@ -677,6 +677,8 @@ bool Agent::attackShit() {
                 archer);
         }
     }
+    while(conductBasicResearchTillReachQuantity(20)) { }
+    while(researchBuildingDefence()) { }
 
     return false;
 }
