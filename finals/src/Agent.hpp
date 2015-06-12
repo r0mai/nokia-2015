@@ -52,6 +52,8 @@ private:
     bool makeUnitIfPossible(Egyseg e);
     void getStuff(Mezo mezo);
 
+    bool researchBuildingDefence();
+
     void handleFreeWorkers();
 
     void createWorkersForTargetCount(int targetCount);
