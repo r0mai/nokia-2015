@@ -143,19 +143,22 @@ std::vector<int> Agent::getFreeWorkers() const {
     return workers;
 }
 
-void Agent::reAllocateWorkers(float food, float wood, float iron) {
+void Agent::reAllocateWorkers(float food, float wood, float iron, float gold) {
     const auto numberOfWorkers = getUnitCount(ceParaszt);
     const int neededForFood = numberOfWorkers * food;
     const int neededForWood = numberOfWorkers * wood;
     const int neededForIron = numberOfWorkers * iron;
+    const int neededForGold = numberOfWorkers * gold;
 
     auto actualFood = getUnitsProducingWare(caKaja);
     auto actualWood = getUnitsProducingWare(caFa);
     auto actualIron = getUnitsProducingWare(caVas);
+    auto actualGold = getUnitsProducingWare(caArany);
 
     const int foodDeficit = neededForFood - actualFood.size();
     const int woodDeficit = neededForWood - actualWood.size();
     const int ironDeficit = neededForIron - actualIron.size();
+    const int goldDeficit = neededForGold - actualGold.size();
 
     std::vector<int> surplusWorkers = getFreeWorkers();
 
@@ -169,6 +172,10 @@ void Agent::reAllocateWorkers(float food, float wood, float iron) {
 
     for(int i=0; i<-ironDeficit;++i) {
         surplusWorkers.push_back(actualIron[i]);
+    }
+
+    for(int i=0; i<-goldDeficit;++i) {
+        surplusWorkers.push_back(actualGold[i]);
     }
 
     // ------ //
@@ -198,6 +205,13 @@ void Agent::reAllocateWorkers(float food, float wood, float iron) {
         unitTo(cviTermel, resource, jatekos.Egysegek[surplusWorkers.back()]);
         surplusWorkers.pop_back();
     }
+
+    for (int i = 0; i < goldDeficit && !surplusWorkers.empty(); ++i) {
+        Position resource = getLocationOfResourceNearBy(
+                cvAranyBanya, getPos(surplusWorkers.back()));
+        unitTo(cviTermel, resource, jatekos.Egysegek[surplusWorkers.back()]);
+        surplusWorkers.pop_back();
+    }
 }
 
 bool Agent::buildBuildingIfPossible(Mezo m, const Position& position) {
@@ -218,6 +232,13 @@ bool Agent::buildBuildingIfPossible(Mezo m, const Position& position) {
     jatekos.Eroforras.Vas -= cost.iron();
     jatekos.Eroforras.Arany -= cost.gold();
     return true;
+}
+
+bool Agent::buildBuildingIfNotAlreadyPresent(Mezo m, const Position& position) {
+    if(getNumberOfBuildings(m) == 1) {
+        return false;
+    }
+    return buildBuildingIfPossible(m, position);
 }
 
 bool Agent::makeUnitIfPossible(Egyseg e) {
@@ -241,6 +262,11 @@ bool Agent::makeUnitIfPossible(Egyseg e) {
     if (epuletIndex < 0) {
         return false;
     }
+
+    if(jatekos.EgySzam == jatekos.Kepesseg.PopLimit) {
+        return false;
+    }
+
     Utasit_Kepez(e, jatekos.Epuletek[epuletIndex].ID);
     jatekos.Epuletek[epuletIndex].AkcioKod = cuKepzes;
     jatekos.Eroforras.Kaja -= cost.food();
@@ -421,13 +447,13 @@ bool Agent::getIronStrategy() {
 
 bool Agent::goForLoterStrategy() {
     log("loter");
-    if(getNumberOfBuildings(cvLoter) >= 2) {
+    if(getNumberOfBuildings(cvLoter) >= 2 && getNumberOfBuildings(cvAkademia)) {
         current_strategy = Strategy::ExploreBoundaries;
         return true;
     }
 
     createWorkersForTargetCount(30);
-    reAllocateWorkers(0.3, 0.6, 0.1);
+    reAllocateWorkers(0.3, 0.6, 0.1, 0.0);
 
     const auto buildingSites = findBuildablePositions();
     if (!buildingSites.empty()) {
@@ -441,6 +467,7 @@ bool Agent::goForLoterStrategy() {
                     return distanceBetween(p1, basePos) <
                            distanceBetween(p2, basePos);
                 });
+        buildBuildingIfNotAlreadyPresent(cvAkademia, buildingSite);
         buildBuildingIfPossible(cvLoter, buildingSite);
     }
     return false;
@@ -501,6 +528,7 @@ bool Agent::defendBordersStrategy() {
             unitTo(cviJaror, pos, jatekos.Egysegek[freeArcher]);
         }
     }
+    reAllocateWorkers(0.1, 0.8, 0.1, 0.0);
 
     // Find tower locations closest to borders
     auto positions = findBuildablePositions();
@@ -535,7 +563,7 @@ bool Agent::defendBordersStrategy() {
         diagonal.second.y);
 
     for (const Position& p : positions) {
-        if (distanceFromDiagonal(p) > 5.) {
+        if (distanceFromDiagonal(p) > 8.) {
             break;
         }
 
@@ -703,9 +731,9 @@ std::pair<Position, Position> Agent::getMainDiagonal() const {
         switch (negyed())
         {
         case 0: return{ { 0, 0 }, { jatekos.XMax / 2 - 1, jatekos.YMax / 2 - 1 } };
-        case 1: return{ { jatekos.XMax / 2 - 1, 0 }, { jatekos.XMax, jatekos.YMax / 2 - 1 } };
-        case 2: return{ { 0, jatekos.YMax / 2 - 1 }, { jatekos.XMax / 2 - 1, jatekos.YMax } };
-        case 3: return{ { jatekos.XMax / 2 - 1, jatekos.YMax / 2 - 1 }, { jatekos.XMax, jatekos.YMax } };
+        case 1: return{ { jatekos.XMax / 2, 0 }, { jatekos.XMax, jatekos.YMax / 2 - 1 } };
+        case 2: return{ { 0, jatekos.YMax / 2 }, { jatekos.XMax / 2 - 1, jatekos.YMax } };
+        case 3: return{ { jatekos.XMax / 2, jatekos.YMax / 2 }, { jatekos.XMax, jatekos.YMax } };
         }
     }
     return{ { 0, 0 }, { jatekos.XMax, jatekos.YMax } };

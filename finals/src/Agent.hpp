@@ -48,6 +48,7 @@ private:
     Mezo buildingTypeForUnit(Egyseg e);
 
     bool buildBuildingIfPossible(Mezo m, const Position& position);
+    bool buildBuildingIfNotAlreadyPresent(Mezo m, const Position& position);
     bool makeUnitIfPossible(Egyseg e);
     void getStuff(Mezo mezo);
 
@@ -83,7 +84,7 @@ private:
     std::size_t getNumberOfUnitsProducingWare(Akcio akcio) const;
     std::vector<int> getUnitsProducingWare(Akcio akcio) const;
 
-    void reAllocateWorkers(float food, float wood, float iron);
+    void reAllocateWorkers(float food, float wood, float iron, float gold);
 
     bool isPieceTime() const;
 
