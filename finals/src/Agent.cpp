@@ -539,6 +539,7 @@ bool Agent::exploreBoundariesStrategy() {
 
     while (makeUnitIfPossible(ceIjasz)) {
     }
+    while(conductBasicResearchTillReachQuantity(20)) { }
 
     return false;
 }
@@ -614,6 +615,7 @@ bool Agent::defendBordersStrategy() {
     }
 
     while (makeUnitIfPossible(ceIjasz)) {}
+    while(conductBasicResearchTillReachQuantity(20)) { }
 
     return false;
 }
