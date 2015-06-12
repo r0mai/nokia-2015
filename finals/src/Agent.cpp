@@ -859,9 +859,6 @@ int Agent::getOpponentUnitIndexNear(const Position& p, int radius) {
 }
 
 int Agent::getOpponentBuildingIndexNear(const Position& p, int radius) {
-    int w = jatekos.XMax;
-    int h = jatekos.YMax;
-
     for (int i = 0; i < jatekos.MasEpSzam; ++i) {
         if (lengthSquared(
             p,
