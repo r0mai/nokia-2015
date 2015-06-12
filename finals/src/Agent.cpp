@@ -348,6 +348,14 @@ void Agent::handleFreeWorkers() {
     }
 }
 
+void Agent::createWorkersForTargetCount(int targetCount) {
+    int currentCount = getUnitCount(ceParaszt);
+
+    for (int i = currentCount; i <= targetCount; ++i) {
+        makeUnitIfPossible(ceParaszt);
+    }
+}
+
 bool Agent::areControlPointsVisible() const {
     const auto middle = getPointTowardsMiddle();
     const auto side1 = getPointTowardsSide1();
