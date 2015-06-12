@@ -286,6 +286,7 @@ bool Agent::makeUnitIfPossible(Egyseg e) {
 
 bool Agent::researchBuildingDefence() {
     const int currentLevel = jatekos.Kepesseg.Szintek[cfEpVed];
+    log("currentLevel for building defence is %d", currentLevel);
     auto our = Resources::fromJatekos(jatekos);
     auto cost = Cost::Epulet_Vedelem(currentLevel + 1);
 
@@ -308,16 +309,19 @@ bool Agent::conductBasicResearchTillReachQuantity(short q) {
     log("--------------------------------------");
     log("--------------------------------------");
     if (q >= jatekos.Kepesseg.KP) {
+        log("We already have enough KP, not creating any more");
         return false;
     }
 
     auto our = Resources::fromJatekos(jatekos);
     auto cost = Cost(Resources::iron(10), 400);
 
-    if(!(our - cost) ) {
+    if (!(our - cost)) {
+        log("We don't have enough resources to create a KP");
         return false;
     }
     Utasit_Kutat(caVas, 10);
+    log("Ordered research");
     jatekos.Eroforras.Vas -= cost.iron();
     return true;
 }
