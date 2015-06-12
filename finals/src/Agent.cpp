@@ -714,10 +714,12 @@ bool Agent::attackShit() {
                 nearOpponent,
                 archer);
         } else {
-            unitTo(
-                cviMozog,
-                getDiscoveredPointTowards(targetPosition),
-                archer);
+            if (archer.Viselkedes != cviMozog) {
+                unitTo(
+                    cviMozog,
+                    getDiscoveredPointTowards(targetPosition),
+                    archer);
+            }
         }
     }
 
