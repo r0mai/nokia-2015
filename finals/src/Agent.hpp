@@ -54,6 +54,7 @@ private:
     void getStuff(Mezo mezo);
 
     bool researchBuildingDefence();
+    bool researchCavalry();
     bool conductBasicResearchTillReachQuantity(short q);
     bool conductBasicResearchTillReachQuantityWithGold(short q);
 
