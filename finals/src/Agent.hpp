@@ -33,6 +33,7 @@ private:
 
     // same format as how negyed returns
     int attackTarget = -1;
+    int attackStartedOn = -1;
 
     // returns true, if strategy changes
     bool getFoodStrategy();

@@ -747,6 +747,7 @@ bool Agent::attackShit() {
     if (attackTarget < 0) {
         // decide where to attack
         attackTarget = (negyed() + 1) % 4; // TODO lets discuss this
+        attackStartedOn = jatekos.Ido;
     }
 
     auto targetPosition = getPointInNegyed(attackTarget);
@@ -781,9 +782,10 @@ bool Agent::attackShit() {
         }
     }
 
-    if (goNext) {
+    if (goNext || jatekos.Ido - attackStartedOn > 3000) {
         attackTarget++;
         attackTarget %= 4;
+        attackStartedOn = jatekos.Ido;
     }
 
     const auto buildingSite = getClosestBuildingSite();
