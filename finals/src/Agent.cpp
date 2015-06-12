@@ -105,7 +105,7 @@ void unitTo(Viselkedes v, Position position, const TEgyseg& unit) {
         }
         break;
     case cviMozog :
-        if (unit.Viselkedes != cviMozog || unit.CelX != x || unit.CelY != y) {
+        if ((unit.Viselkedes != cviMozog || unit.CelX != x || unit.CelY != y) && (unit.X != x && unit.Y != y)) {
             log("Unit %d was idle, sending (viselkedes %d) to %d, %d from %d, %d", int(unit.ID), int(v), x, y, unit.X, unit.Y);
             Utasit_Mozog(unit.ID, x, y);
         }
