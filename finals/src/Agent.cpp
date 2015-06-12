@@ -1229,10 +1229,10 @@ Position Agent::getPointTowardsSide1_forTower() const {
     auto xMax = jatekos.XMax;
     auto yMax = jatekos.YMax;
     switch (negyed()) {
-        case 0: return Position{xMax/3 - 1, 0};
-        case 1: return Position{xMax - 1, yMax/3 - 1};
-        case 2: return Position{0, yMax/3};
-        case 3: return Position{xMax - 1, yMax/3};
+        case 0: return Position{xMax/3, 0};
+        case 1: return Position{xMax - 1, yMax/3};
+        case 2: return Position{0, yMax/2 + yMax/6};
+        case 3: return Position{xMax - 1, yMax/2 + yMax/6};
     }
     assert(false);
     return Position{};
@@ -1242,10 +1242,10 @@ Position Agent::getPointTowardsSide2_forTower() const {
     auto xMax = jatekos.XMax;
     auto yMax = jatekos.YMax;
     switch (negyed()) {
-        case 0: return Position{0, yMax/3 - 1};
-        case 1: return Position{xMax/3, 0};
-        case 2: return Position{xMax/3 - 1, yMax - 1};
-        case 3: return Position{xMax/3, yMax - 1};
+        case 0: return Position{0, yMax/3};
+        case 1: return Position{xMax/2 + xMax/6, 0};
+        case 2: return Position{xMax/3, yMax - 1};
+        case 3: return Position{xMax/2 + xMax/6, yMax - 1};
     }
     assert(false);
     return Position{};
