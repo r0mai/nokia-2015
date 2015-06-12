@@ -636,8 +636,8 @@ bool Agent::defendBordersStrategy() {
     }
 
     while (makeUnitIfPossible(ceIjasz)) {}
-    while(conductBasicResearchTillReachQuantity(80)) { }
     while(researchBuildingDefence()) { }
+    while(conductBasicResearchTillReachQuantity(80)) { }
 
     return false;
 }
@@ -677,8 +677,8 @@ bool Agent::attackShit() {
                 archer);
         }
     }
-    while(conductBasicResearchTillReachQuantity(80)) { }
     while(researchBuildingDefence()) { }
+    while(conductBasicResearchTillReachQuantity(80)) { }
 
     return false;
 }
