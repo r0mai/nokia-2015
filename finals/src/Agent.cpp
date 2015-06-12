@@ -705,7 +705,9 @@ bool Agent::defendBordersStrategy() {
     // Find tower locations closest to borders
     auto positions = findBuildablePositions();
 
-    auto diagonal = std::make_pair(getPointTowardsSide1(), getPointTowardsSide2());
+    auto diagonal = std::make_pair(
+        getPointTowardsSide1_forTower(),
+        getPointTowardsSide2_forTower());
 
     auto distanceFromDiagonal = [&](const Position& p) {
         auto v = diagonal.first;
@@ -1186,6 +1188,32 @@ Position Agent::getPointTowardsSide2() const {
         case 1: return Position{xMax/2, 0};
         case 2: return Position{xMax/2 - 1, yMax - 1};
         case 3: return Position{xMax/2, yMax - 1};
+    }
+    assert(false);
+    return Position{};
+}
+
+Position Agent::getPointTowardsSide1_forTower() const {
+    auto xMax = jatekos.XMax;
+    auto yMax = jatekos.YMax;
+    switch (negyed()) {
+        case 0: return Position{xMax/3 - 1, 0};
+        case 1: return Position{xMax - 1, yMax/3 - 1};
+        case 2: return Position{0, yMax/3};
+        case 3: return Position{xMax - 1, yMax/3};
+    }
+    assert(false);
+    return Position{};
+}
+
+Position Agent::getPointTowardsSide2_forTower() const {
+    auto xMax = jatekos.XMax;
+    auto yMax = jatekos.YMax;
+    switch (negyed()) {
+        case 0: return Position{0, yMax/3 - 1};
+        case 1: return Position{xMax/3, 0};
+        case 2: return Position{xMax/3 - 1, yMax - 1};
+        case 3: return Position{xMax/3, yMax - 1};
     }
     assert(false);
     return Position{};
