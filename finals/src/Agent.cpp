@@ -505,6 +505,7 @@ bool Agent::defendBordersStrategy() {
             unitTo(cviJaror, pos, jatekos.Egysegek[freeArcher]);
         }
     }
+    reAllocateWorkers(0.1, 0.8, 0.1);
 
     // Find tower locations closest to borders
     auto positions = findBuildablePositions();
@@ -539,7 +540,7 @@ bool Agent::defendBordersStrategy() {
         diagonal.second.y);
 
     for (const Position& p : positions) {
-        if (distanceFromDiagonal(p) > 5.) {
+        if (distanceFromDiagonal(p) > 8.) {
             break;
         }
 
