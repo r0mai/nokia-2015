@@ -294,6 +294,11 @@ bool Agent::researchBuildingDefence() {
         return false;
     }
 
+    if (jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod != caNincs) {
+        log("Cannot research at this time, research is already under way");
+        return false;
+    }
+
     Utasit_Fejleszt(cfEpVed);
     jatekos.Eroforras.Kaja -= cost.food();
     jatekos.Eroforras.Fa -= cost.wood();
@@ -632,6 +637,7 @@ bool Agent::defendBordersStrategy() {
 
     while (makeUnitIfPossible(ceIjasz)) {}
     while(conductBasicResearchTillReachQuantity(20)) { }
+    while(researchBuildingDefence()) { }
 
     return false;
 }
