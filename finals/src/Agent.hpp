@@ -31,6 +31,9 @@ private:
         AttackShit
     } current_strategy = Strategy::GetFood;
 
+    // same format as how negyed returns
+    int attackTarget = -1;
+
     // returns true, if strategy changes
     bool getFoodStrategy();
     bool getWoodStrategy();
@@ -55,6 +58,13 @@ private:
     int getBuildingIndex(Mezo m) const;
     std::size_t getNumberOfBuildings(Mezo m) const;
     short getBuildingId(Mezo m);
+
+    /* +--->x
+     * |0 1
+     * |2 3
+     * y
+     */
+
     int negyed() const;
     int getUnitCount(Egyseg e);
 
@@ -69,6 +79,7 @@ private:
     Position getLocationOfResourceNearBy(Mezo mezo, Position near) const;
     std::vector<int> getFreeWorkers() const;
     std::vector<int> getFreeArchers() const;
+    std::vector<int> getArchers() const;
     std::size_t getNumberOfUnitsProducingWare(Akcio akcio) const;
     std::vector<int> getUnitsProducingWare(Akcio akcio) const;
 
@@ -80,6 +91,9 @@ private:
     bool isBuildablePosition(const Position& position) const;
     std::vector<Position> getBoundaryPositions() const;
 
+    bool isPointInNegyed(const Position& p, int negyed);
+    Position getPointInNegyed(int negyed);
+    Position getDiscoveredPointTowards(const Position& to);
 
     Position getPointTowardsMiddle() const;
     Position getPointTowardsSide1() const;

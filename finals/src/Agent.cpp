@@ -123,6 +123,16 @@ std::vector<int> Agent::getFreeArchers() const {
     return archers;
 }
 
+std::vector<int> Agent::getArchers() const {
+    std::vector<int> archers;
+    for (int i=0; i<jatekos.EgySzam; ++i) {
+        if (jatekos.Egysegek[i].Tipus == ceIjasz) {
+            archers.push_back(i);
+        }
+    }
+    return archers;
+}
+
 std::vector<int> Agent::getFreeWorkers() const {
     std::vector<int> workers;
     for (int i = 0; i < jatekos.EgySzam; ++i) {
@@ -547,6 +557,20 @@ bool Agent::attackShit() {
         return true;
     }
 
+    if (attackTarget < 0) {
+        // decide where to attack
+        attackTarget = (negyed() + 1) % 4; // TODO lets discuss this
+    }
+
+    for (int index : getArchers()) {
+        const auto& archer = jatekos.Egysegek[index];
+        if (!isPointInNegyed({archer.CelX, archer.CelY}, attackTarget)) {
+            unitTo(
+                cviJaror,
+                getDiscoveredPointTowards(getPointInNegyed(attackTarget)),
+                archer);
+        }
+    }
 
     return false;
 }
@@ -708,6 +732,43 @@ std::vector<Position> Agent::getBoundaryPositions() const {
         }
     }
     return res;
+}
+
+bool Agent::isPointInNegyed(const Position& p, int negyed) {
+    switch (negyed) {
+        case 0: return p.x < jatekos.XMax / 2 && p.y < jatekos.XMax / 2;
+        case 1: return p.x > jatekos.XMax / 2 && p.y < jatekos.XMax / 2;
+        case 2: return p.x < jatekos.XMax / 2 && p.y > jatekos.XMax / 2;
+        case 3: return p.x > jatekos.XMax / 2 && p.y > jatekos.XMax / 2;
+    }
+    return false;
+}
+
+Position Agent::getPointInNegyed(int negyed) {
+    switch (negyed) {
+        case 0: Position{10, 10};
+        case 1: Position{90, 10};
+        case 2: Position{10, 90};
+        case 3: Position{90, 90};
+    }
+    return Position{0, 0};
+}
+
+Position Agent::getDiscoveredPointTowards(const Position& to) {
+    // TODO what if to is discovered, but is not a mezo?
+    if (jatekos.Vilag[to.y][to.x].Objektum == cvMezo) {
+        return to;
+    }
+
+    auto positions = getBoundaryPositions();
+    if (positions.empty()) {
+        return to; // TODO??
+    }
+    return *std::min_element(positions.begin(), positions.end(),
+        [&](const Position& p1, const Position& p2) {
+            return lengthSquared(p1, to) < lengthSquared(p2, to);
+        }
+    );
 }
 
 std::vector<Position> Agent::findBuildablePositions() const {

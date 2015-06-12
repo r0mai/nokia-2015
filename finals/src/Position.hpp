@@ -51,4 +51,9 @@ PositionBase<T> operator*(T f, const PositionBase<T>& p1) {
     return {p1.x * f, p1.y * f};
 }
 
+template<class T>
+PositionBase<T> operator/(const PositionBase<T>& p1, T f) {
+    return {p1.x/f, p1.y/f};
+}
+
 }
