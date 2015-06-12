@@ -53,6 +53,7 @@ private:
     void getStuff(Mezo mezo);
 
     bool researchBuildingDefence();
+    bool conductBasicResearchTillReachQuantity(short q);
 
     void handleFreeWorkers();
 
