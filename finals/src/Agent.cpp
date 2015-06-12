@@ -760,7 +760,7 @@ bool Agent::attackShit() {
         }
     }
 
-    if (closesArcherSquared < 4) {
+    if (closesArcherSquared <= 9) {
         attackTarget++;
         attackTarget %= 4;
     }
