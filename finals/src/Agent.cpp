@@ -418,7 +418,7 @@ bool Agent::goForLoterStrategy() {
     }
 
     createWorkersForTargetCount(30);
-    reAllocateWorkers(0.2, 0.6, 0.2);
+    reAllocateWorkers(0.3, 0.6, 0.1);
 
     const auto buildingSites = findBuildablePositions();
     if (!buildingSites.empty()) {
