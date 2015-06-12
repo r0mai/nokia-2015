@@ -667,9 +667,9 @@ std::pair<Position, Position> Agent::getMainDiagonal() const {
         switch (negyed())
         {
         case 0: return{ { 0, 0 }, { jatekos.XMax / 2 - 1, jatekos.YMax / 2 - 1 } };
-        case 1: return{ { jatekos.XMax / 2 - 1, 0 }, { jatekos.XMax, jatekos.YMax / 2 - 1 } };
-        case 2: return{ { 0, jatekos.YMax / 2 - 1 }, { jatekos.XMax / 2 - 1, jatekos.YMax } };
-        case 3: return{ { jatekos.XMax / 2 - 1, jatekos.YMax / 2 - 1 }, { jatekos.XMax, jatekos.YMax } };
+        case 1: return{ { jatekos.XMax / 2, 0 }, { jatekos.XMax, jatekos.YMax / 2 - 1 } };
+        case 2: return{ { 0, jatekos.YMax / 2 }, { jatekos.XMax / 2 - 1, jatekos.YMax } };
+        case 3: return{ { jatekos.XMax / 2, jatekos.YMax / 2 }, { jatekos.XMax, jatekos.YMax } };
         }
     }
     return{ { 0, 0 }, { jatekos.XMax, jatekos.YMax } };
