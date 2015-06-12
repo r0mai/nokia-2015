@@ -505,7 +505,7 @@ bool Agent::defendBordersStrategy() {
             unitTo(cviJaror, pos, jatekos.Egysegek[freeArcher]);
         }
     }
-    reAllocateWorkers(0.1, 0.8, 0.1);
+    reAllocateWorkers(0.1, 0.8, 0.1, 0.0);
 
     // Find tower locations closest to borders
     auto positions = findBuildablePositions();
