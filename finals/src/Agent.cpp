@@ -328,6 +328,7 @@ bool Agent::conductBasicResearchTillReachQuantity(short q) {
     }
 
     Utasit_Kutat(caVas, 10);
+    jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod = caVar;
     log("Ordered research");
     jatekos.Eroforras.Vas -= cost.iron();
     return true;
@@ -354,6 +355,7 @@ bool Agent::conductBasicResearchTillReachQuantityWithGold(short q) {
 
     Utasit_Kutat(caArany, 4);
     log("Ordered research");
+    jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod = caVar;
     jatekos.Eroforras.Arany -= cost.gold();
     return true;
 }
