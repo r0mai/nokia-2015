@@ -695,7 +695,7 @@ int Agent::getOpponentUnitIndexNear(const Position& p, int radius) {
     for (int i = 0; i < jatekos.MasEgySzam; ++i) {
         if (lengthSquared(
             p,
-            Position{jatekos.MasEgysegek[i].X, jatekos.MasEgysegek[i].Y}) <
+            Position{jatekos.MasEgysegek[i].X, jatekos.MasEgysegek[i].Y}) <=
             radius*radius)
         {
             return i;
@@ -711,7 +711,7 @@ int Agent::getOpponentBuildingIndexNear(const Position& p, int radius) {
     for (int i = 0; i < jatekos.MasEpSzam; ++i) {
         if (lengthSquared(
             p,
-            Position{jatekos.MasEpuletek[i].X, jatekos.MasEpuletek[i].Y}) <
+            Position{jatekos.MasEpuletek[i].X, jatekos.MasEpuletek[i].Y}) <=
             radius*radius)
         {
             return i;
