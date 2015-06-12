@@ -592,6 +592,8 @@ bool Agent::exploreBoundariesStrategy() {
 
     while (makeUnitIfPossible(ceIjasz)) {
     }
+    const auto buildingSite = getClosestBuildingSite();
+    while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
     while(conductBasicResearchTillReachQuantity(80)) { }
 
     return false;
@@ -667,8 +669,11 @@ bool Agent::defendBordersStrategy() {
         }
     }
 
+    const auto buildingSite = getClosestBuildingSite();
+
     while (makeUnitIfPossible(ceIjasz)) {}
     while(researchBuildingDefence()) { }
+    while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
     while(conductBasicResearchTillReachQuantity(80)) { }
 
     return false;
@@ -725,9 +730,12 @@ bool Agent::attackShit() {
         attackTarget++;
         attackTarget %= 4;
     }
+
+    const auto buildingSite = getClosestBuildingSite();
+
     while(researchBuildingDefence()) { }
-    while (conductBasicResearchTillReachQuantityWithGold(80)) {
-    }
+    while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
+    while (conductBasicResearchTillReachQuantityWithGold(80)) { }
 
     return false;
 }
