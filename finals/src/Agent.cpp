@@ -595,7 +595,7 @@ bool Agent::areControlPointsVisible() const {
 
 bool Agent::getFoodStrategy() {
     log("getFood");
-    if (getNumberOfUnitsProducingWare(caKaja) >= 8) {
+    if (getNumberOfUnitsProducingWare(caKaja) >= 12) {
         current_strategy = Strategy::GetWood;
         return true;
     }
@@ -605,7 +605,8 @@ bool Agent::getFoodStrategy() {
 
 bool Agent::getWoodStrategy() {
     log("getwood");
-    if (getNumberOfUnitsProducingWare(caFa) >= 10) {
+    if (getNumberOfUnitsProducingWare(caFa) >= 4) {
+        reAllocateWorkers(0.5, 0.5, 0.0, 0.0);
         current_strategy = Strategy::GetIron;
         return true;
     }
