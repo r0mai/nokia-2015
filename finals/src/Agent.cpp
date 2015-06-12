@@ -785,7 +785,7 @@ bool Agent::attackShit() {
         }
 
         Position nearOpponent = getPositionNearOpponentIfAny(
-            {archer.X, archer.Y}, 2);
+            {archer.X, archer.Y}, archer.Tipus == ceIjasz ? 2 : 1);
 
         if (nearOpponent.x >= 0) {
             //unitTo(
