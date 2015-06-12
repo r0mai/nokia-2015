@@ -1160,14 +1160,17 @@ std::vector<Position> Agent::findBuildablePositions() const {
 }
 
 bool Agent::isBuildablePosition(const Position& position) const {
-    if (position.x <= 0 || position.y <= 0 ||
-        position.x >= jatekos.XMax-1 || position.y >= jatekos.YMax-1)
+    if (position.x < 0 || position.y < 0 ||
+        position.x >= jatekos.XMax || position.y >= jatekos.YMax)
     {
         return false;
     }
 
-    for (int x = position.x - 1; x <= position.x + 1; ++x) {
-        for (int y = position.y - 1; y <= position.y + 1; ++y) {
+    auto maxX = jatekos.XMax;
+    auto maxY = jatekos.YMax;
+
+    for (int x = std::max(0, position.x - 1); x <= std::min(position.x + 1, maxX-1); ++x) {
+        for (int y = std::max(0, position.y - 1); y <= std::min(position.y + 1, maxY); ++y) {
             if (jatekos.Vilag[y][x].Objektum != cvMezo) {
                 return false;
             }
