@@ -357,7 +357,9 @@ void Agent::createWorkersForTargetCount(int targetCount) {
     int currentCount = getUnitCount(ceParaszt);
 
     for (int i = currentCount; i <= targetCount; ++i) {
-        makeUnitIfPossible(ceParaszt);
+        if (!makeUnitIfPossible(ceParaszt)) {
+            break;
+        }
     }
 }
 
