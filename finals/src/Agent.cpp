@@ -105,7 +105,7 @@ void unitTo(Viselkedes v, Position position, const TEgyseg& unit) {
         }
         break;
     case cviMozog :
-        if (unit.Viselkedes != cviMozog || unit.CelX != x || unit.CelY != y) {
+        if ((unit.Viselkedes != cviMozog || unit.CelX != x || unit.CelY != y) && (unit.X != x && unit.Y != y)) {
             log("Unit %d was idle, sending (viselkedes %d) to %d, %d from %d, %d", int(unit.ID), int(v), x, y, unit.X, unit.Y);
             Utasit_Mozog(unit.ID, x, y);
         }
@@ -286,6 +286,7 @@ bool Agent::makeUnitIfPossible(Egyseg e) {
 
 bool Agent::researchBuildingDefence() {
     const int currentLevel = jatekos.Kepesseg.Szintek[cfEpVed];
+    log("currentLevel for building defence is %d", currentLevel);
     auto our = Resources::fromJatekos(jatekos);
     auto cost = Cost::Epulet_Vedelem(currentLevel + 1);
 
@@ -302,17 +303,32 @@ bool Agent::researchBuildingDefence() {
 }
 
 bool Agent::conductBasicResearchTillReachQuantity(short q) {
-    if (q >= jatekos.Kepesseg.KP) {
+    log("--------------------------------------");
+    log("--------------------------------------");
+    log("----------------%d---------------------", jatekos.Kepesseg.KP);
+    log("--------------------------------------");
+    log("--------------------------------------");
+    if (q <= jatekos.Kepesseg.KP) {
+        log("We already have enough KP, not creating any more");
         return false;
     }
 
     auto our = Resources::fromJatekos(jatekos);
     auto cost = Cost(Resources::iron(10), 400);
 
-    if(!(our - cost) ) {
+    if (!(our - cost)) {
+        log("We don't have enough resources to create a KP");
         return false;
     }
+
+    if (jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod != caNincs) {
+        log("Cannot research at this time, research is already under way");
+        return false;
+    }
+
     Utasit_Kutat(caVas, 10);
+    log("Ordered research");
+    jatekos.Eroforras.Vas -= cost.iron();
     return true;
 }
 
@@ -627,6 +643,8 @@ bool Agent::attackShit() {
         current_strategy = Strategy::DefendBorders;
         return true;
     }
+
+    reAllocateWorkers(0.1, 0.6, 0.1, 0.2);
 
     if (attackTarget < 0) {
         // decide where to attack
