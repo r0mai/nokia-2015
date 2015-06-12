@@ -635,6 +635,9 @@ bool Agent::goForLoterStrategy() {
     reAllocateWorkers(0.3, 0.6, 0.1, 0.0);
 
     const auto buildingSite = getClosestBuildingSite();
+    if (getNumberOfBuildings(cvAkademia)) {
+        while (researchResearch()) { }
+    }
     buildBuildingIfNotAlreadyPresent(cvAkademia, buildingSite);
     buildBuildingIfPossible(cvLoter, buildingSite);
 
@@ -667,6 +670,7 @@ bool Agent::exploreBoundariesStrategy() {
     while (makeUnitIfPossible(ceLovas)) { }
     while (makeUnitIfPossible(ceIjasz)) {
     }
+    createWorkersForTargetCount(30);
     const auto buildingSite = getClosestBuildingSite();
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
     while(researchResearch()) { }
@@ -701,6 +705,7 @@ bool Agent::defendBordersStrategy() {
             unitTo(cviJaror, pos, jatekos.Egysegek[freeArcher]);
         }
     }
+    createWorkersForTargetCount(30);
     reAllocateWorkers(0.2, 0.65, 0.15, 0.0);
 
     // Find tower locations closest to borders
