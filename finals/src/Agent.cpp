@@ -77,7 +77,7 @@ Position Agent::getLocationOfResourceNearBy(Mezo mezo, Position near) const {
     for(int x = 0; x < maxX ; ++x) {
         for(int y = 0; y < maxY; ++y) {
             if (jatekos.Vilag[y][x].Objektum == mezo &&
-                unitsOnCell(Position{x, y}) < 4) {
+                unitsOnCell(Position{ x, y }) < (mezo == cvFa ? 2U : 4U) ) {
                 positions.push_back(Position{x, y});
             }
         }
@@ -94,25 +94,23 @@ Position Agent::getLocationOfResourceNearBy(Mezo mezo, Position near) const {
     return *it;
 }
 
-void sendUnitTo(Position position, const TEgyseg& unit) {
+void unitTo(Viselkedes v, Position position, const TEgyseg& unit) {
     const auto x = position.x;
     const auto y = position.y;
-    if(unit.AkcioKod == caNincs) {
-        log("Unit %d was idle, sending to %d, %d from %d, %d", int(unit.ID), x, y, unit.X, unit.Y);
+    log("Unit %d was idle, sending (viselkedes %d) to %d, %d from %d, %d", int(unit.ID), int(v), x, y, unit.X, unit.Y);
+    switch (v)
+    {
+    case cviTermel : 
         Utasit_Termel(unit.ID, x, y);
-    } else {
-        log("Unit %d was already in movement", int(unit.ID));
-    }
-}
-
-void moveUnitTo(Position position, const TEgyseg& unit) {
-    const auto x = position.x;
-    const auto y = position.y;
-    if(unit.AkcioKod == caNincs) {
-        log("Unit %d was idle, sending to %d, %d", int(unit.ID), x, y);
+        break;
+    case cviMozog :
         Utasit_Mozog(unit.ID, x, y);
-    } else {
-        log("Unit %d was already in movement", int(unit.ID));
+        break;
+    case cviJaror :
+        Utasit_Jaror(unit.ID, x, y);
+        break;
+    default:
+        assert(false);
     }
 }
 
@@ -174,21 +172,21 @@ void Agent::reAllocateWorkers(float food, float wood, float iron) {
     for (int i = 0; i < foodDeficit && !surplusWorkers.empty(); ++i) {
         Position resource = getLocationOfResourceNearBy(
                 cvKaja, getPos(surplusWorkers.back()));
-        sendUnitTo(resource, jatekos.Egysegek[surplusWorkers.back()]);
+        unitTo(cviTermel, resource, jatekos.Egysegek[surplusWorkers.back()]);
         surplusWorkers.pop_back();
     }
 
     for (int i = 0; i < woodDeficit && !surplusWorkers.empty(); ++i) {
         Position resource = getLocationOfResourceNearBy(
                 cvFa, getPos(surplusWorkers.back()));
-        sendUnitTo(resource, jatekos.Egysegek[surplusWorkers.back()]);
+        unitTo(cviTermel, resource, jatekos.Egysegek[surplusWorkers.back()]);
         surplusWorkers.pop_back();
     }
 
     for (int i = 0; i < ironDeficit && !surplusWorkers.empty(); ++i) {
         Position resource = getLocationOfResourceNearBy(
                 cvVasBanya, getPos(surplusWorkers.back()));
-        sendUnitTo(resource, jatekos.Egysegek[surplusWorkers.back()]);
+        unitTo(cviTermel, resource, jatekos.Egysegek[surplusWorkers.back()]);
         surplusWorkers.pop_back();
     }
 }
@@ -334,7 +332,7 @@ void Agent::getStuff(Mezo mezo) {
                                         jatekos.Egysegek[freeWorker].Y};
         Position food = getLocationOfResourceNearBy(mezo, ofMyOnlySon);
         std::cerr << "Found food at: " << food.x << " " << food.y << std::endl;
-        sendUnitTo(food, jatekos.Egysegek[freeWorker]);
+        unitTo(cviTermel, food, jatekos.Egysegek[freeWorker]);
     }
 
     while (makeUnitIfPossible(ceParaszt)) {}
@@ -346,7 +344,7 @@ void Agent::handleFreeWorkers() {
                                         jatekos.Egysegek[freeWorker].Y};
         Position gold = getLocationOfResourceNearBy(cvAranyBanya, ofMyOnlySon);
         std::cerr << "Found gold at: " << gold.x << " " << gold.y << std::endl;
-        sendUnitTo(gold, jatekos.Egysegek[freeWorker]);
+        unitTo(cviTermel, gold, jatekos.Egysegek[freeWorker]);
     }
 }
 
@@ -423,19 +421,25 @@ bool Agent::goForLoterStrategy() {
 
 bool Agent::exploreBoundariesStrategy() {
     log("exploreBoundaries");
-
+    bool seeAllTheSafePlaces = false;
     for (const auto& freeArcher : getFreeArchers()) {
         Position ofMyOnlySon = Position{jatekos.Egysegek[freeArcher].X,
                                         jatekos.Egysegek[freeArcher].Y};
         auto nextPos = getExplorationPosition(ofMyOnlySon);
-        if (nextPos.x != -1){
-            moveUnitTo(nextPos, jatekos.Egysegek[freeArcher]);
+        if (nextPos.x != -1) {
+            unitTo(cviMozog, nextPos, jatekos.Egysegek[freeArcher]);
         }
         else {
-            current_strategy = Strategy::DefendBorders;
-            return true;
+            seeAllTheSafePlaces = true;
+            auto pos = getLocationOfResourceNearBy(cvMezo, rand() % 2 ? getPointTowardsSide1() : getPointTowardsSide2());
+
+            unitTo(cviMozog, pos, jatekos.Egysegek[freeArcher]);
         }
 
+    }
+    if (seeAllTheSafePlaces) {
+        current_strategy = Strategy::DefendBorders;
+        return true;
     }
 
     while (makeUnitIfPossible(ceIjasz)) {
@@ -446,7 +450,19 @@ bool Agent::exploreBoundariesStrategy() {
 
 bool Agent::defendBordersStrategy() {
     log("defendBorders");
-
+    // jarorozes!!
+    for (const auto& freeArcher : getFreeArchers()) {
+        Position ofMyOnlySon = Position{ jatekos.Egysegek[freeArcher].X,
+            jatekos.Egysegek[freeArcher].Y };
+        int distanceFromSide1 = distanceBetween(ofMyOnlySon, getPointTowardsSide1());
+        int distanceFromSide2 = distanceBetween(ofMyOnlySon, getPointTowardsSide2());
+        if (distanceFromSide1 > distanceFromSide2) {
+            unitTo(cviJaror, getPointTowardsSide1(), jatekos.Egysegek[freeArcher]);
+        }
+        else {
+            unitTo(cviJaror, getPointTowardsSide2(), jatekos.Egysegek[freeArcher]);
+        }
+    }
 
     // Find tower locations closest to borders
     auto positions = findBuildablePositions();
