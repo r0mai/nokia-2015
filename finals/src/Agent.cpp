@@ -678,6 +678,9 @@ bool Agent::attackShit() {
 }
 
 void Agent::attackOpponentUnit(int ourIndex, int opponentIndex) {
+    log("Tamad unit id(%d) -/-> id(%d)",
+        jatekos.Egysegek[ourIndex].ID,
+        jatekos.MasEgysegek[opponentIndex].ID);
     Utasit_Tamad(
         jatekos.Egysegek[ourIndex].ID,
         jatekos.MasEgysegek[opponentIndex].ID,
@@ -685,6 +688,9 @@ void Agent::attackOpponentUnit(int ourIndex, int opponentIndex) {
 }
 
 void Agent::attackOpponentBuilding(int ourIndex, int opponentIndex) {
+    log("Tamad building id(%d) -/-> id(%d)",
+        jatekos.Egysegek[ourIndex].ID,
+        jatekos.MasEpuletek[opponentIndex].ID);
     Utasit_Tamad(
         jatekos.Egysegek[ourIndex].ID,
         jatekos.MasEpuletek[opponentIndex].ID,
