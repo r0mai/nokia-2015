@@ -300,6 +300,7 @@ bool Agent::researchBuildingDefence() {
     }
 
     Utasit_Fejleszt(cfEpVed);
+    jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod = caVar;
     jatekos.Eroforras.Kaja -= cost.food();
     jatekos.Eroforras.Fa -= cost.wood();
     jatekos.Eroforras.Vas -= cost.iron();
