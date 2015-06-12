@@ -153,6 +153,13 @@ std::vector<int> Agent::getFreeWorkers() const {
 
 void Agent::reAllocateWorkers(float food, float wood, float iron, float gold) {
     const auto numberOfWorkers = getUnitCount(ceParaszt);
+
+    float sum = food + wood + iron + gold;
+    food /= sum;
+    wood /= sum;
+    iron /= sum;
+    gold /= sum;
+
     const int neededForFood = numberOfWorkers * food;
     const int neededForWood = numberOfWorkers * wood;
     const int neededForIron = numberOfWorkers * iron;
