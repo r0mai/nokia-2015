@@ -986,11 +986,13 @@ Position Agent::getDiscoveredPointTowards(const Position& to) {
     if (positions.empty()) {
         return to; // TODO??
     }
-    return *std::min_element(positions.begin(), positions.end(),
+    std::sort(positions.begin(), positions.end(),
         [&](const Position& p1, const Position& p2) {
             return lengthSquared(p1, to) < lengthSquared(p2, to);
         }
     );
+
+    return positions[rand() % std::min<int>(5, positions.size()-1)];
 }
 
 std::vector<Position> Agent::findBuildablePositions() const {
