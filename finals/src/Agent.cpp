@@ -310,7 +310,7 @@ bool Agent::researchBuildingDefence() {
 
 bool Agent::researchCavalry() {
     const int currentLevel = jatekos.Kepesseg.Szintek[cfLovas];
-    log("currentLevel for building defence is %d", currentLevel);
+    log("currentLevel for cavalry is %d", currentLevel);
     auto our = Resources::fromJatekos(jatekos);
     auto cost = Cost::Lovas_F(currentLevel + 1);
 
@@ -386,7 +386,7 @@ bool Agent::conductBasicResearchTillReachQuantityWithGold(short q) {
 
 bool Agent::researchResearch() {
     const int currentLevel = jatekos.Kepesseg.Szintek[cfKutGyors];
-    log("currentLevel for building defence is %d", currentLevel);
+    log("currentLevel for research is %d", currentLevel);
     auto our = Resources::fromJatekos(jatekos);
     auto cost = Cost::Kutatas_Gyorsitas(currentLevel + 1);
 
@@ -646,8 +646,8 @@ bool Agent::exploreBoundariesStrategy() {
     }
     const auto buildingSite = getClosestBuildingSite();
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
-    while(researchResearch()) { }
     while(conductBasicResearchTillReachQuantity(80)) { }
+    while(researchResearch()) { }
 
     return false;
 }
@@ -728,7 +728,6 @@ bool Agent::defendBordersStrategy() {
     while (makeUnitIfPossible(ceIjasz)) {}
     while(researchBuildingDefence()) { }
     while(researchCavalry()) { }
-    while(researchResearch()) { }
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
     while(conductBasicResearchTillReachQuantity(80)) { }
 
@@ -792,7 +791,6 @@ bool Agent::attackShit() {
     while (makeUnitIfPossible(ceLovas)) { }
     while(researchBuildingDefence()) { }
     while(researchCavalry()) { }
-    while(researchResearch()) { }
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
     while (conductBasicResearchTillReachQuantityWithGold(80)) { }
 
