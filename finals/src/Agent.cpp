@@ -467,6 +467,12 @@ bool Agent::exploreBoundariesStrategy() {
 
 bool Agent::defendBordersStrategy() {
     log("defendBorders");
+
+    if (jatekos.EgySzam >= jatekos.Kepesseg.PopLimit - 2) {
+        current_strategy = Strategy::AttackShit;
+        return true;
+    }
+
     // jarorozes!!
     for (const auto& freeArcher : getFreeArchers()) {
         Position ofMyOnlySon = Position{ jatekos.Egysegek[freeArcher].X,
@@ -527,6 +533,18 @@ bool Agent::defendBordersStrategy() {
     }
 
     while (makeUnitIfPossible(ceIjasz)) {}
+
+    return false;
+}
+
+bool Agent::attackShit() {
+    log("attackShit");
+
+    if (jatekos.EgySzam <= jatekos.Kepesseg.PopLimit - 30) {
+        current_strategy = Strategy::DefendBorders;
+        return true;
+    }
+
 
     return false;
 }

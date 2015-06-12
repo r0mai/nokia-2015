@@ -27,7 +27,8 @@ private:
         GetIron,
         GoForLoter,
         ExploreBoundaries,
-        DefendBorders
+        DefendBorders,
+        AttackShit
     } current_strategy = Strategy::GetFood;
 
     // returns true, if strategy changes
@@ -37,6 +38,7 @@ private:
     bool goForLoterStrategy();
     bool exploreBoundariesStrategy();
     bool defendBordersStrategy();
+    bool attackShit();
 
     void logFeedback();
 
