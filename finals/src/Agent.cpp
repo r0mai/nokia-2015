@@ -768,7 +768,7 @@ bool Agent::defendBordersStrategy() {
         diagonal.second.y);
 
     for (const Position& p : positions) {
-        if (distanceFromDiagonal(p) > 8.) {
+        if (distanceFromDiagonal(p) > 10.) {
             break;
         }
 
