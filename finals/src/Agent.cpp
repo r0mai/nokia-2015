@@ -148,7 +148,7 @@ void Agent::reAllocateWorkers(float food, float wood, float iron) {
     const int woodDeficit = neededForWood - actualWood.size();
     const int ironDeficit = neededForIron - actualIron.size();
 
-    std::vector<int> surplusWorkers;
+    std::vector<int> surplusWorkers = getFreeWorkers();
 
     for(int i=0; i<-foodDeficit;++i) {
         surplusWorkers.push_back(actualFood[i]);
@@ -320,6 +320,11 @@ std::vector<int> Agent::getUnitsProducingWare(Akcio akcio) const {
         const auto unit = jatekos.Egysegek[i];
         if (unit.AkcioKod == akcio) {
             units.push_back(i);
+        } else if ( unit.Viselkedes == cviTermel ) {
+            const auto mezo = jatekos.Vilag[unit.CelY][unit.CelX];
+            if(mezo.Objektum == static_cast<Mezo>(akcio)) {
+                units.push_back(i);
+            }
         }
     }
     return units;
@@ -409,6 +414,8 @@ bool Agent::goForLoterStrategy() {
         current_strategy = Strategy::ExploreBoundaries;
         return true;
     }
+
+    reAllocateWorkers(0.2, 0.6, 0.2);
 
     const auto buildingSites = findBuildablePositions();
     if (!buildingSites.empty()) {
