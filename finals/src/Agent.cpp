@@ -1004,7 +1004,7 @@ Position Agent::getDiscoveredPointTowards(const Position& to) {
         }
     );
 
-    return positions[rand() % std::min<int>(5, positions.size()-1)];
+    return positions[rand() % std::min<int>(5, positions.size())];
 }
 
 std::vector<Position> Agent::findBuildablePositions() const {
