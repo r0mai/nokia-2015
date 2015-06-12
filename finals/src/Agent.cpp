@@ -663,21 +663,19 @@ bool Agent::attackShit() {
 
     for (int index : getArchers()) {
         const auto& archer = jatekos.Egysegek[index];
-        int opUIdx = getOpponentUnitIndexNear(Position{archer.X, archer.Y}, 3);
-        if (opUIdx >= 0) {
-            attackOpponentUnit(index, opUIdx);
-            continue;
+        Position nearOpponent = getPositionNearOpponentIfAny(
+            {archer.X, archer.Y}, 3);
+        if (nearOpponent.x >= 0) {
+            unitTo(
+                cviJaror,
+                nearOpponent,
+                archer);
+        } else {
+            unitTo(
+                cviMozog,
+                getDiscoveredPointTowards(targetPosition),
+                archer);
         }
-        int opBIdx = getOpponentBuildingIndexNear(Position{archer.X, archer.Y}, 3);
-        if (opBIdx >= 0) {
-            attackOpponentBuilding(index, opBIdx);
-            continue;
-        }
-
-        unitTo(
-            cviMozog,
-            getDiscoveredPointTowards(targetPosition),
-            archer);
     }
 
     return false;
@@ -730,6 +728,20 @@ int Agent::getOpponentBuildingIndexNear(const Position& p, int radius) {
         }
     }
     return -1;
+}
+
+Position Agent::getPositionNearOpponentIfAny(const Position& p, int radius) {
+    int opUIdx = getOpponentUnitIndexNear(p, radius);
+    if (opUIdx >= 0) {
+        return getLocationOfResourceNearBy(cvMezo,
+                {jatekos.MasEgysegek[opUIdx].X, jatekos.MasEgysegek[opUIdx].Y});
+    }
+    int opBIdx = getOpponentBuildingIndexNear(p, radius);
+    if (opBIdx >= 0) {
+        return getLocationOfResourceNearBy(cvMezo,
+                {jatekos.MasEpuletek[opBIdx].X, jatekos.MasEpuletek[opBIdx].Y});
+    }
+    return Position{-1, -1};
 }
 
 void Agent::logFeedback() {

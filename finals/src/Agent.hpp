@@ -109,6 +109,8 @@ private:
 
     int getOpponentUnitIndexNear(const Position& p, int radius);
     int getOpponentBuildingIndexNear(const Position& p, int radius);
+
+    Position getPositionNearOpponentIfAny(const Position& p, int radius);
 };
 
 }
