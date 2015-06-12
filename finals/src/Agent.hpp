@@ -43,6 +43,7 @@ private:
     Mezo buildingTypeForUnit(Egyseg e);
 
     bool buildBuildingIfPossible(Mezo m, const Position& position);
+    bool buildBuildingIfNotAlreadyPresent(Mezo m, const Position& position);
     bool makeUnitIfPossible(Egyseg e);
     void getStuff(Mezo mezo);
 

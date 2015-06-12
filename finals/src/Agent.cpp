@@ -210,6 +210,13 @@ bool Agent::buildBuildingIfPossible(Mezo m, const Position& position) {
     return true;
 }
 
+bool Agent::buildBuildingIfNotAlreadyPresent(Mezo m, const Position& position) {
+    if(getNumberOfBuildings(m) == 1) {
+        return false;
+    }
+    return buildBuildingIfPossible(m, position);
+}
+
 bool Agent::makeUnitIfPossible(Egyseg e) {
     auto our = Resources::fromJatekos(jatekos);
     auto cost = Cost::Unit(e);
