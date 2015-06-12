@@ -544,6 +544,17 @@ void Agent::logFeedback() {
                 int(utasitas.ID2),
                 int(utasitas.X),
                 int(utasitas.Y));
+
+            if (int(utasitas.Result) == 16)
+            {
+                Position complained = { int(utasitas.X), int(utasitas.Y) };
+                if (isValidPosition(complained)) {
+                    log("system complained about pos we think is good");
+                }
+                else {
+                    log("we also thought it was invalid");
+                }
+            }
         }
     }
 #endif
@@ -647,10 +658,10 @@ std::pair<Position, Position> Agent::getMainDiagonal() const {
     {
         switch (negyed())
         {
-        case 0: return{ { 0, 0 }, { jatekos.XMax / 2, jatekos.YMax / 2 } };
-        case 1: return{ { jatekos.XMax / 2, 0 }, { jatekos.XMax, jatekos.YMax / 2 } };
-        case 2: return{ { 0, jatekos.YMax / 2 }, { jatekos.XMax / 2, jatekos.YMax } };
-        case 3: return{ { jatekos.XMax / 2, jatekos.YMax / 2 }, { jatekos.XMax, jatekos.YMax } };
+        case 0: return{ { 0, 0 }, { jatekos.XMax / 2 - 1, jatekos.YMax / 2 - 1 } };
+        case 1: return{ { jatekos.XMax / 2 - 1, 0 }, { jatekos.XMax, jatekos.YMax / 2 - 1 } };
+        case 2: return{ { 0, jatekos.YMax / 2 - 1 }, { jatekos.XMax / 2 - 1, jatekos.YMax } };
+        case 3: return{ { jatekos.XMax / 2 - 1, jatekos.YMax / 2 - 1 }, { jatekos.XMax, jatekos.YMax } };
         }
     }
     return{ { 0, 0 }, { jatekos.XMax, jatekos.YMax } };
@@ -748,7 +759,7 @@ Position Agent::getPointTowardsSide1() const {
         case 0: return Position{xMax/2 - 1, 0};
         case 1: return Position{xMax - 1, yMax/2 - 1};
         case 2: return Position{0, yMax/2};
-        case 3: return Position{xMax - 1, yMax/2 + 1};
+        case 3: return Position{xMax - 1, yMax/2};
     }
     assert(false);
     return Position{};
@@ -761,7 +772,7 @@ Position Agent::getPointTowardsSide2() const {
         case 0: return Position{0, yMax/2 - 1};
         case 1: return Position{xMax/2, 0};
         case 2: return Position{xMax/2 - 1, yMax - 1};
-        case 3: return Position{xMax/2 + 1, yMax - 1};
+        case 3: return Position{xMax/2, yMax - 1};
     }
     assert(false);
     return Position{};
