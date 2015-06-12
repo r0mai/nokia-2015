@@ -468,7 +468,9 @@ bool Agent::exploreBoundariesStrategy() {
 bool Agent::defendBordersStrategy() {
     log("defendBorders");
 
-    if (jatekos.EgySzam >= jatekos.Kepesseg.PopLimit - 2) {
+    if (jatekos.Ido > jatekos.BekeIdo &&
+        jatekos.EgySzam >= jatekos.Kepesseg.PopLimit - 2)
+    {
         current_strategy = Strategy::AttackShit;
         return true;
     }
