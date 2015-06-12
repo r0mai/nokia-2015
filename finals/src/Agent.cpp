@@ -819,7 +819,7 @@ bool Agent::attackShit() {
     while(researchBuildingDefence()) { }
     while(researchArchery()) { }
     while(researchCavalry()) { }
-    while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
+    while (buildBuildingIfPossible(cvIstallo, buildingSite)) { }
     while (conductBasicResearchTillReachQuantityWithGold(80)) { }
 
     return false;
