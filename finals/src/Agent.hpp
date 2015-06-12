@@ -91,6 +91,7 @@ private:
     std::vector<Position> findBuildablePositions() const;
     bool isBuildablePosition(const Position& position) const;
     std::vector<Position> getBoundaryPositions() const;
+    std::vector<Position> getBoundaryPositionsMezo() const;
 
     bool isPointInNegyed(const Position& p, int negyed);
     Position getPointInNegyed(int negyed);

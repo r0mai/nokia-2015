@@ -765,6 +765,17 @@ std::vector<Position> Agent::getBoundaryPositions() const {
     return res;
 }
 
+std::vector<Position> Agent::getBoundaryPositionsMezo() const {
+    auto positions = getBoundaryPositions();
+    std::vector<Position> result;
+    for (const Position& p : positions) {
+        if (jatekos.Vilag[p.y][p.x].Objektum == cvMezo) {
+            result.push_back(p);
+        }
+    }
+    return result;
+}
+
 bool Agent::isPointInNegyed(const Position& p, int negyed) {
     switch (negyed) {
         case 0: return p.x < jatekos.XMax / 2 && p.y < jatekos.XMax / 2;
@@ -791,7 +802,7 @@ Position Agent::getDiscoveredPointTowards(const Position& to) {
         return to;
     }
 
-    auto positions = getBoundaryPositions();
+    auto positions = getBoundaryPositionsMezo();
     if (positions.empty()) {
         return to; // TODO??
     }
