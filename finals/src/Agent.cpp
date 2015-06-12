@@ -494,13 +494,16 @@ Position Agent::getClosestBuildingSite() const {
 }
 
 int Agent::negyed() const {
-    int fohazEpuletIndex = getBuildingIndex(cvFohaz);
-    if (fohazEpuletIndex != -1) {
-        return (jatekos.Epuletek[fohazEpuletIndex].X > jatekos.XMax / 2) | ((jatekos.Epuletek[fohazEpuletIndex].Y > jatekos.YMax / 2) << 1);
+    if (negyedCache < 0) {
+        int fohazEpuletIndex = getBuildingIndex(cvFohaz);
+        if (fohazEpuletIndex != -1) {
+            negyedCache = (jatekos.Epuletek[fohazEpuletIndex].X > jatekos.XMax / 2) | ((jatekos.Epuletek[fohazEpuletIndex].Y > jatekos.YMax / 2) << 1);
+        }
+        else {
+            negyedCache = 0;
+        }
     }
-    else {
-        return 0;
-    }
+    return negyedCache;
 }
 
 int Agent::getUnitCount(Egyseg e) {

@@ -75,6 +75,7 @@ private:
      * y
      */
 
+    mutable int negyedCache = -1;
     int negyed() const;
     int getUnitCount(Egyseg e);
 
