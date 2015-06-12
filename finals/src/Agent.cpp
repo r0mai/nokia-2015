@@ -623,11 +623,14 @@ bool Agent::attackShit() {
         attackTarget = (negyed() + 1) % 4; // TODO lets discuss this
     }
 
+    auto targetPosition = getPointInNegyed(attackTarget);
+    log("targetPosition: (%d, %d)", targetPosition.x, targetPosition.y);
+
     for (int index : getArchers()) {
         const auto& archer = jatekos.Egysegek[index];
         unitTo(
             cviMozog,
-            getDiscoveredPointTowards(getPointInNegyed(attackTarget)),
+            getDiscoveredPointTowards(targetPosition),
             archer);
     }
 
