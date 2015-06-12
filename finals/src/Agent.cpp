@@ -792,9 +792,11 @@ bool Agent::attackShit() {
              //   cviJaror,
              //   nearOpponent,
              //   archer);
-            unitTo(cviMozog,
-                {archer.X, archer.Y},
-                archer);
+            if (archer.Viselkedes == cviMozog) {
+                unitTo(cviMozog,
+                    {archer.X, archer.Y},
+                    archer);
+            }
         } else {
             if (archer.Viselkedes != cviMozog) {
                 unitTo(
