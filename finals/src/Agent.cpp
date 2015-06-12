@@ -308,6 +308,30 @@ bool Agent::researchBuildingDefence() {
     return true;
 }
 
+bool Agent::researchArchery() {
+    const int currentLevel = jatekos.Kepesseg.Szintek[cfIjasz];
+    log("currentLevel for archery is %d", currentLevel);
+    auto our = Resources::fromJatekos(jatekos);
+    auto cost = Cost::Ijasz_F(currentLevel + 1);
+
+    if (!(our - cost)) {
+        return false;
+    }
+
+    if (jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod != caNincs) {
+        log("Cannot research at this time, research is already under way");
+        return false;
+    }
+
+    Utasit_Fejleszt(cfIjasz);
+    jatekos.Epuletek[getBuildingIndex(cvAkademia)].AkcioKod = caVar;
+    jatekos.Eroforras.Kaja -= cost.food();
+    jatekos.Eroforras.Fa -= cost.wood();
+    jatekos.Eroforras.Vas -= cost.iron();
+    jatekos.Eroforras.Arany -= cost.gold();
+    return true;
+}
+
 bool Agent::researchCavalry() {
     const int currentLevel = jatekos.Kepesseg.Szintek[cfLovas];
     log("currentLevel for cavalry is %d", currentLevel);
@@ -673,7 +697,7 @@ bool Agent::defendBordersStrategy() {
             unitTo(cviJaror, pos, jatekos.Egysegek[freeArcher]);
         }
     }
-    reAllocateWorkers(0.1, 0.7, 0.2, 0.0);
+    reAllocateWorkers(0.2, 0.65, 0.15, 0.0);
 
     // Find tower locations closest to borders
     auto positions = findBuildablePositions();
@@ -722,6 +746,7 @@ bool Agent::defendBordersStrategy() {
     while (makeUnitIfPossible(ceLovas)) { }
     while (makeUnitIfPossible(ceIjasz)) {}
     while(researchBuildingDefence()) { }
+    while(researchArchery()) { }
     while(researchCavalry()) { }
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
     while(conductBasicResearchTillReachQuantity(80)) { }
@@ -787,6 +812,7 @@ bool Agent::attackShit() {
 
     while (makeUnitIfPossible(ceLovas)) { }
     while(researchBuildingDefence()) { }
+    while(researchArchery()) { }
     while(researchCavalry()) { }
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
     while (conductBasicResearchTillReachQuantityWithGold(80)) { }
