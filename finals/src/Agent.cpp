@@ -308,7 +308,7 @@ bool Agent::conductBasicResearchTillReachQuantity(short q) {
     log("----------------%d---------------------", jatekos.Kepesseg.KP);
     log("--------------------------------------");
     log("--------------------------------------");
-    if (q >= jatekos.Kepesseg.KP) {
+    if (q <= jatekos.Kepesseg.KP) {
         log("We already have enough KP, not creating any more");
         return false;
     }
