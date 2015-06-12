@@ -758,7 +758,7 @@ bool Agent::attackShit() {
         const auto& archer = jatekos.Egysegek[index];
         if (lengthSquared(
                 Position{archer.X, archer.Y},
-                targetPosition) <= 9)
+                targetPosition) <= 25)
         {
             goNext = true;
         }
