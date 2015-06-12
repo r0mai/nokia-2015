@@ -573,7 +573,6 @@ bool Agent::getFoodStrategy() {
         return true;
     }
     getStuff(cvKaja);
-    while (conductBasicResearchTillReachQuantityWithGold(80)) { }
     return false;
 }
 
@@ -584,7 +583,6 @@ bool Agent::getWoodStrategy() {
         return true;
     }
     getStuff(cvFa);
-    while (conductBasicResearchTillReachQuantityWithGold(80)) { }
     return false;
 }
 
@@ -611,10 +609,7 @@ bool Agent::goForLoterStrategy() {
     const auto buildingSite = getClosestBuildingSite();
     buildBuildingIfNotAlreadyPresent(cvAkademia, buildingSite);
     buildBuildingIfPossible(cvLoter, buildingSite);
-    buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite);
 
-    while(researchResearch()) { }
-    while(conductBasicResearchTillReachQuantity(80)) { }
     return false;
 }
 
@@ -646,8 +641,8 @@ bool Agent::exploreBoundariesStrategy() {
     }
     const auto buildingSite = getClosestBuildingSite();
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
-    while(conductBasicResearchTillReachQuantity(80)) { }
     while(researchResearch()) { }
+    while(conductBasicResearchTillReachQuantity(80)) { }
 
     return false;
 }
