@@ -421,6 +421,9 @@ bool Agent::defendBordersStrategy() {
             break;
         }
     }
+
+    while (makeUnitIfPossible(ceIjasz)) {}
+
     return false;
 }
 
