@@ -402,6 +402,25 @@ short Agent::getBuildingId(Mezo m) {
     return -1;
 }
 
+Position Agent::getClosestBuildingSite() const {
+    const auto buildingSites = findBuildablePositions();
+    if (!buildingSites.empty()) {
+        const auto baseIndex = getBuildingIndex(cvFohaz);
+        const auto base = jatekos.Epuletek[baseIndex];
+        const auto basePos = Position{base.X, base.Y};
+        const auto buildingSite =
+                *std::min_element(buildingSites.begin(), buildingSites.end(),
+                                  [&basePos](const Position& p1,
+                                             const Position& p2) {
+                    return distanceBetween(p1, basePos) <
+                           distanceBetween(p2, basePos);
+                });
+        return buildingSite;
+    } else {
+        return {};
+    }
+}
+
 int Agent::negyed() const {
     int fohazEpuletIndex = getBuildingIndex(cvFohaz);
     if (fohazEpuletIndex != -1) {
@@ -539,21 +558,11 @@ bool Agent::goForLoterStrategy() {
     createWorkersForTargetCount(30);
     reAllocateWorkers(0.3, 0.6, 0.1, 0.0);
 
-    const auto buildingSites = findBuildablePositions();
-    if (!buildingSites.empty()) {
-        const auto baseIndex = getBuildingIndex(cvFohaz);
-        const auto base = jatekos.Epuletek[baseIndex];
-        const auto basePos = Position{base.X, base.Y};
-        const auto buildingSite =
-                *std::min_element(buildingSites.begin(), buildingSites.end(),
-                                  [&basePos](const Position& p1,
-                                             const Position& p2) {
-                    return distanceBetween(p1, basePos) <
-                           distanceBetween(p2, basePos);
-                });
-        buildBuildingIfNotAlreadyPresent(cvAkademia, buildingSite);
-        buildBuildingIfPossible(cvLoter, buildingSite);
-    }
+    const auto buildingSite = getClosestBuildingSite();
+    buildBuildingIfNotAlreadyPresent(cvAkademia, buildingSite);
+    buildBuildingIfPossible(cvLoter, buildingSite);
+    buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite);
+
     while(conductBasicResearchTillReachQuantity(80)) { }
     return false;
 }

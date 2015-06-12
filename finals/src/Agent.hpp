@@ -46,6 +46,7 @@ private:
     void logFeedback();
 
     Mezo buildingTypeForUnit(Egyseg e);
+    Position getClosestBuildingSite() const;
 
     bool buildBuildingIfPossible(Mezo m, const Position& position);
     bool buildBuildingIfNotAlreadyPresent(Mezo m, const Position& position);
