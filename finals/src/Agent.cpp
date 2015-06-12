@@ -416,31 +416,31 @@ bool Agent::areControlPointsVisible() const {
 }
 
 bool Agent::getFoodStrategy() {
+    log("getFood");
     if (getNumberOfUnitsProducingWare(caKaja) >= 8) {
         current_strategy = Strategy::GetWood;
         return true;
     }
-    log("getFood");
     getStuff(cvKaja);
     return false;
 }
 
 bool Agent::getWoodStrategy() {
+    log("getwood");
     if (getNumberOfUnitsProducingWare(caFa) >= 10) {
         current_strategy = Strategy::GetIron;
         return true;
     }
-    log("getwood");
     getStuff(cvFa);
     return false;
 }
 
 bool Agent::getIronStrategy() {
+    log("getiron");
     if (getNumberOfUnitsProducingWare(caVas) >= 4) {
         current_strategy = Strategy::GoForLoter;
         return true;
     }
-    log("getiron");
     getStuff(cvVasBanya);
     return false;
 }
@@ -506,7 +506,7 @@ bool Agent::defendBordersStrategy() {
     log("defendBorders");
 
     if (jatekos.Ido > jatekos.BekeIdo &&
-        jatekos.EgySzam >= jatekos.Kepesseg.PopLimit - 2)
+        jatekos.EgySzam >= jatekos.Kepesseg.PopLimit - 5)
     {
         current_strategy = Strategy::AttackShit;
         return true;
