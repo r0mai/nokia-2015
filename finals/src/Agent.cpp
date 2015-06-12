@@ -626,7 +626,7 @@ bool Agent::attackShit() {
     for (int index : getArchers()) {
         const auto& archer = jatekos.Egysegek[index];
         unitTo(
-            cviJaror,
+            cviMozog,
             getDiscoveredPointTowards(getPointInNegyed(attackTarget)),
             archer);
     }
