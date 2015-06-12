@@ -134,7 +134,7 @@ std::vector<int> Agent::getFreeArchers() const {
 std::vector<int> Agent::getArchers() const {
     std::vector<int> archers;
     for (int i=0; i<jatekos.EgySzam; ++i) {
-        if (jatekos.Egysegek[i].Tipus == ceIjasz) {
+        if (jatekos.Egysegek[i].Tipus == ceIjasz || jatekos.Egysegek[i].Tipus == ceLovas) {
             archers.push_back(i);
         }
     }
@@ -525,6 +525,7 @@ bool Agent::getFoodStrategy() {
         return true;
     }
     getStuff(cvKaja);
+    while (conductBasicResearchTillReachQuantityWithGold(80)) { }
     return false;
 }
 
@@ -535,6 +536,7 @@ bool Agent::getWoodStrategy() {
         return true;
     }
     getStuff(cvFa);
+    while (conductBasicResearchTillReachQuantityWithGold(80)) { }
     return false;
 }
 
@@ -590,6 +592,7 @@ bool Agent::exploreBoundariesStrategy() {
         return true;
     }
 
+    while (makeUnitIfPossible(ceLovas)) { }
     while (makeUnitIfPossible(ceIjasz)) {
     }
     const auto buildingSite = getClosestBuildingSite();
@@ -671,6 +674,7 @@ bool Agent::defendBordersStrategy() {
 
     const auto buildingSite = getClosestBuildingSite();
 
+    while (makeUnitIfPossible(ceLovas)) { }
     while (makeUnitIfPossible(ceIjasz)) {}
     while(researchBuildingDefence()) { }
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
@@ -733,6 +737,7 @@ bool Agent::attackShit() {
 
     const auto buildingSite = getClosestBuildingSite();
 
+    while (makeUnitIfPossible(ceLovas)) { }
     while(researchBuildingDefence()) { }
     while(buildBuildingIfNotAlreadyPresent(cvIstallo, buildingSite)) { }
     while (conductBasicResearchTillReachQuantityWithGold(80)) { }
