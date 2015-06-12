@@ -623,7 +623,7 @@ bool Agent::defendBordersStrategy() {
             unitTo(cviJaror, pos, jatekos.Egysegek[freeArcher]);
         }
     }
-    reAllocateWorkers(0.1, 0.8, 0.1, 0.0);
+    reAllocateWorkers(0.1, 0.7, 0.2, 0.0);
 
     // Find tower locations closest to borders
     auto positions = findBuildablePositions();
@@ -682,7 +682,7 @@ bool Agent::attackShit() {
         return true;
     }
 
-    reAllocateWorkers(0.1, 0.5, 0.2, 0.2);
+    reAllocateWorkers(0.1, 0.4, 0.3, 0.2);
 
     if (attackTarget < 0) {
         // decide where to attack
