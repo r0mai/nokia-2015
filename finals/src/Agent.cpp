@@ -632,7 +632,8 @@ bool Agent::attackShit() {
     }
 
     auto targetPosition = getPointInNegyed(attackTarget);
-    log("targetPosition: (%d, %d)", targetPosition.x, targetPosition.y);
+    log("targetPosition: (%d, %d), negyed %d",
+        targetPosition.x, targetPosition.y, attackTarget);
 
     for (int index : getArchers()) {
         const auto& archer = jatekos.Egysegek[index];
