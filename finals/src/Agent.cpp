@@ -252,6 +252,11 @@ bool Agent::makeUnitIfPossible(Egyseg e) {
     if (epuletIndex < 0) {
         return false;
     }
+
+    if(jatekos.EgySzam == jatekos.Kepesseg.PopLimit) {
+        return false;
+    }
+
     Utasit_Kepez(e, jatekos.Epuletek[epuletIndex].ID);
     jatekos.Epuletek[epuletIndex].AkcioKod = cuKepzes;
     jatekos.Eroforras.Kaja -= cost.food();
